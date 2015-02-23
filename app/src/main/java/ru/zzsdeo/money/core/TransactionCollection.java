@@ -1,0 +1,45 @@
+package ru.zzsdeo.money.core;
+
+import java.util.ArrayList;
+
+import ru.zzsdeo.money.core.interfaces.ITransaction;
+import ru.zzsdeo.money.core.interfaces.ITransactionCollection;
+
+public class TransactionCollection implements ITransactionCollection {
+
+    private ArrayList<ITransaction> transactions;
+
+    public TransactionCollection() {
+        transactions = new ArrayList<>();
+    }
+
+    @Override
+    public void addTransaction(ITransaction transaction) {
+        transactions.add(transaction);
+    }
+
+    @Override
+    public void removeTransaction(long dateInMill) {
+        for (int i = 1; i <= transactions.size(); i++) {
+            if (transactions.get(i).getDateInMill() == dateInMill) {
+                transactions.remove(i);
+                return;
+            }
+        }
+    }
+
+    @Override
+    public ITransaction getTransaction(long dateInMill) {
+        for (int i = 1; i <= transactions.size(); i++) {
+            if (transactions.get(i).getDateInMill() == dateInMill) {
+                return transactions.get(i);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public ArrayList<ITransaction> getAllTransactions() {
+        return transactions;
+    }
+}
