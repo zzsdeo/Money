@@ -20,7 +20,7 @@ public class TransactionCollection implements ITransactionCollection {
 
     @Override
     public void removeTransaction(long dateInMill) {
-        for (int i = 1; i <= transactions.size(); i++) {
+        for (int i = 0; i < transactions.size(); i++) {
             if (transactions.get(i).getDateInMill() == dateInMill) {
                 transactions.remove(i);
                 return;
@@ -30,7 +30,7 @@ public class TransactionCollection implements ITransactionCollection {
 
     @Override
     public ITransaction getTransaction(long dateInMill) {
-        for (int i = 1; i <= transactions.size(); i++) {
+        for (int i = 0; i < transactions.size(); i++) {
             if (transactions.get(i).getDateInMill() == dateInMill) {
                 return transactions.get(i);
             }

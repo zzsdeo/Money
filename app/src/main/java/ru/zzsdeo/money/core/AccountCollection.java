@@ -21,7 +21,7 @@ public class AccountCollection implements IAccountCollection {
 
     @Override
     public void removeAccount(String name) {
-        for (int i = 1; i <= accounts.size(); i++) {
+        for (int i = 0; i < accounts.size(); i++) {
             if (accounts.get(i).getName().equals(name)) {
                 accounts.remove(i);
                 return;
@@ -31,7 +31,7 @@ public class AccountCollection implements IAccountCollection {
 
     @Override
     public IAccount getAccount(String name) {
-        for (int i = 1; i <= accounts.size(); i++) {
+        for (int i = 0; i < accounts.size(); i++) {
             if (accounts.get(i).getName().equals(name)) {
                 return accounts.get(i);
             }

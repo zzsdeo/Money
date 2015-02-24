@@ -10,10 +10,14 @@ public interface ITransaction {
 
     public String getComment();
 
-    public boolean approved();
+    public boolean isApproved();
 
     public boolean isTransfer();
 
-    
+    public IAccount getDestinationAccount();
+
+    public boolean getNeedApprove();
+
+    public void approve();
 
 }
