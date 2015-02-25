@@ -4,6 +4,13 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import ru.zzsdeo.money.core.Account;
@@ -12,20 +19,25 @@ import ru.zzsdeo.money.core.Transaction;
 import ru.zzsdeo.money.core.TransactionCollection;
 import ru.zzsdeo.money.core.interfaces.IAccount;
 import ru.zzsdeo.money.core.interfaces.ITransaction;
+import ru.zzsdeo.money.core.storage.DataStore;
 
 public class MainActivity extends Activity {
 
     private AccountCollection accounts;
     private TransactionCollection transactions;
+    private DataStore dataStore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        dataStore = new DataStore(this);
+
         accounts = getAccountCollection();
 
-        transactions = getTransactionCollection(accounts);
+        transactions = (TransactionCollection) dataStore.loadData(DataStore.TRANSACTION_COLLECTION_FILE_NAME);
+        if (transactions == null) transactions = getTransactionCollection(accounts);
 
         transactions.getTransaction(100l).approve();
 
@@ -40,6 +52,14 @@ public class MainActivity extends Activity {
 
             Log.d("my", "Карта: " + name + " --- Сумма: " + amount + " --- Комментарий: " + comment + " --- Подтверждено: " + isApproved + " --- Дата: " + date);
         }
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        transactions = (TransactionCollection) dataStore.loadData(DataStore.TRANSACTION_COLLECTION_FILE_NAME);
+        if (transactions == null) transactions = getTransactionCollection(accounts);
     }
 
     private AccountCollection getAccountCollection() {

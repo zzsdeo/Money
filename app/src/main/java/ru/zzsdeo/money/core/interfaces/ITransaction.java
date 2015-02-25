@@ -20,4 +20,8 @@ public interface ITransaction {
 
     public void approve();
 
+    public boolean isRepeating();
+
+    public int getRepeatingType();
+
 }

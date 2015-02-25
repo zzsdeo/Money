@@ -1,8 +1,10 @@
 package ru.zzsdeo.money.core;
 
+import java.io.Serializable;
+
 import ru.zzsdeo.money.core.interfaces.IAccount;
 
-public class Account implements IAccount {
+public class Account implements IAccount, Serializable {
 
     private final String name;
     private final boolean hasSmsNotification;

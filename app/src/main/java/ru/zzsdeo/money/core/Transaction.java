@@ -1,9 +1,13 @@
 package ru.zzsdeo.money.core;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+
+import ru.zzsdeo.money.R;
 import ru.zzsdeo.money.core.interfaces.IAccount;
 import ru.zzsdeo.money.core.interfaces.ITransaction;
 
-public class Transaction implements ITransaction {
+public class Transaction implements ITransaction, Serializable {
 
     private final IAccount account;
     private final long dateInMill;
@@ -13,6 +17,10 @@ public class Transaction implements ITransaction {
     private final boolean isTransfer;
     private final IAccount destinationAccount;
     private final boolean needApprove;
+    private final boolean isRepeating;
+    private final int repeatingType;
+
+    //public static final String[] repeatingTypes = {getString(R.string.once), "Каждый день", "Каждый будний день", "Каждое определенное число", "Каждый определенный день недели", "Каждый последний день месяца"};
 
     public static class Builder {
 
@@ -25,6 +33,8 @@ public class Transaction implements ITransaction {
         private boolean isTransfer = false;
         private IAccount destinationAccount = null;
         private boolean needApprove = false;
+        private boolean isRepeating = false;
+        private int repeatingType = 0;
 
         public Builder(IAccount account, long dateInMill) {
             this.dateInMill = dateInMill;
@@ -61,6 +71,16 @@ public class Transaction implements ITransaction {
             return this;
         }
 
+        public Builder isRepeating(boolean val) {
+            isRepeating = val;
+            return this;
+        }
+
+        public Builder repeatingType(int val) {
+            repeatingType = val;
+            return this;
+        }
+
         public Transaction build() {
             return new Transaction(this);
         }
@@ -76,6 +96,8 @@ public class Transaction implements ITransaction {
         isTransfer = builder.isTransfer;
         destinationAccount = builder.destinationAccount;
         needApprove = builder.needApprove;
+        isRepeating = builder.isRepeating;
+        repeatingType = builder.repeatingType;
     }
 
     @Override
@@ -121,5 +143,15 @@ public class Transaction implements ITransaction {
     @Override
     public void approve() {
         isApproved = true;
+    }
+
+    @Override
+    public boolean isRepeating() {
+        return isRepeating;
+    }
+
+    @Override
+    public int getRepeatingType() {
+        return repeatingType;
     }
 }

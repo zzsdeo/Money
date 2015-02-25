@@ -1,12 +1,13 @@
 package ru.zzsdeo.money.core;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 import ru.zzsdeo.money.core.interfaces.IAccount;
 import ru.zzsdeo.money.core.interfaces.IAccountCollection;
 
-public class AccountCollection implements IAccountCollection {
+public class AccountCollection implements IAccountCollection, Serializable {
 
     private ArrayList<IAccount> accounts;
 
