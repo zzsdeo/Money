@@ -2,6 +2,9 @@ package ru.zzsdeo.money;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import java.io.File;
@@ -13,6 +16,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+import ru.zzsdeo.money.adapters.RecyclerViewAdapter;
 import ru.zzsdeo.money.core.Account;
 import ru.zzsdeo.money.core.AccountCollection;
 import ru.zzsdeo.money.core.Transaction;
@@ -27,6 +31,12 @@ public class MainActivity extends Activity {
     private TransactionCollection transactions;
     private DataStore dataStore;
 
+    private RecyclerView mRecyclerView;
+    private RecyclerViewAdapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private ArrayList<String> items;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +49,7 @@ public class MainActivity extends Activity {
         transactions = (TransactionCollection) dataStore.loadData(DataStore.TRANSACTION_COLLECTION_FILE_NAME);
         if (transactions == null) transactions = getTransactionCollection(accounts);
 
-        transactions.getTransaction(100l).approve();
+        //transactions.getTransaction(100l).approve();
 
         ArrayList<ITransaction> transactionList = transactions.getAllTransactions();
 
@@ -53,13 +63,45 @@ public class MainActivity extends Activity {
             Log.d("my", "Карта: " + name + " --- Сумма: " + amount + " --- Комментарий: " + comment + " --- Подтверждено: " + isApproved + " --- Дата: " + date);
         }
 
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+
+        // improve performance if you know that changes in content
+        // do not change the size of the RecyclerView
+        mRecyclerView.setHasFixedSize(true);
+
+        // use a linear layout manager
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        items = new ArrayList<>();
+
+        mAdapter = new RecyclerViewAdapter(items);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        for(ITransaction t : transactionList) {
+            String name = t.getAccount().getName();
+            String amount = String.valueOf(t.getAmount());
+            String comment = t.getComment();
+            String isApproved = String.valueOf(t.isApproved());
+            String date = String.valueOf(t.getDateInMill());
+            mAdapter.add("Карта: " + name + " --- Сумма: " + amount + " --- Комментарий: " + comment + " --- Подтверждено: " + isApproved + " --- Дата: " + date);
+        }
+
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onRestart() {
+        super.onRestart();
         transactions = (TransactionCollection) dataStore.loadData(DataStore.TRANSACTION_COLLECTION_FILE_NAME);
         if (transactions == null) transactions = getTransactionCollection(accounts);
+    }
+
+    @Override
+    protected void onStop() {
+        dataStore.saveData(transactions, DataStore.TRANSACTION_COLLECTION_FILE_NAME);
+        super.onStop();
     }
 
     private AccountCollection getAccountCollection() {
@@ -80,7 +122,7 @@ public class MainActivity extends Activity {
 
     private TransactionCollection getTransactionCollection(AccountCollection accounts) {
         TransactionCollection transactions = new TransactionCollection();
-        transactions.addTransaction(new Transaction.Builder(accounts.getAccount("Зарплатная"), 100l)
+        /*transactions.addTransaction(new Transaction.Builder(accounts.getAccount("Зарплатная"), 100l)
                 .amount(100)
                 .comment("Зарплата")
                 .build());
@@ -115,7 +157,13 @@ public class MainActivity extends Activity {
         transactions.addTransaction(new Transaction.Builder(accounts.getAccount("Наличные"), 900l)
                 .amount(-100)
                 .comment("Музей")
-                .build());
+                .build());*/
+        for (long i = 100l; i <= 10000l; i += 100l) {
+            transactions.addTransaction(new Transaction.Builder(accounts.getAccount("Зарплатная"), i)
+                    .amount(100)
+                    .comment("Зарплата")
+                    .build());
+        }
         return transactions;
     }
 }

@@ -2,6 +2,8 @@ package ru.zzsdeo.money.core.storage;
 
 import android.content.Context;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -29,8 +31,14 @@ public class DataStore {
             File dir = new File(context.getFilesDir(), File.separator + DATA_STORE_SUB_DIR);
             if (!dir.exists()) dir.mkdirs();
             File file = new File(dir, filename);
-            FileOutputStream fos = new FileOutputStream(file);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            ObjectOutputStream oos =
+                    new ObjectOutputStream(
+                            new BufferedOutputStream(
+                                    new FileOutputStream(
+                                            file
+                                    )
+                            )
+                    );
             oos.writeObject(object);
             oos.flush();
             oos.close();
@@ -45,13 +53,20 @@ public class DataStore {
             if (!dir.exists()) return null;
             File file = new File(dir, filename);
             if (!file.exists()) return null;
-            FileInputStream fis = new FileInputStream(file);
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            return ois.readObject();
+            ObjectInputStream ois =
+                    new ObjectInputStream(
+                            new BufferedInputStream(
+                                    new FileInputStream(
+                                            file
+                                    )
+                            )
+                    );
+            Object o = ois.readObject();
+            ois.close();
+            return o;
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
             return null;
         }
     }
-
 }
