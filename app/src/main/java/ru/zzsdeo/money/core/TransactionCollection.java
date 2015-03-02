@@ -2,6 +2,7 @@ package ru.zzsdeo.money.core;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import ru.zzsdeo.money.core.interfaces.ITransaction;
 import ru.zzsdeo.money.core.interfaces.ITransactionCollection;
@@ -29,6 +30,12 @@ public class TransactionCollection implements ITransactionCollection, Serializab
         }
     }
 
+    /*@Override
+    public void updateTransaction(long dateInMill, ITransaction updatedTransaction) {
+        removeTransaction(dateInMill);
+        addTransaction(updatedTransaction);
+    }*/
+
     @Override
     public ITransaction getTransaction(long dateInMill) {
         for (int i = 0; i < transactions.size(); i++) {
@@ -41,6 +48,7 @@ public class TransactionCollection implements ITransactionCollection, Serializab
 
     @Override
     public ArrayList<ITransaction> getAllTransactions() {
+        // TODO Collections.sort();
         return transactions;
     }
 }

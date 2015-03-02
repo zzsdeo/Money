@@ -22,13 +22,9 @@ public class Account implements IAccount, Serializable {
             this.name = name;
         }
 
-        public Builder hasSmsNotification(boolean val) {
-            hasSmsNotification = val;
-            return this;
-        }
-
         public Builder smsId(String val) {
             smsId = val;
+            if (!val.isEmpty()) hasSmsNotification = true;
             return this;
         }
 

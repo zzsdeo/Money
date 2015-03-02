@@ -56,13 +56,9 @@ public class Transaction implements ITransaction, Serializable {
             return this;
         }
 
-        public Builder isTransfer(boolean val) {
-            isTransfer = val;
-            return this;
-        }
-
         public Builder destinationAccount(IAccount val) {
             destinationAccount = val;
+            if (val != null) isTransfer = true;
             return this;
         }
 
@@ -71,13 +67,9 @@ public class Transaction implements ITransaction, Serializable {
             return this;
         }
 
-        public Builder isRepeating(boolean val) {
-            isRepeating = val;
-            return this;
-        }
-
         public Builder repeatingType(int val) {
             repeatingType = val;
+            if (val != 0) isRepeating = true;
             return this;
         }
 
