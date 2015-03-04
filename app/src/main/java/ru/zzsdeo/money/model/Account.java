@@ -30,6 +30,7 @@ public class Account {
 
     public String getName() {
         Cursor c = getCursor(TableAccounts.COLUMN_NAME);
+        c.moveToFirst();
         String name = c.getString(c.getColumnIndex(TableAccounts.COLUMN_NAME));
         c.close();
         return name;
@@ -43,6 +44,7 @@ public class Account {
 
     public int getCardNumber() {
         Cursor c = getCursor(TableAccounts.COLUMN_CARD_NUMBER);
+        c.moveToFirst();
         int cardNumber = c.getInt(c.getColumnIndex(TableAccounts.COLUMN_CARD_NUMBER));
         c.close();
         return cardNumber;
@@ -56,6 +58,7 @@ public class Account {
 
     public float getBalance() {
         Cursor c = getCursor(TableAccounts.COLUMN_BALANCE);
+        c.moveToFirst();
         float balance = c.getFloat(c.getColumnIndex(TableAccounts.COLUMN_BALANCE));
         c.close();
         return balance;
