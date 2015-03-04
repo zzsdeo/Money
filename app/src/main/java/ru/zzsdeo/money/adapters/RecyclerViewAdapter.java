@@ -3,23 +3,21 @@ package ru.zzsdeo.money.adapters;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
 import ru.zzsdeo.money.R;
-import ru.zzsdeo.money.core.Transaction;
-import ru.zzsdeo.money.core.TransactionCollection;
-import ru.zzsdeo.money.core.interfaces.ITransaction;
+import ru.zzsdeo.money.model.Transaction;
+import ru.zzsdeo.money.model.TransactionCollection;
+import ru.zzsdeo.money.model.interfaces.ITransaction;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>  {
 

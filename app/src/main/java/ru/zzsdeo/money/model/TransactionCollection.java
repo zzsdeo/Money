@@ -1,13 +1,12 @@
-package ru.zzsdeo.money.core;
+package ru.zzsdeo.money.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 
-import ru.zzsdeo.money.core.interfaces.ITransaction;
-import ru.zzsdeo.money.core.interfaces.ITransactionCollection;
+import ru.zzsdeo.money.model.interfaces.ITransaction;
+import ru.zzsdeo.money.model.interfaces.ITransactionCollection;
 
-public class TransactionCollection implements ITransactionCollection, Serializable {
+public class TransactionCollection {
 
     private ArrayList<ITransaction> transactions;
 
