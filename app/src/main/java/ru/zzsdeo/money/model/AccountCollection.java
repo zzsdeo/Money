@@ -15,8 +15,8 @@ import ru.zzsdeo.money.db.TableAccounts;
 
 public class AccountCollection extends HashMap<Long, Account> {
 
-    private ContentResolver contentResolver;
-    private Context context;
+    private final ContentResolver contentResolver;
+    private final Context context;
 
     public AccountCollection (Context context) {
         this.context = context;
