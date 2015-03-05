@@ -11,21 +11,26 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Locale;
 
 import ru.zzsdeo.money.R;
+import ru.zzsdeo.money.model.Account;
+import ru.zzsdeo.money.model.AccountCollection;
 import ru.zzsdeo.money.model.Transaction;
 import ru.zzsdeo.money.model.TransactionCollection;
-import ru.zzsdeo.money.model.interfaces.ITransaction;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>  {
 
-    private ArrayList<ITransaction> mTransactions;
+    private ArrayList<Transaction> mTransactions;
+    private AccountCollection mAccounts;
     private final static String DATE_FORMAT = "dd.MM.yy, HH:mm";
 
-    public RecyclerViewAdapter(TransactionCollection transactions) {
-        mTransactions = transactions.getAllTransactions();
+    public RecyclerViewAdapter(TransactionCollection transactions, AccountCollection accounts) {
+        mTransactions = new ArrayList<>(transactions.values());
+        mAccounts = accounts;
     }
 
     /*public void add(String item) {
@@ -57,10 +62,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Transaction transaction = (Transaction) mTransactions.get(position);
+        Transaction transaction = mTransactions.get(position);
         String [] items = new String[] {
                 transaction.getComment(),
-                transaction.getAccount().getName(),
+                mAccounts.get(transaction.getAccountId()).getName(),
                 new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(new Date(transaction.getDateInMill())),
                 String.valueOf(transaction.getAmount())
         };
