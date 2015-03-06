@@ -55,14 +55,7 @@ public class TransactionCollection extends HashMap<Long, Transaction> {
         cv.put(TableTransactions.COLUMN_AMOUNT, amount);
         cv.put(TableTransactions.COLUMN_COMMISSION, commission);
         cv.put(TableTransactions.COLUMN_COMMENT, comment);
-        cv.put(TableTransactions.COLUMN_IS_APPROVED, 0);
         cv.put(TableTransactions.COLUMN_DESTINATION_ACCOUNT_ID, destinationAccountId);
-        if (needApprove) {
-            cv.put(TableTransactions.COLUMN_NEED_APPROVE, 1);
-        } else {
-            cv.put(TableTransactions.COLUMN_NEED_APPROVE, 0);
-        }
-        cv.put(TableTransactions.COLUMN_REPEATING_TYPE_ID, repeatingTypeId);
         cv.put(TableTransactions.COLUMN_CATEGORY_ID, categoryId);
         Uri uri = contentResolver.insert(DatabaseContentProvider.CONTENT_URI_TRANSACTIONS, cv);
         long id = Long.decode(uri.getLastPathSegment());

@@ -9,6 +9,9 @@ public class DatabaseContentProvider extends ContentProvider {
 
     public static final Uri CONTENT_URI_ACCOUNTS = Uri.parse("content://");
     public static final Uri CONTENT_URI_TRANSACTIONS = Uri.parse("content://");
+    public static final Uri CONTENT_URI_SCHEDULED_TRANSACTIONS = Uri.parse("content://");
+    public static final Uri CONTENT_URI_CATEGORIES = Uri.parse("content://");
+
 
     @Override
     public boolean onCreate() {

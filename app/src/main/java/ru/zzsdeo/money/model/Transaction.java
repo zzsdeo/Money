@@ -13,8 +13,6 @@ public class Transaction {
     private final ContentResolver contentResolver;
     private final long id;
 
-    //public static final String[] repeatingTypes = {getString(R.string.once), "Каждый день", "Каждый будний день", "Каждое определенное число", "Каждый определенный день недели", "Каждый последний день месяца"};
-
     public Transaction(Context context, long id) {
         contentResolver = context.getContentResolver();
         this.id = id;
@@ -76,14 +74,6 @@ public class Transaction {
         return comment;
     }
 
-    public boolean isApproved() {
-        Cursor c = getCursor(TableTransactions.COLUMN_IS_APPROVED);
-        c.moveToFirst();
-        int isApproved = c.getInt(c.getColumnIndex(TableTransactions.COLUMN_IS_APPROVED));
-        c.close();
-        return isApproved != 0;
-    }
-
     /*public boolean isTransfer() {
         return isTransfer;
     }
@@ -91,48 +81,6 @@ public class Transaction {
     public IAccount getDestinationAccount() {
         return destinationAccount;
     }*/
-
-    public void setNeedApprove(boolean needApprove) {
-        ContentValues cv = new ContentValues();
-        if (needApprove) {
-            cv.put(TableTransactions.COLUMN_NEED_APPROVE, 1);
-        } else {
-            cv.put(TableTransactions.COLUMN_NEED_APPROVE, 0);
-        }
-        updateDb(cv);
-    }
-
-    public boolean getNeedApprove() {
-        Cursor c = getCursor(TableTransactions.COLUMN_NEED_APPROVE);
-        c.moveToFirst();
-        int needApprove = c.getInt(c.getColumnIndex(TableTransactions.COLUMN_NEED_APPROVE));
-        c.close();
-        return needApprove != 0;
-    }
-
-    public void approve() {
-        ContentValues cv = new ContentValues();
-        cv.put(TableTransactions.COLUMN_IS_APPROVED, 1);
-        updateDb(cv);
-    }
-
-    /*public boolean isRepeating() {
-        return isRepeating;
-    }*/
-
-    public void setRepeatingTypeId(long id) {
-        ContentValues cv = new ContentValues();
-        cv.put(TableTransactions.COLUMN_REPEATING_TYPE_ID, id);
-        updateDb(cv);
-    }
-
-    public long getRepeatingTypeId() {
-        Cursor c = getCursor(TableTransactions.COLUMN_REPEATING_TYPE_ID);
-        c.moveToFirst();
-        long repeatingTypeId = c.getLong(c.getColumnIndex(TableTransactions.COLUMN_REPEATING_TYPE_ID));
-        c.close();
-        return repeatingTypeId;
-    }
 
     private Cursor getCursor (String column) {
         return contentResolver.query(
