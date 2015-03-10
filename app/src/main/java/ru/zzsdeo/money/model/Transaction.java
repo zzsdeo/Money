@@ -18,6 +18,10 @@ public class Transaction {
         this.id = id;
     }
 
+    public long getTransactionId() {
+        return id;
+    }
+
     public void setAccountId(long accountId) {
         ContentValues cv = new ContentValues();
         cv.put(TableTransactions.COLUMN_ACCOUNT_ID, accountId);

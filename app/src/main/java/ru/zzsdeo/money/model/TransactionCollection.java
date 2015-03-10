@@ -58,7 +58,7 @@ public class TransactionCollection extends HashMap<Long, Transaction> {
         cv.put(TableTransactions.COLUMN_DESTINATION_ACCOUNT_ID, destinationAccountId);
         cv.put(TableTransactions.COLUMN_CATEGORY_ID, categoryId);
         Uri uri = contentResolver.insert(DatabaseContentProvider.CONTENT_URI_TRANSACTIONS, cv);
-        long id = Long.decode(uri.getLastPathSegment());
+        long id = Long.valueOf(uri.getLastPathSegment());
         put(id, new Transaction(context, id));
     }
 

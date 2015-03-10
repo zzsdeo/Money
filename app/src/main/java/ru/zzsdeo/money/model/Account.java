@@ -36,16 +36,16 @@ public class Account {
         return name;
     }
 
-    public void setCardNumber(int cardNumber) {
+    public void setCardNumber(String cardNumber) {
         ContentValues cv = new ContentValues();
         cv.put(TableAccounts.COLUMN_CARD_NUMBER, cardNumber);
         updateDb(cv);
     }
 
-    public int getCardNumber() {
+    public String getCardNumber() {
         Cursor c = getCursor(TableAccounts.COLUMN_CARD_NUMBER);
         c.moveToFirst();
-        int cardNumber = c.getInt(c.getColumnIndex(TableAccounts.COLUMN_CARD_NUMBER));
+        String cardNumber = c.getString(c.getColumnIndex(TableAccounts.COLUMN_CARD_NUMBER));
         c.close();
         return cardNumber;
     }

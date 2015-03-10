@@ -19,6 +19,10 @@ public class ScheduledTransaction {
         this.id = id;
     }
 
+    public long getScheduledTransactionId() {
+        return id;
+    }
+
     public void setAccountId(long accountId) {
         ContentValues cv = new ContentValues();
         cv.put(TableScheduledTransactions.COLUMN_ACCOUNT_ID, accountId);

@@ -66,7 +66,7 @@ public class ScheduledTransactionCollection extends HashMap<Long, ScheduledTrans
         cv.put(TableScheduledTransactions.COLUMN_REPEATING_TYPE_ID, repeatingTypeId);
         cv.put(TableScheduledTransactions.COLUMN_CATEGORY_ID, categoryId);
         Uri uri = contentResolver.insert(DatabaseContentProvider.CONTENT_URI_SCHEDULED_TRANSACTIONS, cv);
-        long id = Long.decode(uri.getLastPathSegment());
+        long id = Long.valueOf(uri.getLastPathSegment());
         put(id, new ScheduledTransaction(context, id));
     }
 

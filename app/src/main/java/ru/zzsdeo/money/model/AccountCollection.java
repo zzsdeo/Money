@@ -9,6 +9,7 @@ import android.net.Uri;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import ru.zzsdeo.money.db.DatabaseContentProvider;
 import ru.zzsdeo.money.db.TableAccounts;
@@ -40,13 +41,13 @@ public class AccountCollection extends HashMap<Long, Account> {
         c.close();
     }
 
-    public void addAccount(String name, int cardNumber, float balance) {
+    public void addAccount(String name, String cardNumber, float balance) {
         ContentValues cv = new ContentValues();
         cv.put(TableAccounts.COLUMN_NAME, name);
         cv.put(TableAccounts.COLUMN_CARD_NUMBER, cardNumber);
         cv.put(TableAccounts.COLUMN_BALANCE, balance);
         Uri uri = contentResolver.insert(DatabaseContentProvider.CONTENT_URI_ACCOUNTS, cv);
-        long id = Long.decode(uri.getLastPathSegment());
+        long id = Long.valueOf(uri.getLastPathSegment());
         put(id, new Account(context, id));
     }
 
@@ -57,6 +58,11 @@ public class AccountCollection extends HashMap<Long, Account> {
                 null
         );
         if (deletedRows > 0) remove(id);
-        //TODO сделать удаление транзакций ассоциированных с этим аккаунтом
+        // удаление транзакций ассоциированных с этим аккаунтом
+        TransactionCollection transactionCollection = new TransactionCollection(context);
+        for (Transaction transaction : transactionCollection.values()) {
+            if (transaction.getAccountId() == id)
+                transactionCollection.removeTransaction(transaction.getTransactionId());
+        }
     }
 }

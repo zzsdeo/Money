@@ -7,11 +7,5 @@
         android:orderInCategory="1"
         app:showAsAction="ifRoom"
         android:title="Добавить"
-        android:icon="@android:drawable/ic_menu_edit"/>
-    <item
-        android:id="@+id/add_item"
-        android:orderInCategory="2"
-        app:showAsAction="ifRoom"
-        android:title="Добавить"
         android:icon="@android:drawable/ic_menu_add"/>
 </menu>

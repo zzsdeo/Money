@@ -45,7 +45,7 @@ public class CategoryCollection extends HashMap<Long, Category> {
         cv.put(TableCategories.COLUMN_NAME, name);
         cv.put(TableCategories.COLUMN_BUDGET, budget);
         Uri uri = contentResolver.insert(DatabaseContentProvider.CONTENT_URI_CATEGORIES, cv);
-        long id = Long.decode(uri.getLastPathSegment());
+        long id = Long.valueOf(uri.getLastPathSegment());
         put(id, new Category(context, id));
     }
 

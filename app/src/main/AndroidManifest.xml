@@ -13,6 +13,18 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".AddActivity"
+            android:label="Добавить счет"/>
+
+        <activity android:name=".ManageAccountsActivity"
+            android:label="Управление счетами"/>
+
+        <provider
+            android:name="ru.zzsdeo.money.db.DatabaseContentProvider"
+            android:authorities="ru.zzsdeo.money.contentprovider"
+            android:exported="false" >
+        </provider>
+
     </application>
 
 </manifest>
