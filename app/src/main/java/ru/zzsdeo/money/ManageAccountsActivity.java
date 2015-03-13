@@ -8,13 +8,16 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import ru.zzsdeo.money.adapters.ManageAccountsRecyclerViewAdapter;
 import ru.zzsdeo.money.model.AccountCollection;
 
-public class ManageAccountsActivity extends ActionBarActivity implements LoaderManager.LoaderCallbacks<AccountCollection> {
+public class ManageAccountsActivity extends ActionBarActivity {
+
+    public static final int ADD_ACCOUNT_REQUEST_CODE = 10;
 
     private ManageAccountsRecyclerViewAdapter manageAccountsRecyclerViewAdapter;
 
@@ -28,7 +31,7 @@ public class ManageAccountsActivity extends ActionBarActivity implements LoaderM
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.add_account:
-                startActivity(new Intent(this, AddActivity.class));
+                startActivityForResult(new Intent(this, AddActivity.class), ADD_ACCOUNT_REQUEST_CODE);
                 return true;
             default:
                 return false;
@@ -41,29 +44,18 @@ public class ManageAccountsActivity extends ActionBarActivity implements LoaderM
         setContentView(R.layout.activity_manage_accounts);
 
         AccountCollection accountCollection = new AccountCollection(this);
-        getLoaderManager().initLoader(0, null, this);
-
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_accounts);
-        manageAccountsRecyclerViewAdapter = new ManageAccountsRecyclerViewAdapter(this);
+        manageAccountsRecyclerViewAdapter = new ManageAccountsRecyclerViewAdapter(this, accountCollection);
         recyclerView.setAdapter(manageAccountsRecyclerViewAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
     @Override
-    public Loader<AccountCollection> onCreateLoader(int id, Bundle args) {
-        return new AccountsAsyncTaskLoader(getApplicationContext());
-    }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-    @Override
-    public void onLoadFinished(Loader<AccountCollection> loader, AccountCollection data) {
-        manageAccountsRecyclerViewAdapter.setData(data);
-        //getLoaderManager().getLoader(0).forceLoad();
-    }
-
-    @Override
-    public void onLoaderReset(Loader<AccountCollection> loader) {
-        manageAccountsRecyclerViewAdapter.clearData();
+        if (resultCode == RESULT_OK) manageAccountsRecyclerViewAdapter.refreshDataSet();
     }
 }

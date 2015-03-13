@@ -33,12 +33,11 @@ public class ManageAccountsRecyclerViewAdapter extends RecyclerView.Adapter<Mana
     public static final String ACCOUNT_CARD_NUMBER = "account_card_number";
     public static final String ACCOUNT_BALANCE = "account_balance";
 
-    public ManageAccountsRecyclerViewAdapter(Context context) {
-        /*mAccounts = new ArrayList<>(accounts.values());
-        mAccountCollection = accounts;*/
+    public ManageAccountsRecyclerViewAdapter(Context context, AccountCollection accounts) {
+        mAccounts = new ArrayList<>(accounts.values());
+        mAccountCollection = accounts;
         mContext = context;
-        mAccounts = new ArrayList<>();
-
+        setHasStableIds(true);
     }
 
     @Override
@@ -60,20 +59,19 @@ public class ManageAccountsRecyclerViewAdapter extends RecyclerView.Adapter<Mana
 
     @Override
     public int getItemCount() {
-        if (mAccounts != null) {
-            return mAccounts.size();
-        } else {
-            return 0;
-        }
+        return mAccounts.size();
     }
 
-    public void setData(AccountCollection accounts) {
-        mAccounts.addAll(accounts.values());
-        mAccountCollection = accounts;
+    @Override
+    public long getItemId(int position) {
+        return mAccounts.get(position).getAccountId();
     }
 
-    public void clearData() {
-        if (mAccounts != null) mAccounts.clear();
+    public void refreshDataSet() {
+        mAccountCollection = new AccountCollection(mContext);
+        mAccounts.clear();
+        mAccounts.addAll(mAccountCollection.values());
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -93,6 +91,8 @@ public class ManageAccountsRecyclerViewAdapter extends RecyclerView.Adapter<Mana
                     switch (menuItem.getItemId()) {
                         case R.id.delete_account:
                             mAccountCollection.removeAccount(mAccounts.get(getPosition()).getAccountId());
+                            mAccounts.remove(getPosition());
+                            notifyItemRemoved(getPosition());
                             return true;
                         case R.id.edit_account:
                             Intent i = new Intent(mContext, AddActivity.class);

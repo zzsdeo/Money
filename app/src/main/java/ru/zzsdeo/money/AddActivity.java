@@ -64,6 +64,7 @@ public class AddActivity extends ActionBarActivity implements View.OnClickListen
                 cardNumber.setText("");
                 balance.setText("");
                 Toast.makeText(this, "Счет успешно добавлен", Toast.LENGTH_LONG).show();
+                setResult(RESULT_OK);
                 break;
         }
     }

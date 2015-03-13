@@ -45,8 +45,6 @@ public class TransactionCollection extends HashMap<Long, Transaction> {
             float commission,
             String comment,
             long destinationAccountId,
-            boolean needApprove,
-            long repeatingTypeId,
             long categoryId) {
 
         ContentValues cv = new ContentValues();
