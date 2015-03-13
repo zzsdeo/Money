@@ -33,10 +33,12 @@ public class ManageAccountsRecyclerViewAdapter extends RecyclerView.Adapter<Mana
     public static final String ACCOUNT_CARD_NUMBER = "account_card_number";
     public static final String ACCOUNT_BALANCE = "account_balance";
 
-    public ManageAccountsRecyclerViewAdapter(AccountCollection accounts, Context context) {
-        mAccounts = new ArrayList<>(accounts.values());
-        mAccountCollection = accounts;
+    public ManageAccountsRecyclerViewAdapter(Context context) {
+        /*mAccounts = new ArrayList<>(accounts.values());
+        mAccountCollection = accounts;*/
         mContext = context;
+        mAccounts = new ArrayList<>();
+
     }
 
     @Override
@@ -58,7 +60,20 @@ public class ManageAccountsRecyclerViewAdapter extends RecyclerView.Adapter<Mana
 
     @Override
     public int getItemCount() {
-        return mAccounts.size();
+        if (mAccounts != null) {
+            return mAccounts.size();
+        } else {
+            return 0;
+        }
+    }
+
+    public void setData(AccountCollection accounts) {
+        mAccounts.addAll(accounts.values());
+        mAccountCollection = accounts;
+    }
+
+    public void clearData() {
+        if (mAccounts != null) mAccounts.clear();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -78,7 +93,6 @@ public class ManageAccountsRecyclerViewAdapter extends RecyclerView.Adapter<Mana
                     switch (menuItem.getItemId()) {
                         case R.id.delete_account:
                             mAccountCollection.removeAccount(mAccounts.get(getPosition()).getAccountId());
-                            ManageAccountsRecyclerViewAdapter.this.notifyDataSetChanged();
                             return true;
                         case R.id.edit_account:
                             Intent i = new Intent(mContext, AddActivity.class);

@@ -1,6 +1,8 @@
 package ru.zzsdeo.money;
 
+import android.app.LoaderManager;
 import android.content.Intent;
+import android.content.Loader;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -12,7 +14,9 @@ import android.view.MenuItem;
 import ru.zzsdeo.money.adapters.ManageAccountsRecyclerViewAdapter;
 import ru.zzsdeo.money.model.AccountCollection;
 
-public class ManageAccountsActivity extends ActionBarActivity {
+public class ManageAccountsActivity extends ActionBarActivity implements LoaderManager.LoaderCallbacks<AccountCollection> {
+
+    private ManageAccountsRecyclerViewAdapter manageAccountsRecyclerViewAdapter;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -37,11 +41,29 @@ public class ManageAccountsActivity extends ActionBarActivity {
         setContentView(R.layout.activity_manage_accounts);
 
         AccountCollection accountCollection = new AccountCollection(this);
+        getLoaderManager().initLoader(0, null, this);
+
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_accounts);
-        ManageAccountsRecyclerViewAdapter manageAccountsRecyclerViewAdapter = new ManageAccountsRecyclerViewAdapter(accountCollection, this);
+        manageAccountsRecyclerViewAdapter = new ManageAccountsRecyclerViewAdapter(this);
         recyclerView.setAdapter(manageAccountsRecyclerViewAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+    }
+
+    @Override
+    public Loader<AccountCollection> onCreateLoader(int id, Bundle args) {
+        return new AccountsAsyncTaskLoader(getApplicationContext());
+    }
+
+    @Override
+    public void onLoadFinished(Loader<AccountCollection> loader, AccountCollection data) {
+        manageAccountsRecyclerViewAdapter.setData(data);
+        //getLoaderManager().getLoader(0).forceLoad();
+    }
+
+    @Override
+    public void onLoaderReset(Loader<AccountCollection> loader) {
+        manageAccountsRecyclerViewAdapter.clearData();
     }
 }
