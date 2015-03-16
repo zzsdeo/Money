@@ -1,24 +1,21 @@
 package ru.zzsdeo.money;
 
 import android.app.DialogFragment;
-import android.app.LoaderManager;
 import android.content.Intent;
-import android.content.Loader;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import ru.zzsdeo.money.adapters.ManageAccountsRecyclerViewAdapter;
-import ru.zzsdeo.money.model.AccountCollection;
 
 public class ManageAccountsActivity extends ActionBarActivity implements Dialogs.DialogListener {
 
     public static final int ADD_ACCOUNT_REQUEST_CODE = 10;
+    public static final int EDIT_ACCOUNT_REQUEST_CODE = 20;
 
     private ManageAccountsRecyclerViewAdapter manageAccountsRecyclerViewAdapter;
 
@@ -32,7 +29,7 @@ public class ManageAccountsActivity extends ActionBarActivity implements Dialogs
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.add_account:
-                startActivityForResult(new Intent(this, AddActivity.class), ADD_ACCOUNT_REQUEST_CODE);
+                startActivityForResult(new Intent(this, AddAccountActivity.class), ADD_ACCOUNT_REQUEST_CODE);
                 return true;
             default:
                 return false;

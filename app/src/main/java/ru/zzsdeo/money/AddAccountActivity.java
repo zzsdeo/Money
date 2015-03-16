@@ -17,7 +17,7 @@ import android.widget.Toast;
 import ru.zzsdeo.money.adapters.ManageAccountsRecyclerViewAdapter;
 import ru.zzsdeo.money.model.AccountCollection;
 
-public class AddActivity extends ActionBarActivity implements View.OnClickListener{
+public class AddAccountActivity extends ActionBarActivity implements View.OnClickListener{
 
     private EditText name, cardNumber, balance;
 
@@ -26,18 +26,10 @@ public class AddActivity extends ActionBarActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_account);
 
-        Bundle bundle = getIntent().getExtras();
-
         Button addBtn = (Button) findViewById(R.id.addBtn);
         name = (EditText) findViewById(R.id.cardName);
         cardNumber = (EditText) findViewById(R.id.cardNumber);
         balance = (EditText) findViewById(R.id.startBalance);
-
-        if (bundle != null) {
-            name.setText(bundle.getString(ManageAccountsRecyclerViewAdapter.ACCOUNT_NAME));
-            cardNumber.setText(bundle.getString(ManageAccountsRecyclerViewAdapter.ACCOUNT_CARD_NUMBER));
-            balance.setText(bundle.getString(ManageAccountsRecyclerViewAdapter.ACCOUNT_BALANCE));
-        }
 
         addBtn.setOnClickListener(this);
     }

@@ -1,16 +1,8 @@
 package ru.zzsdeo.money.adapters;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.app.FragmentManager;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -22,8 +14,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 
-import ru.zzsdeo.money.AddActivity;
+import ru.zzsdeo.money.AddAccountActivity;
 import ru.zzsdeo.money.Dialogs;
+import ru.zzsdeo.money.EditAccountActivity;
 import ru.zzsdeo.money.ManageAccountsActivity;
 import ru.zzsdeo.money.R;
 import ru.zzsdeo.money.model.Account;
@@ -35,9 +28,7 @@ public class ManageAccountsRecyclerViewAdapter extends RecyclerView.Adapter<Mana
     private AccountCollection mAccountCollection;
     private ManageAccountsActivity mContext;
     private FragmentManager mFragmentManager;
-    public static final String ACCOUNT_NAME = "account_name";
-    public static final String ACCOUNT_CARD_NUMBER = "account_card_number";
-    public static final String ACCOUNT_BALANCE = "account_balance";
+    public static final String ACCOUNT_ID = "account_id";
 
     public ManageAccountsRecyclerViewAdapter(ManageAccountsActivity context) {
         mAccountCollection = new AccountCollection(context);
@@ -130,13 +121,11 @@ public class ManageAccountsRecyclerViewAdapter extends RecyclerView.Adapter<Mana
                     dialog.show(mAdapter.mFragmentManager, Dialogs.DIALOGS_TAG);
                     return true;
                 case R.id.edit_account:
-                    Intent i = new Intent(mAdapter.mContext, AddActivity.class);
+                    Intent i = new Intent(mAdapter.mContext, EditAccountActivity.class);
                     Bundle b = new Bundle();
-                    b.putString(ACCOUNT_NAME, mAdapter.mAccounts.get(getPosition()).getName());
-                    b.putString(ACCOUNT_CARD_NUMBER, String.valueOf(mAdapter.mAccounts.get(getPosition()).getCardNumber()));
-                    b.putString(ACCOUNT_BALANCE, String.valueOf(mAdapter.mAccounts.get(getPosition()).getBalance()));
+                    b.putLong(ACCOUNT_ID, mAdapter.mAccounts.get(getPosition()).getAccountId());
                     i.putExtras(b);
-                    mAdapter.mContext.startActivity(i);
+                    mAdapter.mContext.startActivityForResult(i, ManageAccountsActivity.EDIT_ACCOUNT_REQUEST_CODE);
                     return true;
                 default:
                     return false;
