@@ -1,4 +1,4 @@
-package ru.zzsdeo.money;
+package ru.zzsdeo.money.activities;
 
 import android.app.ActionBar;
 import android.content.Context;
@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import ru.zzsdeo.money.R;
 import ru.zzsdeo.money.adapters.ManageAccountsRecyclerViewAdapter;
 import ru.zzsdeo.money.model.AccountCollection;
 

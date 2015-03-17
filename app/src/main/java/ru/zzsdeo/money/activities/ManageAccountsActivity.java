@@ -1,4 +1,4 @@
-package ru.zzsdeo.money;
+package ru.zzsdeo.money.activities;
 
 import android.app.DialogFragment;
 import android.content.Intent;
@@ -10,6 +10,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import ru.zzsdeo.money.Constants;
+import ru.zzsdeo.money.Dialogs;
+import ru.zzsdeo.money.R;
 import ru.zzsdeo.money.adapters.ManageAccountsRecyclerViewAdapter;
 
 public class ManageAccountsActivity extends ActionBarActivity implements Dialogs.DialogListener {

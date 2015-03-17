@@ -6,20 +6,20 @@
     <application android:allowBackup="true" android:label="@string/app_name"
         android:icon="@mipmap/ic_launcher" android:theme="@style/AppTheme">
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
-        <activity android:name=".AddAccountActivity"
+        <activity android:name=".activities.AddAccountActivity"
             android:label="Добавить счет"/>
 
-        <activity android:name=".ManageAccountsActivity"
+        <activity android:name=".activities.ManageAccountsActivity"
             android:label="Управление счетами"/>
 
-        <activity android:name=".EditAccountActivity"
+        <activity android:name=".activities.EditAccountActivity"
             android:label="Редактировать счет"/>
 
         <provider

@@ -1,4 +1,4 @@
-package ru.zzsdeo.money;
+package ru.zzsdeo.money.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import ru.zzsdeo.money.R;
 import ru.zzsdeo.money.adapters.ManageAccountsRecyclerViewAdapter;
 import ru.zzsdeo.money.model.Account;
 import ru.zzsdeo.money.model.AccountCollection;

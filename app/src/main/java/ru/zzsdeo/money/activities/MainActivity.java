@@ -1,8 +1,9 @@
-package ru.zzsdeo.money;
+package ru.zzsdeo.money.activities;
 
 import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,10 +11,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.astuetz.PagerSlidingTabStrip;
+
+import ru.zzsdeo.money.Constants;
+import ru.zzsdeo.money.Dialogs;
+import ru.zzsdeo.money.R;
 import ru.zzsdeo.money.adapters.MainActivityBalanceRecyclerViewAdapter;
-import ru.zzsdeo.money.adapters.ManageAccountsRecyclerViewAdapter;
+import ru.zzsdeo.money.adapters.MainPagerAdapter;
 import ru.zzsdeo.money.model.AccountCollection;
-import ru.zzsdeo.money.model.RepeatingTypes;
 
 public class MainActivity extends ActionBarActivity implements Dialogs.DialogListener {
 
@@ -44,11 +49,20 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
 
         accountCollection = new AccountCollection(this);
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_accounts_main);
+        /*RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_accounts_main);
         mainActivityBalanceRecyclerViewAdapter = new MainActivityBalanceRecyclerViewAdapter(this);
         recyclerView.setAdapter(mainActivityBalanceRecyclerViewAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setItemAnimator(new DefaultItemAnimator());*/
+
+        // Initialize the ViewPager and set an adapter
+        ViewPager pager = (ViewPager) findViewById(R.id.pager);
+        pager.setAdapter(new MainPagerAdapter(getSupportFragmentManager()));
+
+        // Bind the tabs to the ViewPager
+        PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+        tabs.setViewPager(pager);
+
     }
 
     @Override

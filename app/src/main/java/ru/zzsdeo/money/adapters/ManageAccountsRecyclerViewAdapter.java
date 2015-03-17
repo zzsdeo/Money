@@ -14,11 +14,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 
-import ru.zzsdeo.money.AddAccountActivity;
 import ru.zzsdeo.money.Constants;
 import ru.zzsdeo.money.Dialogs;
-import ru.zzsdeo.money.EditAccountActivity;
-import ru.zzsdeo.money.ManageAccountsActivity;
+import ru.zzsdeo.money.activities.EditAccountActivity;
+import ru.zzsdeo.money.activities.ManageAccountsActivity;
 import ru.zzsdeo.money.R;
 import ru.zzsdeo.money.model.Account;
 import ru.zzsdeo.money.model.AccountCollection;
