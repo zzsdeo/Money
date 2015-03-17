@@ -69,7 +69,6 @@ public class Dialogs extends DialogFragment {
                 return builder.create();
             case YOU_MUST_ADD_ACCOUNT:
                 builder.setMessage("Для работы приложения необходимо создать хотя бы один счет.");
-                builder.setCancelable(false);
                 builder.setPositiveButton("Создать", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

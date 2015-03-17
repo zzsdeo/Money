@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 
 import ru.zzsdeo.money.AddAccountActivity;
+import ru.zzsdeo.money.Constants;
 import ru.zzsdeo.money.Dialogs;
 import ru.zzsdeo.money.EditAccountActivity;
 import ru.zzsdeo.money.ManageAccountsActivity;
@@ -125,7 +126,7 @@ public class ManageAccountsRecyclerViewAdapter extends RecyclerView.Adapter<Mana
                     Bundle b = new Bundle();
                     b.putLong(ACCOUNT_ID, mAdapter.mAccounts.get(getPosition()).getAccountId());
                     i.putExtras(b);
-                    mAdapter.mContext.startActivityForResult(i, ManageAccountsActivity.EDIT_ACCOUNT_REQUEST_CODE);
+                    mAdapter.mContext.startActivityForResult(i, Constants.EDIT_ACCOUNT_REQUEST_CODE);
                     return true;
                 default:
                     return false;
