@@ -56,13 +56,18 @@ public class ManageAccountsActivity extends ActionBarActivity implements Dialogs
     }
 
     @Override
-    public void onDialogPositiveClick(DialogFragment dialog, long id) {
+    public void onDialogPositiveClick(DialogFragment dialog, int dialogType) {
+
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog, int dialogType, long id) {
         manageAccountsRecyclerViewAdapter.removeItem(id);
         dialog.dismiss();
     }
 
     @Override
-    public void onDialogNegativeClick(DialogFragment dialog) {
+    public void onDialogNegativeClick(DialogFragment dialog, int dialogType) {
         dialog.dismiss();
     }
 }
