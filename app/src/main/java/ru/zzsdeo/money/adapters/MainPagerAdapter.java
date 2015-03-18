@@ -1,15 +1,17 @@
 package ru.zzsdeo.money.adapters;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.astuetz.PagerSlidingTabStrip;
+
 import ru.zzsdeo.money.fragments.FragmentCollection;
 
-public class MainPagerAdapter extends FragmentPagerAdapter {
+public class MainPagerAdapter extends FragmentPagerAdapter implements PagerSlidingTabStrip.IconTabProvider {
 
     private FragmentCollection fragmentCollection;
-    public static final String[] TITLES = {"111", "222", "333"};
 
     public MainPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -18,13 +20,7 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        Fragment fragmentClass = fragmentCollection.get(position);
-        try {
-            return fragmentClass.getClass().newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
-            e.printStackTrace();
-            return null;
-        }
+        return (Fragment) fragmentCollection.get(position);
     }
 
     @Override
@@ -33,7 +29,7 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
     }
 
     @Override
-    public CharSequence getPageTitle(int position) {
-        return TITLES[position];
+    public int getPageIconResId(int i) {
+        return fragmentCollection.get(i).getIconResId();
     }
 }

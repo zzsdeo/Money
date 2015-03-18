@@ -49,7 +49,7 @@ public class MainActivityBalanceRecyclerViewAdapter extends RecyclerView.Adapter
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Account account = mAccounts.get(position);
-        String [] items = new String[] {
+        String[] items = new String[] {
                 account.getName(),
                 String.valueOf(account.getBalance())
         };

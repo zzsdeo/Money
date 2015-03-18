@@ -93,7 +93,7 @@ public class ManageAccountsRecyclerViewAdapter extends RecyclerView.Adapter<Mana
             mTextView = (TextView) view.findViewById(R.id.recycler_card_account_text);
 
             mToolbar = (Toolbar) view.findViewById(R.id.card_toolbar_account);
-            mToolbar.inflateMenu(R.menu.recucler_card_account_menu);
+            mToolbar.inflateMenu(R.menu.recucler_card_account_toolbar);
             mToolbar.setOnMenuItemClickListener(this);
         }
 

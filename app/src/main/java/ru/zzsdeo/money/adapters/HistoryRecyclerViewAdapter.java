@@ -30,37 +30,16 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecy
         mAccounts = accounts;
     }
 
-    /*public void add(String item) {
-        mDataset.add(item);
-        notifyItemInserted(mDataset.size());
-    }
-
-    public void add(String item, int position) {
-        mDataset.add(position, item);
-        notifyItemInserted(position);
-    }
-
-    public void remove(String item) {
-        int position = mDataset.indexOf(item);
-        mDataset.remove(position);
-        notifyItemRemoved(position);
-    }
-
-    public void remove(int position) {
-        mDataset.remove(position);
-        notifyItemRemoved(position);
-    }*/
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_card, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_card_transaction_history, parent, false);
         return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Transaction transaction = mTransactions.get(position);
-        String [] items = new String[] {
+        String[] items = new String[] {
                 transaction.getComment(),
                 mAccounts.get(transaction.getAccountId()).getName(),
                 new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(new Date(transaction.getDateInMill())),
@@ -84,11 +63,11 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecy
         public ViewHolder(View view) {
             super(view);
             view.setOnClickListener(this);
-            mTextView1 = (TextView) view.findViewById(R.id.recycler_card_text1);
-            mTextView2 = (TextView) view.findViewById(R.id.recycler_card_text2);
+            mTextView1 = (TextView) view.findViewById(R.id.recycler_card_history_text1);
+            mTextView2 = (TextView) view.findViewById(R.id.recycler_card_history_text2);
 
-            mToolbar = (Toolbar) view.findViewById(R.id.card_toolbar);
-            mToolbar.inflateMenu(R.menu.card_menu);
+            mToolbar = (Toolbar) view.findViewById(R.id.recycler_card_history_toolbar);
+            mToolbar.inflateMenu(R.menu.recycler_card_history_toolbar);
             mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem menuItem) {

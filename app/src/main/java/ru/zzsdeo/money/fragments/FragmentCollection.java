@@ -4,11 +4,10 @@ import android.support.v4.app.Fragment;
 
 import java.util.ArrayList;
 
-public class FragmentCollection extends ArrayList<Fragment> {
+public class FragmentCollection extends ArrayList<IFragment> {
 
     public FragmentCollection() {
-        add(0, new MainFragment());
+        add(0, new HistoryFragment());
         add(1, new MainFragment());
-        add(2, new MainFragment());
     }
 }

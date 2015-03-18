@@ -16,14 +16,17 @@ import com.astuetz.PagerSlidingTabStrip;
 import ru.zzsdeo.money.Constants;
 import ru.zzsdeo.money.Dialogs;
 import ru.zzsdeo.money.R;
+import ru.zzsdeo.money.adapters.HistoryRecyclerViewAdapter;
 import ru.zzsdeo.money.adapters.MainActivityBalanceRecyclerViewAdapter;
 import ru.zzsdeo.money.adapters.MainPagerAdapter;
 import ru.zzsdeo.money.model.AccountCollection;
+import ru.zzsdeo.money.model.TransactionCollection;
 
 public class MainActivity extends ActionBarActivity implements Dialogs.DialogListener {
 
     private AccountCollection accountCollection;
-    private MainActivityBalanceRecyclerViewAdapter mainActivityBalanceRecyclerViewAdapter;
+    public MainActivityBalanceRecyclerViewAdapter mainActivityBalanceRecyclerViewAdapter;
+    public HistoryRecyclerViewAdapter historyRecyclerViewAdapter;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -49,19 +52,18 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
 
         accountCollection = new AccountCollection(this);
 
-        /*RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_accounts_main);
         mainActivityBalanceRecyclerViewAdapter = new MainActivityBalanceRecyclerViewAdapter(this);
-        recyclerView.setAdapter(mainActivityBalanceRecyclerViewAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());*/
+        historyRecyclerViewAdapter = new HistoryRecyclerViewAdapter(new TransactionCollection(this), accountCollection);
 
         // Initialize the ViewPager and set an adapter
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
-        pager.setAdapter(new MainPagerAdapter(getSupportFragmentManager()));
+        MainPagerAdapter mainPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
+        pager.setAdapter(mainPagerAdapter);
 
         // Bind the tabs to the ViewPager
         PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         tabs.setViewPager(pager);
+        pager.setCurrentItem(1);
 
     }
 
