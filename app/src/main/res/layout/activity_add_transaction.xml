@@ -9,18 +9,26 @@
         android:layout_height="match_parent"
         android:layout_margin="10dp">
 
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/spinner1"
-            android:layout_margin="10dp" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Использовать данный счет по умолчанию"
-            android:id="@+id/checkBox1"
-            android:layout_margin="10dp" />
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner1"
+                android:layout_margin="10dp"
+                android:layout_gravity="center_vertical" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/checkBox1"
+                android:layout_margin="10dp"
+                style="@android:style/Widget.CompoundButton.Star"
+                android:layout_gravity="center_vertical" />
+        </LinearLayout>
 
         <Spinner
             android:layout_width="wrap_content"

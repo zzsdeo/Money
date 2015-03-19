@@ -9,33 +9,34 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
+import ru.zzsdeo.money.R;
 import ru.zzsdeo.money.model.Account;
-import ru.zzsdeo.money.model.AccountCollection;
 
-public class AccountsSpinnerAdapter extends BaseAdapter {
+public abstract class AbstractSpinnerAdapter extends BaseAdapter {
 
-    private ArrayList<Account> accounts;
+    private ArrayList<Object> objects;
     private Context context;
 
-    public AccountsSpinnerAdapter(Context context, AccountCollection accountCollection) {
-        accounts = new ArrayList<>(accountCollection.values());
+    public AbstractSpinnerAdapter(Context context, LinkedHashMap collection) {
+        objects = new ArrayList<Object>(collection.values());
         this.context = context;
     }
 
     @Override
     public int getCount() {
-        return accounts.size();
+        return objects.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return accounts.get(position);
+        return objects.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return accounts.get(position).getAccountId();
+        return getObjectId(objects.get(position));
     }
 
     @Override
@@ -44,14 +45,14 @@ public class AccountsSpinnerAdapter extends BaseAdapter {
         View rowView = convertView;
         if (rowView == null) {
             LayoutInflater inflater = ((Activity)context).getLayoutInflater();
-            rowView = inflater.inflate(android.R.layout.simple_spinner_item, null, true);
+            rowView = inflater.inflate(R.layout.spinner_item, null, true);
             holder = new ViewHolder();
-            holder.textView = (TextView) rowView.findViewById(android.R.id.text1);
+            holder.textView = (TextView) rowView.findViewById(R.id.textView);
             rowView.setTag(holder);
         } else {
             holder = (ViewHolder) rowView.getTag();
         }
-        holder.textView.setText(accounts.get(position).getName());
+        holder.textView.setText(getTitle(objects.get(position)));
         return rowView;
     }
 
@@ -63,4 +64,8 @@ public class AccountsSpinnerAdapter extends BaseAdapter {
     private static class ViewHolder {
         public TextView textView;
     }
+
+    public abstract CharSequence getTitle(Object object);
+
+    public abstract long getObjectId(Object object);
 }

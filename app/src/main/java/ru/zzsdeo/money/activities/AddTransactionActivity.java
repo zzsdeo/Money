@@ -14,10 +14,11 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ru.zzsdeo.money.R;
-import ru.zzsdeo.money.adapters.AccountsSpinnerAdapter;
+import ru.zzsdeo.money.adapters.AbstractSpinnerAdapter;
 import ru.zzsdeo.money.model.Account;
 import ru.zzsdeo.money.model.AccountCollection;
 
@@ -44,8 +45,17 @@ public class AddTransactionActivity extends ActionBarActivity implements View.On
         Spinner categoryId = (Spinner) findViewById(R.id.spinner4);
         Button addBtn = (Button) findViewById(R.id.addBtn);
 
-        AccountsSpinnerAdapter accountsSpinnerAdapter = new AccountsSpinnerAdapter(this, accountCollection);
-        accountId.setAdapter(accountsSpinnerAdapter);
+        accountId.setAdapter(new AbstractSpinnerAdapter(this, accountCollection) {
+            @Override
+            public CharSequence getTitle(Object object) {
+                return ((Account)object).getName();
+            }
+
+            @Override
+            public long getObjectId(Object object) {
+                return ((Account)object).getAccountId();
+            }
+        });
 
         destinationAccountId.setVisibility(View.GONE);
         isTransfer.setOnCheckedChangeListener(this);
