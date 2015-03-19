@@ -22,6 +22,9 @@
         <activity android:name=".activities.EditAccountActivity"
             android:label="Редактировать счет"/>
 
+        <activity android:name=".activities.AddTransactionActivity"
+            android:label="Добавить транзакцию"/>
+
         <provider
             android:name="ru.zzsdeo.money.db.DatabaseContentProvider"
             android:authorities="ru.zzsdeo.money.contentprovider"

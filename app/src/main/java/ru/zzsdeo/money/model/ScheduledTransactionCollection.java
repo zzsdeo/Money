@@ -6,13 +6,16 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import ru.zzsdeo.money.db.DatabaseContentProvider;
 import ru.zzsdeo.money.db.TableScheduledTransactions;
 import ru.zzsdeo.money.db.TableTransactions;
 
-public class ScheduledTransactionCollection extends HashMap<Long, ScheduledTransaction> {
+public class ScheduledTransactionCollection extends LinkedHashMap<Long, ScheduledTransaction> {
 
     private final ContentResolver contentResolver;
     private final Context context;
@@ -28,6 +31,36 @@ public class ScheduledTransactionCollection extends HashMap<Long, ScheduledTrans
                 null,
                 null,
                 null
+        );
+        long id;
+        if (c.moveToFirst()) {
+            do {
+                id = c.getLong(c.getColumnIndex(TableScheduledTransactions.COLUMN_ID));
+                put(id, new ScheduledTransaction(context, id));
+            } while (c.moveToNext());
+        }
+        c.close();
+    }
+
+    public ScheduledTransactionCollection(Context context, String[] params) {
+        String[] args;
+        if (params.length > 2) {
+            ArrayList<String> argsList = new ArrayList<>();
+            argsList.addAll(Arrays.asList(params).subList(2, params.length));
+            args = (String[]) argsList.toArray();
+        } else {
+            args = null;
+        }
+        this.context = context;
+        contentResolver = context.getContentResolver();
+        Cursor c = contentResolver.query(
+                DatabaseContentProvider.CONTENT_URI_SCHEDULED_TRANSACTIONS,
+                new String[]{
+                        TableScheduledTransactions.COLUMN_ID
+                },
+                params[0],
+                args,
+                params[1]
         );
         long id;
         if (c.moveToFirst()) {

@@ -1,5 +1,6 @@
 package ru.zzsdeo.money.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import com.melnykov.fab.FloatingActionButton;
 
 import ru.zzsdeo.money.R;
+import ru.zzsdeo.money.activities.AddTransactionActivity;
 import ru.zzsdeo.money.activities.MainActivity;
 
 public class HistoryFragment extends Fragment implements IFragment, View.OnClickListener {
@@ -27,6 +29,7 @@ public class HistoryFragment extends Fragment implements IFragment, View.OnClick
 
         FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.fab);
         fab.attachToRecyclerView(recyclerView);
+        fab.setOnClickListener(this);
 
         return v;
     }
@@ -40,6 +43,7 @@ public class HistoryFragment extends Fragment implements IFragment, View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab:
+                startActivity(new Intent(getActivity(), AddTransactionActivity.class));
                 break;
         }
     }
