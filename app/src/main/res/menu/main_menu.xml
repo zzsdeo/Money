@@ -7,4 +7,11 @@
         android:orderInCategory="1"
         app:showAsAction="never"
         android:title="Управление счетами"/>
+
+    <item
+        android:id="@+id/manage_categories"
+        android:orderInCategory="2"
+        app:showAsAction="never"
+        android:title="Управление категориями"/>
+
 </menu>

@@ -5,16 +5,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.DatePicker;
+import android.widget.TimePicker;
 
 import com.astuetz.PagerSlidingTabStrip;
 
 import ru.zzsdeo.money.Constants;
-import ru.zzsdeo.money.Dialogs;
+import ru.zzsdeo.money.dialogs.Dialogs;
 import ru.zzsdeo.money.R;
 import ru.zzsdeo.money.adapters.HistoryRecyclerViewAdapter;
 import ru.zzsdeo.money.adapters.MainActivityBalanceRecyclerViewAdapter;
@@ -39,6 +38,9 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
         switch (item.getItemId()) {
             case R.id.manage_accounts:
                 startActivityForResult(new Intent(this, ManageAccountsActivity.class), Constants.MANAGE_ACCOUNTS_REQUEST_CODE);
+                return true;
+            case R.id.manage_categories:
+                startActivity(new Intent(this, ManageCategoriesActivity.class));
                 return true;
             default:
                 return false;
@@ -84,9 +86,13 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK) {
-            accountCollection = new AccountCollection(this);
-            mainActivityBalanceRecyclerViewAdapter.refreshDataSet();
+        switch (requestCode) {
+            case Constants.MANAGE_ACCOUNTS_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    accountCollection = new AccountCollection(this);
+                    mainActivityBalanceRecyclerViewAdapter.refreshDataSet();
+                }
+                break;
         }
     }
 
@@ -103,6 +109,16 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog, int dialogType) {
+
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int dialogType, int year, int monthOfYear, int dayOfMonth) {
+
+    }
+
+    @Override
+    public void onTimeSet(TimePicker view, int dialogType, int hourOfDay, int minute) {
 
     }
 }

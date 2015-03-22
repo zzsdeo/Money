@@ -1,13 +1,20 @@
-package ru.zzsdeo.money;
+package ru.zzsdeo.money.dialogs;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.format.DateFormat;
+import android.widget.DatePicker;
+import android.widget.TimePicker;
 
-public class Dialogs extends DialogFragment {
+import java.util.Calendar;
+
+public class Dialogs extends DialogFragment implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     public static final String DIALOGS_TAG = "dialogs_tag";
 
@@ -16,6 +23,9 @@ public class Dialogs extends DialogFragment {
 
     public static final int DELETE_ACCOUNT = 10;
     public static final int YOU_MUST_ADD_ACCOUNT = 20;
+    public static final int DATE_PICKER = 30;
+    public static final int TIME_PICKER = 40;
+    public static final int DELETE_CATEGORY = 50;
 
     private Bundle bundle;
     private DialogListener dialogListener;
@@ -25,6 +35,10 @@ public class Dialogs extends DialogFragment {
         public void onDialogPositiveClick(DialogFragment dialog, int dialogType, long id);
 
         public void onDialogNegativeClick(DialogFragment dialog, int dialogType);
+
+        public void onDateSet(DatePicker view, int dialogType, int year, int monthOfYear, int dayOfMonth);
+
+        public void onTimeSet(TimePicker view, int dialogType, int hourOfDay, int minute);
     }
 
     @Override
@@ -50,6 +64,7 @@ public class Dialogs extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final Calendar c = Calendar.getInstance();
         switch (bundle.getInt(DIALOG_TYPE)) {
             case DELETE_ACCOUNT:
                 builder.setTitle("Вы уверены?");
@@ -76,8 +91,48 @@ public class Dialogs extends DialogFragment {
                     }
                 });
                 return builder.create();
+            case DATE_PICKER:
+                // Use the current date as the default date in the picker
+                int year = c.get(Calendar.YEAR);
+                int month = c.get(Calendar.MONTH);
+                int day = c.get(Calendar.DAY_OF_MONTH);
+
+                // Create a new instance of DatePickerDialog and return it
+                return new DatePickerDialog(getActivity(), this, year, month, day);
+            case TIME_PICKER:
+                // Use the current time as the default values for the picker
+                int hour = c.get(Calendar.HOUR_OF_DAY);
+                int minute = c.get(Calendar.MINUTE);
+
+                // Create a new instance of TimePickerDialog and return it
+                return new TimePickerDialog(getActivity(), this, hour, minute, DateFormat.is24HourFormat(getActivity()));
+            case DELETE_CATEGORY:
+                builder.setMessage("Вы уверены?");
+                builder.setNegativeButton("Нет", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialogListener.onDialogNegativeClick(Dialogs.this, DELETE_ACCOUNT);
+                    }
+                });
+                builder.setPositiveButton("Да", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialogListener.onDialogPositiveClick(Dialogs.this, DELETE_ACCOUNT, bundle.getLong(ID));
+                    }
+                });
+                return builder.create();
             default:
                 return super.onCreateDialog(savedInstanceState);
         }
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+        dialogListener.onDateSet(view, DATE_PICKER, year, monthOfYear, dayOfMonth);
+    }
+
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        dialogListener.onTimeSet(view, TIME_PICKER, hourOfDay, minute);
     }
 }

@@ -25,6 +25,15 @@
         <activity android:name=".activities.AddTransactionActivity"
             android:label="Добавить транзакцию"/>
 
+        <activity android:name=".activities.ManageCategoriesActivity"
+            android:label="Управление категориями"/>
+
+        <activity android:name=".activities.AddCategoryActivity"
+            android:label="Добавить категорию"/>
+
+        <activity android:name=".activities.EditCategoryActivity"
+            android:label="Редактировать категорию"/>
+
         <provider
             android:name="ru.zzsdeo.money.db.DatabaseContentProvider"
             android:authorities="ru.zzsdeo.money.contentprovider"

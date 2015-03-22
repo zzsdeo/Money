@@ -13,26 +13,27 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-
 import ru.zzsdeo.money.Constants;
-import ru.zzsdeo.money.dialogs.Dialogs;
-import ru.zzsdeo.money.activities.EditAccountActivity;
-import ru.zzsdeo.money.activities.ManageAccountsActivity;
 import ru.zzsdeo.money.R;
+import ru.zzsdeo.money.activities.EditCategoryActivity;
+import ru.zzsdeo.money.activities.ManageCategoriesActivity;
+import ru.zzsdeo.money.dialogs.Dialogs;
 import ru.zzsdeo.money.model.Account;
 import ru.zzsdeo.money.model.AccountCollection;
+import ru.zzsdeo.money.model.Category;
+import ru.zzsdeo.money.model.CategoryCollection;
 
-public class ManageAccountsRecyclerViewAdapter extends RecyclerView.Adapter<ManageAccountsRecyclerViewAdapter.ViewHolder>  {
+public class ManageCategoriesRecyclerViewAdapter extends RecyclerView.Adapter<ManageCategoriesRecyclerViewAdapter.ViewHolder>  {
 
-    private ArrayList<Account> mAccounts;
-    private AccountCollection mAccountCollection;
-    private ManageAccountsActivity mContext;
+    private ArrayList<Category> mCategories;
+    private CategoryCollection mCategoryCollection;
+    private ManageCategoriesActivity mContext;
     private FragmentManager mFragmentManager;
-    public static final String ACCOUNT_ID = "account_id";
+    public static final String CATEGORY_ID = "category_id";
 
-    public ManageAccountsRecyclerViewAdapter(ManageAccountsActivity context) {
-        mAccountCollection = new AccountCollection(context);
-        mAccounts = new ArrayList<>(mAccountCollection.values());
+    public ManageCategoriesRecyclerViewAdapter(ManageCategoriesActivity context) {
+        mCategoryCollection = new CategoryCollection(context);
+        mCategories = new ArrayList<>(mCategoryCollection.values());
         mContext = context;
         mFragmentManager = context.getFragmentManager();
         setHasStableIds(true);
@@ -46,49 +47,48 @@ public class ManageAccountsRecyclerViewAdapter extends RecyclerView.Adapter<Mana
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Account account = mAccounts.get(position);
+        Category category = mCategories.get(position);
         String [] items = new String[] {
-                account.getName(),
-                account.getCardNumber(),
-                String.valueOf(account.getBalance())
+                category.getName(),
+                String.valueOf(category.getBudget())
         };
         holder.setItems(items);
     }
 
     @Override
     public int getItemCount() {
-        return mAccounts.size();
+        return mCategories.size();
     }
 
     @Override
     public long getItemId(int position) {
-        return mAccounts.get(position).getAccountId();
+        return mCategories.get(position).getCategoryId();
     }
 
     public void refreshDataSet() {
-        mAccountCollection = new AccountCollection(mContext);
-        mAccounts.clear();
-        mAccounts.addAll(mAccountCollection.values());
+        mCategoryCollection = new CategoryCollection(mContext);
+        mCategories.clear();
+        mCategories.addAll(mCategoryCollection.values());
         notifyDataSetChanged();
     }
 
     public void removeItem(long id) {
-        mAccountCollection.removeAccount(id);
-        mAccounts.clear();
-        mAccounts.addAll(mAccountCollection.values());
+        mCategoryCollection.removeCategory(id);
+        mCategories.clear();
+        mCategories.addAll(mCategoryCollection.values());
         notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, Toolbar.OnMenuItemClickListener {
         private TextView mTextView;
         private Toolbar mToolbar;
-        private ManageAccountsRecyclerViewAdapter mAdapter;
+        private ManageCategoriesRecyclerViewAdapter mAdapter;
 
-        public ViewHolder(final View view, final ManageAccountsRecyclerViewAdapter manageAccountsRecyclerViewAdapter) {
+        public ViewHolder(final View view, final ManageCategoriesRecyclerViewAdapter manageCategoriesRecyclerViewAdapter) {
             super(view);
             view.setOnClickListener(this);
 
-            mAdapter = manageAccountsRecyclerViewAdapter;
+            mAdapter = manageCategoriesRecyclerViewAdapter;
 
             mTextView = (TextView) view.findViewById(R.id.recycler_card_account_text);
 
@@ -99,8 +99,7 @@ public class ManageAccountsRecyclerViewAdapter extends RecyclerView.Adapter<Mana
 
         public void setItems(String[] items) {
             mToolbar.setTitle(items[0]);
-            mToolbar.setSubtitle(items[1]);
-            mTextView.setText(items[2]);
+            mTextView.setText(items[1]);
         }
 
         @Override
@@ -115,17 +114,17 @@ public class ManageAccountsRecyclerViewAdapter extends RecyclerView.Adapter<Mana
                 case R.id.delete_account:
                     Dialogs dialog = new Dialogs();
                     Bundle bundle = new Bundle();
-                    bundle.putInt(Dialogs.DIALOG_TYPE, Dialogs.DELETE_ACCOUNT);
-                    bundle.putLong(Dialogs.ID, mAdapter.mAccounts.get(getPosition()).getAccountId());
+                    bundle.putInt(Dialogs.DIALOG_TYPE, Dialogs.DELETE_CATEGORY);
+                    bundle.putLong(Dialogs.ID, mAdapter.mCategories.get(getPosition()).getCategoryId());
                     dialog.setArguments(bundle);
                     dialog.show(mAdapter.mFragmentManager, Dialogs.DIALOGS_TAG);
                     return true;
                 case R.id.edit_account:
-                    Intent i = new Intent(mAdapter.mContext, EditAccountActivity.class);
+                    Intent i = new Intent(mAdapter.mContext, EditCategoryActivity.class);
                     Bundle b = new Bundle();
-                    b.putLong(ACCOUNT_ID, mAdapter.mAccounts.get(getPosition()).getAccountId());
+                    b.putLong(CATEGORY_ID, mAdapter.mCategories.get(getPosition()).getCategoryId());
                     i.putExtras(b);
-                    mAdapter.mContext.startActivityForResult(i, Constants.EDIT_ACCOUNT_REQUEST_CODE);
+                    mAdapter.mContext.startActivityForResult(i, Constants.EDIT_CATEGORY_REQUEST_CODE);
                     return true;
                 default:
                     return false;

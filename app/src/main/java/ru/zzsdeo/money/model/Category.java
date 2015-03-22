@@ -21,13 +21,13 @@ public class Category {
         return id;
     }
 
-    public void setCategoryName(String name) {
+    public void setName(String name) {
         ContentValues cv = new ContentValues();
         cv.put(TableCategories.COLUMN_NAME, name);
         updateDb(cv);
     }
 
-    public String getCategoryName() {
+    public String getName() {
         Cursor c = getCursor(TableCategories.COLUMN_NAME);
         c.moveToFirst();
         String name = c.getString(c.getColumnIndex(TableCategories.COLUMN_NAME));
@@ -44,7 +44,7 @@ public class Category {
     public float getBudget() {
         Cursor c = getCursor(TableCategories.COLUMN_BUDGET);
         c.moveToFirst();
-        float budget = c.getFloat(c.getColumnIndex(TableCategories.COLUMN_NAME));
+        float budget = c.getFloat(c.getColumnIndex(TableCategories.COLUMN_BUDGET));
         c.close();
         return budget;
     }

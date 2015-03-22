@@ -14,13 +14,14 @@ import android.widget.TimePicker;
 import com.melnykov.fab.FloatingActionButton;
 
 import ru.zzsdeo.money.Constants;
-import ru.zzsdeo.money.dialogs.Dialogs;
 import ru.zzsdeo.money.R;
 import ru.zzsdeo.money.adapters.ManageAccountsRecyclerViewAdapter;
+import ru.zzsdeo.money.adapters.ManageCategoriesRecyclerViewAdapter;
+import ru.zzsdeo.money.dialogs.Dialogs;
 
-public class ManageAccountsActivity extends ActionBarActivity implements Dialogs.DialogListener, View.OnClickListener {
+public class ManageCategoriesActivity extends ActionBarActivity implements Dialogs.DialogListener, View.OnClickListener {
 
-    private ManageAccountsRecyclerViewAdapter manageAccountsRecyclerViewAdapter;
+    private ManageCategoriesRecyclerViewAdapter manageCategoriesRecyclerViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +29,8 @@ public class ManageAccountsActivity extends ActionBarActivity implements Dialogs
         setContentView(R.layout.activity_recycler_fab);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_accounts);
-        manageAccountsRecyclerViewAdapter = new ManageAccountsRecyclerViewAdapter(this);
-        recyclerView.setAdapter(manageAccountsRecyclerViewAdapter);
+        manageCategoriesRecyclerViewAdapter = new ManageCategoriesRecyclerViewAdapter(this);
+        recyclerView.setAdapter(manageCategoriesRecyclerViewAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
@@ -43,15 +44,15 @@ public class ManageAccountsActivity extends ActionBarActivity implements Dialogs
         super.onActivityResult(requestCode, resultCode, data);
 
         switch (requestCode) {
-            case Constants.ADD_ACCOUNT_REQUEST_CODE:
+            case Constants.ADD_CATEGORY_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
-                    manageAccountsRecyclerViewAdapter.refreshDataSet();
+                    manageCategoriesRecyclerViewAdapter.refreshDataSet();
                     setResult(RESULT_OK);
                 }
                 break;
-            case Constants.EDIT_ACCOUNT_REQUEST_CODE:
+            case Constants.EDIT_CATEGORY_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
-                    manageAccountsRecyclerViewAdapter.refreshDataSet();
+                    manageCategoriesRecyclerViewAdapter.refreshDataSet();
                     setResult(RESULT_OK);
                 }
                 break;
@@ -65,8 +66,8 @@ public class ManageAccountsActivity extends ActionBarActivity implements Dialogs
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialog, int dialogType, long id) {
-        manageAccountsRecyclerViewAdapter.removeItem(id);
-        setResult(RESULT_OK);
+        manageCategoriesRecyclerViewAdapter.removeItem(id);
+        //setResult(RESULT_OK);
         dialog.dismiss();
     }
 
@@ -89,7 +90,7 @@ public class ManageAccountsActivity extends ActionBarActivity implements Dialogs
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab:
-                startActivityForResult(new Intent(this, AddAccountActivity.class), Constants.ADD_ACCOUNT_REQUEST_CODE);
+                startActivityForResult(new Intent(this, AddCategoryActivity.class), Constants.ADD_CATEGORY_REQUEST_CODE);
                 break;
         }
     }
