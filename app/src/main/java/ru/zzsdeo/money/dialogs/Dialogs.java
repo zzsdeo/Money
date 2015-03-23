@@ -26,6 +26,7 @@ public class Dialogs extends DialogFragment implements DatePickerDialog.OnDateSe
     public static final int DATE_PICKER = 30;
     public static final int TIME_PICKER = 40;
     public static final int DELETE_CATEGORY = 50;
+    public static final int DELETE_TRANSACTION = 60;
 
     private Bundle bundle;
     private DialogListener dialogListener;
@@ -118,6 +119,21 @@ public class Dialogs extends DialogFragment implements DatePickerDialog.OnDateSe
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialogListener.onDialogPositiveClick(Dialogs.this, DELETE_ACCOUNT, bundle.getLong(ID));
+                    }
+                });
+                return builder.create();
+            case DELETE_TRANSACTION:
+                builder.setMessage("Вы уверены?");
+                builder.setNegativeButton("Нет", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialogListener.onDialogNegativeClick(Dialogs.this, DELETE_TRANSACTION);
+                    }
+                });
+                builder.setPositiveButton("Да", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialogListener.onDialogPositiveClick(Dialogs.this, DELETE_TRANSACTION, bundle.getLong(ID));
                     }
                 });
                 return builder.create();

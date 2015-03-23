@@ -19,6 +19,11 @@ public class TransactionCollection extends LinkedHashMap<Long, Transaction> {
     private final ContentResolver contentResolver;
     private final Context context;
 
+    public static final String[] SORTED_BY_DATE_DESC = {
+            null,
+            TableTransactions.COLUMN_DATE_IN_MILL + " DESC, " + TableTransactions.COLUMN_ID + " DESC"
+    };
+
     public TransactionCollection(Context context) {
         this.context = context;
         contentResolver = context.getContentResolver();

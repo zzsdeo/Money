@@ -40,6 +40,7 @@ import ru.zzsdeo.money.model.Account;
 import ru.zzsdeo.money.model.AccountCollection;
 import ru.zzsdeo.money.model.Category;
 import ru.zzsdeo.money.model.CategoryCollection;
+import ru.zzsdeo.money.model.TransactionCollection;
 
 public class AddTransactionActivity extends ActionBarActivity
         implements
@@ -51,11 +52,11 @@ public class AddTransactionActivity extends ActionBarActivity
     public static final String DEFAULT_ACCOUNT_ID = "default_account_id";
 
     private EditText amount, commission, comment;
-    private Spinner destinationAccountId, accountId;
+    private Spinner destinationAccountId, accountId, categoryId;
     private TextView date, time;
     private final Calendar calendar = Calendar.getInstance();
     private SharedPreferences sharedPreferences;
-    private CheckBox isDefaultAccount;
+    private CheckBox isDefaultAccount, isTransfer;
     private AccountSpinnerAdapter accountSpinnerAdapter, destinationAccountSpinnerAdapter;
 
     @Override
@@ -74,9 +75,9 @@ public class AddTransactionActivity extends ActionBarActivity
         amount = (EditText) findViewById(R.id.amount);
         commission = (EditText) findViewById(R.id.commission);
         comment = (EditText) findViewById(R.id.comment);
-        CheckBox isTransfer = (CheckBox) findViewById(R.id.checkBox2);
+        isTransfer = (CheckBox) findViewById(R.id.checkBox2);
         destinationAccountId = (Spinner) findViewById(R.id.spinner2);
-        Spinner categoryId = (Spinner) findViewById(R.id.spinner3);
+        categoryId = (Spinner) findViewById(R.id.spinner3);
         Button addBtn = (Button) findViewById(R.id.addBtn);
 
         accountSpinnerAdapter = new AccountSpinnerAdapter(this, accountCollection);
@@ -133,25 +134,41 @@ public class AddTransactionActivity extends ActionBarActivity
                 time.show(getFragmentManager(), Dialogs.DIALOGS_TAG);
                 break;
             case R.id.addBtn:
-                /*String nameString = name.getText().toString();
-                String cardNumberString = cardNumber.getText().toString();
-                String balanceString = balance.getText().toString();
-                float balanceFloat;
-                if (nameString.isEmpty()) {
-                    Toast.makeText(this, "Необходимо ввести название", Toast.LENGTH_LONG).show();
+                String amountString = amount.getText().toString();
+                String commissionString = commission.getText().toString();
+                String commentString = comment.getText().toString();
+                float amountFloat, commissionFloat;
+                long destination;
+                if (amountString.isEmpty()) {
+                    Toast.makeText(this, "Необходимо ввести сумму", Toast.LENGTH_LONG).show();
                     return;
-                }
-                if (balanceString.isEmpty()) {
-                    balanceFloat = 0;
                 } else {
-                    balanceFloat = Float.parseFloat(balanceString);
+                    amountFloat = Float.parseFloat(amountString);
                 }
-                new AccountCollection(this).addAccount(nameString, cardNumberString, balanceFloat);
-                name.setText("");
-                cardNumber.setText("");
-                balance.setText("");
-                Toast.makeText(this, "Счет успешно добавлен", Toast.LENGTH_LONG).show();
-                setResult(RESULT_OK);*/
+                if (commissionString.isEmpty()) {
+                    commissionFloat = 0;
+                } else {
+                    commissionFloat = Float.parseFloat(commissionString);
+                }
+                if (isTransfer.isChecked()) {
+                    destination = destinationAccountId.getSelectedItemId();
+                } else {
+                    destination = 0;
+                }
+                new TransactionCollection(this).addTransaction(
+                        accountId.getSelectedItemId(),
+                        calendar.getTimeInMillis(),
+                        amountFloat,
+                        commissionFloat,
+                        commentString,
+                        destination,
+                        categoryId.getSelectedItemId()
+                );
+                amount.setText("");
+                commission.setText("");
+                comment.setText("");
+                Toast.makeText(this, "Транзакция успешно добавлена", Toast.LENGTH_LONG).show();
+                setResult(RESULT_OK);
                 break;
         }
     }

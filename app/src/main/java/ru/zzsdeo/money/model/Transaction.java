@@ -78,13 +78,33 @@ public class Transaction {
         return comment;
     }
 
-    /*public boolean isTransfer() {
-        return isTransfer;
+    public void setDestinationAccountId(long destinationAccountId) {
+        ContentValues cv = new ContentValues();
+        cv.put(TableTransactions.COLUMN_DESTINATION_ACCOUNT_ID, destinationAccountId);
+        updateDb(cv);
     }
 
-    public IAccount getDestinationAccount() {
-        return destinationAccount;
-    }*/
+    public long getDestinationAccountId() {
+        Cursor c = getCursor(TableTransactions.COLUMN_DESTINATION_ACCOUNT_ID);
+        c.moveToFirst();
+        long destinationAccountId = c.getLong(c.getColumnIndex(TableTransactions.COLUMN_DESTINATION_ACCOUNT_ID));
+        c.close();
+        return destinationAccountId;
+    }
+
+    public void setCategoryId(long categoryId) {
+        ContentValues cv = new ContentValues();
+        cv.put(TableTransactions.COLUMN_CATEGORY_ID, categoryId);
+        updateDb(cv);
+    }
+
+    public long getCategoryId() {
+        Cursor c = getCursor(TableTransactions.COLUMN_CATEGORY_ID);
+        c.moveToFirst();
+        long categoryId = c.getLong(c.getColumnIndex(TableTransactions.COLUMN_CATEGORY_ID));
+        c.close();
+        return categoryId;
+    }
 
     private Cursor getCursor (String column) {
         return contentResolver.query(

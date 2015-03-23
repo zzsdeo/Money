@@ -79,6 +79,20 @@ public class ScheduledTransaction {
         return comment;
     }
 
+    public void setDestinationAccountId(long destinationAccountId) {
+        ContentValues cv = new ContentValues();
+        cv.put(TableScheduledTransactions.COLUMN_DESTINATION_ACCOUNT_ID, destinationAccountId);
+        updateDb(cv);
+    }
+
+    public long getDestinationAccountId() {
+        Cursor c = getCursor(TableScheduledTransactions.COLUMN_DESTINATION_ACCOUNT_ID);
+        c.moveToFirst();
+        long destinationAccountId = c.getLong(c.getColumnIndex(TableScheduledTransactions.COLUMN_DESTINATION_ACCOUNT_ID));
+        c.close();
+        return destinationAccountId;
+    }
+
     public boolean isApproved() {
         Cursor c = getCursor(TableScheduledTransactions.COLUMN_IS_APPROVED);
         c.moveToFirst();
@@ -86,14 +100,6 @@ public class ScheduledTransaction {
         c.close();
         return isApproved != 0;
     }
-
-    /*public boolean isTransfer() {
-        return isTransfer;
-    }
-
-    public IAccount getDestinationAccount() {
-        return destinationAccount;
-    }*/
 
     public void setNeedApprove(boolean needApprove) {
         ContentValues cv = new ContentValues();
@@ -119,10 +125,6 @@ public class ScheduledTransaction {
         updateDb(cv);
     }
 
-    /*public boolean isRepeating() {
-        return isRepeating;
-    }*/
-
     public void setRepeatingTypeId(int id) {
         ContentValues cv = new ContentValues();
         cv.put(TableScheduledTransactions.COLUMN_REPEATING_TYPE_ID, id);
@@ -135,6 +137,20 @@ public class ScheduledTransaction {
         int repeatingTypeId = c.getInt(c.getColumnIndex(TableScheduledTransactions.COLUMN_REPEATING_TYPE_ID));
         c.close();
         return repeatingTypeId;
+    }
+
+    public void setCategoryId(long categoryId) {
+        ContentValues cv = new ContentValues();
+        cv.put(TableScheduledTransactions.COLUMN_CATEGORY_ID, categoryId);
+        updateDb(cv);
+    }
+
+    public long getCategoryId() {
+        Cursor c = getCursor(TableScheduledTransactions.COLUMN_CATEGORY_ID);
+        c.moveToFirst();
+        long categoryId = c.getLong(c.getColumnIndex(TableScheduledTransactions.COLUMN_CATEGORY_ID));
+        c.close();
+        return categoryId;
     }
 
     private Cursor getCursor (String column) {

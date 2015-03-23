@@ -89,5 +89,16 @@ public class CategoryCollection extends LinkedHashMap<Long, Category> {
                 null
         );
         if (deletedRows > 0) remove(id);
+
+        for (Transaction transaction : new TransactionCollection(context).values()) {
+            if (transaction.getCategoryId() == id) {
+                transaction.setCategoryId(0);
+            }
+        }
+        for (ScheduledTransaction scheduledTransaction : new ScheduledTransactionCollection(context).values()) {
+            if (scheduledTransaction.getCategoryId() == id) {
+                scheduledTransaction.setCategoryId(0);
+            }
+        }
     }
 }

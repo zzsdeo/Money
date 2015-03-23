@@ -98,9 +98,31 @@ public class AccountCollection extends LinkedHashMap<Long, Account> {
         if (deletedRows > 0) remove(id);
         // удаление транзакций ассоциированных с этим аккаунтом
         TransactionCollection transactionCollection = new TransactionCollection(context);
+        ArrayList<Long> transactionIdsToRemove = new ArrayList<>();
         for (Transaction transaction : transactionCollection.values()) {
-            if (transaction.getAccountId() == id)
-                transactionCollection.removeTransaction(transaction.getTransactionId());
+            if (transaction.getDestinationAccountId() == id) {
+                transaction.setDestinationAccountId(0);
+            }
+            if (transaction.getAccountId() == id) {
+                transactionIdsToRemove.add(transaction.getTransactionId());
+            }
+        }
+        for (long trId : transactionIdsToRemove) {
+            transactionCollection.removeTransaction(trId);
+        }
+
+        ScheduledTransactionCollection scheduledTransactionCollection = new ScheduledTransactionCollection(context);
+        ArrayList<Long> scheduledTransactionIdsToRemove = new ArrayList<>();
+        for (ScheduledTransaction scheduledTransaction : scheduledTransactionCollection.values()) {
+            if (scheduledTransaction.getDestinationAccountId() == id) {
+                scheduledTransaction.setDestinationAccountId(0);
+            }
+            if (scheduledTransaction.getAccountId() == id) {
+                scheduledTransactionIdsToRemove.add(scheduledTransaction.getScheduledTransactionId());
+            }
+        }
+        for (long trId : scheduledTransactionIdsToRemove) {
+            scheduledTransactionCollection.removeScheduledTransaction(trId);
         }
     }
 }

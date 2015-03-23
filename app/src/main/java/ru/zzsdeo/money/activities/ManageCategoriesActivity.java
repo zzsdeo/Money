@@ -66,14 +66,22 @@ public class ManageCategoriesActivity extends ActionBarActivity implements Dialo
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialog, int dialogType, long id) {
-        manageCategoriesRecyclerViewAdapter.removeItem(id);
-        //setResult(RESULT_OK);
-        dialog.dismiss();
+        switch (dialogType) {
+            case Dialogs.DELETE_CATEGORY:
+                manageCategoriesRecyclerViewAdapter.removeItem(id);
+                setResult(RESULT_OK);
+                dialog.dismiss();
+                break;
+        }
     }
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog, int dialogType) {
-        dialog.dismiss();
+        switch (dialogType) {
+            case Dialogs.DELETE_CATEGORY:
+                dialog.dismiss();
+                break;
+        }
     }
 
     @Override

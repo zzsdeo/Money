@@ -55,7 +55,7 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
         accountCollection = new AccountCollection(this);
 
         mainActivityBalanceRecyclerViewAdapter = new MainActivityBalanceRecyclerViewAdapter(this);
-        historyRecyclerViewAdapter = new HistoryRecyclerViewAdapter(new TransactionCollection(this), accountCollection);
+        historyRecyclerViewAdapter = new HistoryRecyclerViewAdapter(this);
 
         // Initialize the ViewPager and set an adapter
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
@@ -93,23 +93,42 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
                     mainActivityBalanceRecyclerViewAdapter.refreshDataSet();
                 }
                 break;
+            case Constants.ADD_ACCOUNT_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    accountCollection = new AccountCollection(this);
+                    mainActivityBalanceRecyclerViewAdapter.refreshDataSet();
+                }
+                break;
         }
     }
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialog, int dialogType) {
-        startActivityForResult(new Intent(this, AddAccountActivity.class), Constants.ADD_ACCOUNT_REQUEST_CODE);
-        dialog.dismiss();
+        switch (dialogType) {
+            case Dialogs.YOU_MUST_ADD_ACCOUNT:
+                startActivityForResult(new Intent(this, AddAccountActivity.class), Constants.ADD_ACCOUNT_REQUEST_CODE);
+                dialog.dismiss();
+                break;
+        }
     }
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialog, int dialogType, long id) {
-
+        switch (dialogType) {
+            case Dialogs.DELETE_TRANSACTION:
+                historyRecyclerViewAdapter.removeItem(id);
+                dialog.dismiss();
+                break;
+        }
     }
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog, int dialogType) {
-
+        switch (dialogType) {
+            case Dialogs.DELETE_TRANSACTION:
+                dialog.dismiss();
+                break;
+        }
     }
 
     @Override

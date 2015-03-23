@@ -40,11 +40,33 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:id="@+id/recycler_card_history_text1"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:textColor="@android:color/holo_blue_light" />
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:id="@+id/recycler_card_history_text2"
+                    android:layout_weight="1"
+                    android:gravity="end" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/recycler_card_history_text3"
+                    android:layout_weight="1" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/recycler_card_history_text4"
                     android:layout_weight="1"
                     android:gravity="end"
                     android:textColor="@android:color/black" />

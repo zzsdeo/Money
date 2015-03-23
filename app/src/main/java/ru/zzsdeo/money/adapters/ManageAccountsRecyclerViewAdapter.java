@@ -84,7 +84,7 @@ public class ManageAccountsRecyclerViewAdapter extends RecyclerView.Adapter<Mana
         private Toolbar mToolbar;
         private ManageAccountsRecyclerViewAdapter mAdapter;
 
-        public ViewHolder(final View view, final ManageAccountsRecyclerViewAdapter manageAccountsRecyclerViewAdapter) {
+        public ViewHolder(View view, ManageAccountsRecyclerViewAdapter manageAccountsRecyclerViewAdapter) {
             super(view);
             view.setOnClickListener(this);
 

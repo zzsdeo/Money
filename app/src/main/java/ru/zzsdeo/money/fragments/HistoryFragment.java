@@ -1,5 +1,6 @@
 package ru.zzsdeo.money.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,9 +14,11 @@ import android.view.ViewGroup;
 
 import com.melnykov.fab.FloatingActionButton;
 
+import ru.zzsdeo.money.Constants;
 import ru.zzsdeo.money.R;
 import ru.zzsdeo.money.activities.AddTransactionActivity;
 import ru.zzsdeo.money.activities.MainActivity;
+import ru.zzsdeo.money.model.AccountCollection;
 
 public class HistoryFragment extends Fragment implements IFragment, View.OnClickListener {
 
@@ -43,7 +46,20 @@ public class HistoryFragment extends Fragment implements IFragment, View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab:
-                startActivity(new Intent(getActivity(), AddTransactionActivity.class));
+                startActivityForResult(new Intent(getActivity(), AddTransactionActivity.class), Constants.ADD_TRANSACTION_REQUEST_CODE);
+                break;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case Constants.ADD_TRANSACTION_REQUEST_CODE:
+                if (resultCode == Activity.RESULT_OK) {
+                    ((MainActivity)getActivity()).historyRecyclerViewAdapter.refreshDataSet();
+                }
                 break;
         }
     }
