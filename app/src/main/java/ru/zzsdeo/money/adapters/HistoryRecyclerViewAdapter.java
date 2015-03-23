@@ -20,6 +20,7 @@ import java.util.Locale;
 import ru.zzsdeo.money.Constants;
 import ru.zzsdeo.money.R;
 import ru.zzsdeo.money.activities.EditAccountActivity;
+import ru.zzsdeo.money.activities.EditTransactionActivity;
 import ru.zzsdeo.money.activities.MainActivity;
 import ru.zzsdeo.money.dialogs.Dialogs;
 import ru.zzsdeo.money.model.AccountCollection;
@@ -28,6 +29,8 @@ import ru.zzsdeo.money.model.Transaction;
 import ru.zzsdeo.money.model.TransactionCollection;
 
 public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecyclerViewAdapter.ViewHolder>  {
+
+    public static final String TRANSACTION_ID = "transaction_id";
 
     private ArrayList<Transaction> mTransactions;
     private AccountCollection mAccounts;
@@ -160,13 +163,13 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecy
                     dialog.setArguments(bundle);
                     dialog.show(mAdapter.mFragmentManager, Dialogs.DIALOGS_TAG);
                     return true;
-                /*case R.id.edit_item:
-                    Intent i = new Intent(mAdapter.mContext, EditAccountActivity.class);
+                case R.id.edit_item:
+                    Intent i = new Intent(mAdapter.mContext, EditTransactionActivity.class);
                     Bundle b = new Bundle();
-                    b.putLong(ACCOUNT_ID, mAdapter.mAccounts.get(getPosition()).getAccountId());
+                    b.putLong(TRANSACTION_ID, mAdapter.mTransactions.get(getPosition()).getTransactionId());
                     i.putExtras(b);
-                    mAdapter.mContext.startActivityForResult(i, Constants.EDIT_ACCOUNT_REQUEST_CODE);
-                    return true;*/
+                    mAdapter.mContext.startActivityForResult(i, Constants.EDIT_TRANSACTION_REQUEST_CODE);
+                    return true;
                 default:
                     return false;
             }

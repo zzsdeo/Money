@@ -1,10 +1,12 @@
 package ru.zzsdeo.money.activities;
 
+import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.DatePicker;
@@ -40,7 +42,7 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
                 startActivityForResult(new Intent(this, ManageAccountsActivity.class), Constants.MANAGE_ACCOUNTS_REQUEST_CODE);
                 return true;
             case R.id.manage_categories:
-                startActivity(new Intent(this, ManageCategoriesActivity.class));
+                startActivityForResult(new Intent(this, ManageCategoriesActivity.class), Constants.MANAGE_CATEGORIES_REQUEST_CODE);
                 return true;
             default:
                 return false;
@@ -91,12 +93,23 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
                 if (resultCode == RESULT_OK) {
                     accountCollection = new AccountCollection(this);
                     mainActivityBalanceRecyclerViewAdapter.refreshDataSet();
+                    historyRecyclerViewAdapter.refreshDataSet();
                 }
                 break;
             case Constants.ADD_ACCOUNT_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
                     accountCollection = new AccountCollection(this);
                     mainActivityBalanceRecyclerViewAdapter.refreshDataSet();
+                }
+                break;
+            case Constants.MANAGE_CATEGORIES_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    historyRecyclerViewAdapter.refreshDataSet();
+                }
+                break;
+            case Constants.EDIT_TRANSACTION_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    historyRecyclerViewAdapter.refreshDataSet();
                 }
                 break;
         }

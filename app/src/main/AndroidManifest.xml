@@ -25,6 +25,9 @@
         <activity android:name=".activities.AddTransactionActivity"
             android:label="Добавить транзакцию"/>
 
+        <activity android:name=".activities.EditTransactionActivity"
+            android:label="Редактировать транзакцию"/>
+
         <activity android:name=".activities.ManageCategoriesActivity"
             android:label="Управление категориями"/>
 

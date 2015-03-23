@@ -6,7 +6,9 @@ public class Constants {
     public static final int MANAGE_ACCOUNTS_REQUEST_CODE = 30;
     public static final int ADD_CATEGORY_REQUEST_CODE = 40;
     public static final int EDIT_CATEGORY_REQUEST_CODE = 50;
-    public static final int ADD_TRANSACTION_REQUEST_CODE = 60;
+    public static final int MANAGE_CATEGORIES_REQUEST_CODE = 60;
+    public static final int ADD_TRANSACTION_REQUEST_CODE = 70;
+    public static final int EDIT_TRANSACTION_REQUEST_CODE = 80;
 
     public static final String SHARED_PREFERENCES_NAME = "shared_preferences";
 }

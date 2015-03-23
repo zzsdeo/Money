@@ -20,6 +20,7 @@ public class Dialogs extends DialogFragment implements DatePickerDialog.OnDateSe
 
     public static final String DIALOG_TYPE = "dialog_type";
     public static final String ID = "id";
+    public static final String DATE_IN_MILL = "date_in_mill";
 
     public static final int DELETE_ACCOUNT = 10;
     public static final int YOU_MUST_ADD_ACCOUNT = 20;
@@ -66,6 +67,7 @@ public class Dialogs extends DialogFragment implements DatePickerDialog.OnDateSe
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final Calendar c = Calendar.getInstance();
+        long dateInMill;
         switch (bundle.getInt(DIALOG_TYPE)) {
             case DELETE_ACCOUNT:
                 builder.setTitle("Вы уверены?");
@@ -93,19 +95,21 @@ public class Dialogs extends DialogFragment implements DatePickerDialog.OnDateSe
                 });
                 return builder.create();
             case DATE_PICKER:
-                // Use the current date as the default date in the picker
+                dateInMill = bundle.getLong(DATE_IN_MILL, 0);
+                if (dateInMill != 0) c.setTimeInMillis(dateInMill);
+
                 int year = c.get(Calendar.YEAR);
                 int month = c.get(Calendar.MONTH);
                 int day = c.get(Calendar.DAY_OF_MONTH);
 
-                // Create a new instance of DatePickerDialog and return it
                 return new DatePickerDialog(getActivity(), this, year, month, day);
             case TIME_PICKER:
-                // Use the current time as the default values for the picker
+                dateInMill = bundle.getLong(DATE_IN_MILL, 0);
+                if (dateInMill != 0) c.setTimeInMillis(dateInMill);
+
                 int hour = c.get(Calendar.HOUR_OF_DAY);
                 int minute = c.get(Calendar.MINUTE);
 
-                // Create a new instance of TimePickerDialog and return it
                 return new TimePickerDialog(getActivity(), this, hour, minute, DateFormat.is24HourFormat(getActivity()));
             case DELETE_CATEGORY:
                 builder.setMessage("Вы уверены?");

@@ -64,6 +64,20 @@ public class Transaction {
         return amount;
     }
 
+    public void setCommission(float commission) {
+        ContentValues cv = new ContentValues();
+        cv.put(TableTransactions.COLUMN_COMMISSION, commission);
+        updateDb(cv);
+    }
+
+    public float getCommission() {
+        Cursor c = getCursor(TableTransactions.COLUMN_COMMISSION);
+        c.moveToFirst();
+        float commission = c.getFloat(c.getColumnIndex(TableTransactions.COLUMN_COMMISSION));
+        c.close();
+        return commission;
+    }
+
     public void setComment(String comment) {
         ContentValues cv = new ContentValues();
         cv.put(TableTransactions.COLUMN_COMMENT, comment);
