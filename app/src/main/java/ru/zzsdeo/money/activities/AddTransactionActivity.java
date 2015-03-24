@@ -58,13 +58,14 @@ public class AddTransactionActivity extends ActionBarActivity
     private SharedPreferences sharedPreferences;
     private CheckBox isDefaultAccount, isTransfer;
     private AccountSpinnerAdapter accountSpinnerAdapter, destinationAccountSpinnerAdapter;
+    private AccountCollection accountCollection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_transaction);
 
-        AccountCollection accountCollection = new AccountCollection(this);
+        accountCollection = new AccountCollection(this);
         CategoryCollection categoryCollection = new CategoryCollection(this);
         sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
 
@@ -124,12 +125,14 @@ public class AddTransactionActivity extends ActionBarActivity
             case R.id.textView:
                 Dialogs date = new Dialogs();
                 bundle.putInt(Dialogs.DIALOG_TYPE, Dialogs.DATE_PICKER);
+                bundle.putLong(Dialogs.DATE_IN_MILL, calendar.getTimeInMillis());
                 date.setArguments(bundle);
                 date.show(getFragmentManager(), Dialogs.DIALOGS_TAG);
                 break;
             case R.id.textView2:
                 Dialogs time = new Dialogs();
                 bundle.putInt(Dialogs.DIALOG_TYPE, Dialogs.TIME_PICKER);
+                bundle.putLong(Dialogs.DATE_IN_MILL, calendar.getTimeInMillis());
                 time.setArguments(bundle);
                 time.show(getFragmentManager(), Dialogs.DIALOGS_TAG);
                 break;
@@ -139,6 +142,7 @@ public class AddTransactionActivity extends ActionBarActivity
                 String commentString = comment.getText().toString();
                 float amountFloat, commissionFloat;
                 long destination;
+                Account destAcc = null;
                 if (amountString.isEmpty()) {
                     Toast.makeText(this, "Необходимо ввести сумму", Toast.LENGTH_LONG).show();
                     return;
@@ -152,11 +156,18 @@ public class AddTransactionActivity extends ActionBarActivity
                 }
                 if (isTransfer.isChecked()) {
                     destination = destinationAccountId.getSelectedItemId();
+                    if (amountFloat > 0) {
+                        Toast.makeText(this, "Сумма должна быть отрицательной", Toast.LENGTH_LONG).show();
+                        return;
+                    } else {
+                        destAcc = accountCollection.get(destination);
+                    }
                 } else {
                     destination = 0;
                 }
+                long accId = accountId.getSelectedItemId();
                 new TransactionCollection(this).addTransaction(
-                        accountId.getSelectedItemId(),
+                        accId,
                         calendar.getTimeInMillis(),
                         amountFloat,
                         commissionFloat,
@@ -164,6 +175,28 @@ public class AddTransactionActivity extends ActionBarActivity
                         destination,
                         categoryId.getSelectedItemId()
                 );
+
+                Account acc = accountCollection.get(accId);
+                float balance = acc.getBalance();
+                balance = balance + amountFloat - commissionFloat;
+                acc.setBalance(balance);
+
+                if (destAcc != null) {
+                    balance = destAcc.getBalance();
+                    balance -= amountFloat;
+                    destAcc.setBalance(balance);
+
+                    new TransactionCollection(this).addTransaction(
+                            destAcc.getAccountId(),
+                            calendar.getTimeInMillis(),
+                            -amountFloat,
+                            0,
+                            "Перевод с: " + acc.getName(),
+                            0,
+                            categoryId.getSelectedItemId()
+                    );
+                }
+
                 amount.setText("");
                 commission.setText("");
                 comment.setText("");

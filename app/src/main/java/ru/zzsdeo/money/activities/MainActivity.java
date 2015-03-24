@@ -110,6 +110,7 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
             case Constants.EDIT_TRANSACTION_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
                     historyRecyclerViewAdapter.refreshDataSet();
+                    mainActivityBalanceRecyclerViewAdapter.refreshDataSet();
                 }
                 break;
         }
@@ -130,6 +131,7 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
         switch (dialogType) {
             case Dialogs.DELETE_TRANSACTION:
                 historyRecyclerViewAdapter.removeItem(id);
+                mainActivityBalanceRecyclerViewAdapter.refreshDataSet();
                 dialog.dismiss();
                 break;
         }

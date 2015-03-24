@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +18,8 @@ import ru.zzsdeo.money.Constants;
 import ru.zzsdeo.money.R;
 import ru.zzsdeo.money.activities.AddTransactionActivity;
 import ru.zzsdeo.money.activities.MainActivity;
-import ru.zzsdeo.money.model.AccountCollection;
 
-public class HistoryFragment extends Fragment implements IFragment, View.OnClickListener {
+public class SchedulerFragment extends Fragment implements IFragment, View.OnClickListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -40,7 +38,7 @@ public class HistoryFragment extends Fragment implements IFragment, View.OnClick
 
     @Override
     public int getIconResId() {
-        return android.R.drawable.ic_menu_agenda;
+        return android.R.drawable.ic_menu_camera;
     }
 
     @Override
@@ -60,7 +58,6 @@ public class HistoryFragment extends Fragment implements IFragment, View.OnClick
             case Constants.ADD_TRANSACTION_REQUEST_CODE:
                 if (resultCode == Activity.RESULT_OK) {
                     ((MainActivity)getActivity()).historyRecyclerViewAdapter.refreshDataSet();
-                    ((MainActivity)getActivity()).mainActivityBalanceRecyclerViewAdapter.refreshDataSet();
                 }
                 break;
         }

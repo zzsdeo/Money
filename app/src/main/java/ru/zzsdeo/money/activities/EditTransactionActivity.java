@@ -52,6 +52,9 @@ public class EditTransactionActivity extends ActionBarActivity
     private CheckBox isDefaultAccount, isTransfer;
     private AccountSpinnerAdapter accountSpinnerAdapter, destinationAccountSpinnerAdapter;
     private Transaction transaction;
+    private float oldAmount, oldCommission;
+    private Account oldAccount, oldDestAccount;
+    private AccountCollection accountCollection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +66,7 @@ public class EditTransactionActivity extends ActionBarActivity
         assert bundle != null;
         transaction = new TransactionCollection(this).get(bundle.getLong(HistoryRecyclerViewAdapter.TRANSACTION_ID));
 
-        AccountCollection accountCollection = new AccountCollection(this);
+        accountCollection = new AccountCollection(this);
         CategoryCollection categoryCollection = new CategoryCollection(this);
         sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
 
@@ -83,8 +86,10 @@ public class EditTransactionActivity extends ActionBarActivity
         accountId.setAdapter(accountSpinnerAdapter);
         accountId.setOnItemSelectedListener(this);
         ArrayList<Object> ids = accountSpinnerAdapter.getAllItemsIds();
-        int selection = ids.indexOf(transaction.getAccountId());
+        long accId = transaction.getAccountId();
+        int selection = ids.indexOf(accId);
         accountId.setSelection(selection);
+        oldAccount = accountCollection.get(accId);
 
         isDefaultAccount.setOnCheckedChangeListener(this);
 
@@ -95,9 +100,11 @@ public class EditTransactionActivity extends ActionBarActivity
         time.setText(new SimpleDateFormat("HH:mm", Locale.getDefault()).format(dateTime) + "   ");
         time.setOnClickListener(this);
 
-        amount.setText(String.valueOf(transaction.getAmount()));
+        oldAmount = transaction.getAmount();
+        amount.setText(String.valueOf(oldAmount));
 
-        commission.setText(String.valueOf(transaction.getCommission()));
+        oldCommission = transaction.getCommission();
+        commission.setText(String.valueOf(oldCommission));
 
         comment.setText(transaction.getComment());
 
@@ -108,7 +115,9 @@ public class EditTransactionActivity extends ActionBarActivity
         destinationAccountSpinnerAdapter = new AccountSpinnerAdapter(this, accountCollection);
         destinationAccountId.setAdapter(destinationAccountSpinnerAdapter);
         long destinationId = transaction.getDestinationAccountId();
+        oldDestAccount = null;
         if (destinationId != 0) {
+            oldDestAccount = accountCollection.get(destinationId);
             isTransfer.setChecked(true);
             destinationAccountId.setVisibility(View.VISIBLE);
             ids.clear();
@@ -157,11 +166,22 @@ public class EditTransactionActivity extends ActionBarActivity
                 time.show(getFragmentManager(), Dialogs.DIALOGS_TAG);
                 break;
             case R.id.addBtn:
+                float balance = oldAccount.getBalance();
+                balance = balance - oldAmount + oldCommission;
+                oldAccount.setBalance(balance);
+
+                if (oldDestAccount != null) {
+                    balance = oldDestAccount.getBalance();
+                    balance += oldAmount;
+                    oldDestAccount.setBalance(balance);
+                }
+
                 String amountString = amount.getText().toString();
                 String commissionString = commission.getText().toString();
                 String commentString = comment.getText().toString();
                 float amountFloat, commissionFloat;
                 long destination;
+                Account destAcc = null;
                 if (amountString.isEmpty()) {
                     Toast.makeText(this, "Необходимо ввести сумму", Toast.LENGTH_LONG).show();
                     return;
@@ -175,17 +195,36 @@ public class EditTransactionActivity extends ActionBarActivity
                 }
                 if (isTransfer.isChecked()) {
                     destination = destinationAccountId.getSelectedItemId();
+                    if (amountFloat > 0) {
+                        Toast.makeText(this, "Сумма должна быть отрицательной", Toast.LENGTH_LONG).show();
+                        return;
+                    } else {
+                        destAcc = accountCollection.get(destination);
+                    }
                 } else {
                     destination = 0;
                 }
 
-                transaction.setAccountId(accountId.getSelectedItemId());
+                long accId = accountId.getSelectedItemId();
+
+                transaction.setAccountId(accId);
                 transaction.setDateInMill(calendar.getTimeInMillis());
                 transaction.setAmount(amountFloat);
                 transaction.setCommission(commissionFloat);
                 transaction.setComment(commentString);
                 transaction.setDestinationAccountId(destination);
                 transaction.setCategoryId(categoryId.getSelectedItemId());
+
+                Account acc = accountCollection.get(accId);
+                balance = acc.getBalance();
+                balance = balance + amountFloat - commissionFloat;
+                acc.setBalance(balance);
+
+                if (destAcc != null) {
+                    balance = destAcc.getBalance();
+                    balance -= amountFloat;
+                    destAcc.setBalance(balance);
+                }
 
                 Toast.makeText(this, "Сохранено", Toast.LENGTH_LONG).show();
                 setResult(RESULT_OK);

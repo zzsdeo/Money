@@ -19,17 +19,15 @@ import java.util.Locale;
 
 import ru.zzsdeo.money.Constants;
 import ru.zzsdeo.money.R;
-import ru.zzsdeo.money.activities.EditAccountActivity;
 import ru.zzsdeo.money.activities.EditTransactionActivity;
 import ru.zzsdeo.money.activities.MainActivity;
 import ru.zzsdeo.money.dialogs.Dialogs;
-import ru.zzsdeo.money.model.Account;
 import ru.zzsdeo.money.model.AccountCollection;
 import ru.zzsdeo.money.model.CategoryCollection;
 import ru.zzsdeo.money.model.Transaction;
 import ru.zzsdeo.money.model.TransactionCollection;
 
-public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecyclerViewAdapter.ViewHolder>  {
+public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<SchedulerRecyclerViewAdapter.ViewHolder>  {
 
     public static final String TRANSACTION_ID = "transaction_id";
 
@@ -41,7 +39,7 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecy
     private FragmentManager mFragmentManager;
     private final static String DATE_FORMAT = "dd.MM.yy, HH:mm";
 
-    public HistoryRecyclerViewAdapter(MainActivity context) {
+    public SchedulerRecyclerViewAdapter(MainActivity context) {
         mTransactionCollection = new TransactionCollection(context, TransactionCollection.SORTED_BY_DATE_DESC);
         mTransactions = new ArrayList<>(mTransactionCollection.values());
         mAccounts = new AccountCollection(context);
@@ -106,19 +104,6 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecy
     }
 
     public void removeItem(long id) {
-        Transaction transaction = mTransactionCollection.get(id);
-        Account account = mAccounts.get(transaction.getAccountId());
-        float balance = account.getBalance();
-        balance = balance - transaction.getAmount() + transaction.getCommission();
-        account.setBalance(balance);
-
-        if (transaction.getDestinationAccountId() != 0) {
-            account = mAccounts.get(transaction.getDestinationAccountId());
-            balance = account.getBalance();
-            balance += transaction.getAmount();
-            account.setBalance(balance);
-        }
-
         mTransactionCollection.removeTransaction(id);
         mTransactions.clear();
         mTransactions.addAll(mTransactionCollection.values());
@@ -128,9 +113,9 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecy
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, Toolbar.OnMenuItemClickListener {
         private TextView mTextView1, mTextView2, mTextView3, mTextView4;
         private Toolbar mToolbar;
-        private HistoryRecyclerViewAdapter mAdapter;
+        private SchedulerRecyclerViewAdapter mAdapter;
 
-        public ViewHolder(View view, HistoryRecyclerViewAdapter historyRecyclerViewAdapter) {
+        public ViewHolder(View view, SchedulerRecyclerViewAdapter historyRecyclerViewAdapter) {
             super(view);
             view.setOnClickListener(this);
 

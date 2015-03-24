@@ -116,13 +116,13 @@ public class Dialogs extends DialogFragment implements DatePickerDialog.OnDateSe
                 builder.setNegativeButton("Нет", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dialogListener.onDialogNegativeClick(Dialogs.this, DELETE_ACCOUNT);
+                        dialogListener.onDialogNegativeClick(Dialogs.this, DELETE_CATEGORY);
                     }
                 });
                 builder.setPositiveButton("Да", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dialogListener.onDialogPositiveClick(Dialogs.this, DELETE_ACCOUNT, bundle.getLong(ID));
+                        dialogListener.onDialogPositiveClick(Dialogs.this, DELETE_CATEGORY, bundle.getLong(ID));
                     }
                 });
                 return builder.create();
