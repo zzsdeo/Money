@@ -166,36 +166,27 @@ public class AddTransactionActivity extends ActionBarActivity
                     destination = 0;
                 }
                 long accId = accountId.getSelectedItemId();
-                long linkedTransaction = new TransactionCollection(this).addTransaction(
+                long linkedTransactionId = new TransactionCollection(this).addTransaction(
                         accId,
                         calendar.getTimeInMillis(),
                         amountFloat,
-                        commissionFloat,
+                        -commissionFloat,
                         commentString,
                         destination,
                         categoryId.getSelectedItemId(),
                         0
                 );
 
-                Account acc = accountCollection.get(accId);
-                float balance = acc.getBalance();
-                balance = balance + amountFloat - commissionFloat;
-                acc.setBalance(balance);
-
                 if (destAcc != null) {
-                    balance = destAcc.getBalance();
-                    balance -= amountFloat;
-                    destAcc.setBalance(balance);
-
                     new TransactionCollection(this).addTransaction(
                             destAcc.getAccountId(),
                             calendar.getTimeInMillis(),
                             -amountFloat,
                             0,
-                            "Перевод с: " + acc.getName(),
+                            "Перевод с: " + accountCollection.get(accId).getName(),
                             0,
                             categoryId.getSelectedItemId(),
-                            linkedTransaction
+                            linkedTransactionId
                     );
                 }
 
