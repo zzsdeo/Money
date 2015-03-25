@@ -24,6 +24,11 @@ public class TransactionCollection extends LinkedHashMap<Long, Transaction> {
             TableTransactions.COLUMN_DATE_IN_MILL + " DESC, " + TableTransactions.COLUMN_ID + " DESC"
     };
 
+    public static final String[] ONLY = {
+            null,
+            TableTransactions.COLUMN_DATE_IN_MILL + " DESC, " + TableTransactions.COLUMN_ID + " DESC"
+    };
+
     public TransactionCollection(Context context) {
         this.context = context;
         contentResolver = context.getContentResolver();
@@ -76,14 +81,15 @@ public class TransactionCollection extends LinkedHashMap<Long, Transaction> {
         c.close();
     }
 
-    public void addTransaction(
+    public long addTransaction(
             long accountId,
             long dateInMill,
             float amount,
             float commission,
             String comment,
             long destinationAccountId,
-            long categoryId) {
+            long categoryId,
+            long linkedTransactionId) {
 
         ContentValues cv = new ContentValues();
         cv.put(TableTransactions.COLUMN_ACCOUNT_ID, accountId);
@@ -93,9 +99,11 @@ public class TransactionCollection extends LinkedHashMap<Long, Transaction> {
         cv.put(TableTransactions.COLUMN_COMMENT, comment);
         cv.put(TableTransactions.COLUMN_DESTINATION_ACCOUNT_ID, destinationAccountId);
         cv.put(TableTransactions.COLUMN_CATEGORY_ID, categoryId);
+        cv.put(TableTransactions.COLUMN_LINKED_TRANSACTION_ID, linkedTransactionId);
         Uri uri = contentResolver.insert(DatabaseContentProvider.CONTENT_URI_TRANSACTIONS, cv);
         long id = Long.valueOf(uri.getLastPathSegment());
         put(id, new Transaction(context, id));
+        return id;
     }
 
     public void removeTransaction(long id) {

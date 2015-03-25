@@ -20,7 +20,7 @@ import ru.zzsdeo.money.model.AccountCollection;
 
 public class AddAccountActivity extends ActionBarActivity implements View.OnClickListener{
 
-    private EditText name, cardNumber, balance;
+    private EditText name, cardNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +30,6 @@ public class AddAccountActivity extends ActionBarActivity implements View.OnClic
         Button addBtn = (Button) findViewById(R.id.addBtn);
         name = (EditText) findViewById(R.id.cardName);
         cardNumber = (EditText) findViewById(R.id.cardNumber);
-        balance = (EditText) findViewById(R.id.startBalance);
 
         addBtn.setOnClickListener(this);
     }
@@ -41,21 +40,13 @@ public class AddAccountActivity extends ActionBarActivity implements View.OnClic
             case R.id.addBtn:
                 String nameString = name.getText().toString();
                 String cardNumberString = cardNumber.getText().toString();
-                String balanceString = balance.getText().toString();
-                float balanceFloat;
                 if (nameString.isEmpty()) {
                     Toast.makeText(this, "Необходимо ввести название", Toast.LENGTH_LONG).show();
                     return;
                 }
-                if (balanceString.isEmpty()) {
-                    balanceFloat = 0;
-                } else {
-                    balanceFloat = Float.parseFloat(balanceString);
-                }
-                new AccountCollection(this).addAccount(nameString, cardNumberString, balanceFloat);
+                new AccountCollection(this).addAccount(nameString, cardNumberString, 0);
                 name.setText("");
                 cardNumber.setText("");
-                balance.setText("");
                 Toast.makeText(this, "Счет успешно добавлен", Toast.LENGTH_LONG).show();
                 setResult(RESULT_OK);
                 break;

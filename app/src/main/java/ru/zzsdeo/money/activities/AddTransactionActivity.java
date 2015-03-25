@@ -166,14 +166,15 @@ public class AddTransactionActivity extends ActionBarActivity
                     destination = 0;
                 }
                 long accId = accountId.getSelectedItemId();
-                new TransactionCollection(this).addTransaction(
+                long linkedTransaction = new TransactionCollection(this).addTransaction(
                         accId,
                         calendar.getTimeInMillis(),
                         amountFloat,
                         commissionFloat,
                         commentString,
                         destination,
-                        categoryId.getSelectedItemId()
+                        categoryId.getSelectedItemId(),
+                        0
                 );
 
                 Account acc = accountCollection.get(accId);
@@ -193,7 +194,8 @@ public class AddTransactionActivity extends ActionBarActivity
                             0,
                             "Перевод с: " + acc.getName(),
                             0,
-                            categoryId.getSelectedItemId()
+                            categoryId.getSelectedItemId(),
+                            linkedTransaction
                     );
                 }
 

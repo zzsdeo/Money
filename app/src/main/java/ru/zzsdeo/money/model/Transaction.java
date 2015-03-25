@@ -120,6 +120,20 @@ public class Transaction {
         return categoryId;
     }
 
+    public void setLinkedTransactionId(long linkedTransactionId) {
+        ContentValues cv = new ContentValues();
+        cv.put(TableTransactions.COLUMN_LINKED_TRANSACTION_ID, linkedTransactionId);
+        updateDb(cv);
+    }
+
+    public long getLinkedTransactionId() {
+        Cursor c = getCursor(TableTransactions.COLUMN_LINKED_TRANSACTION_ID);
+        c.moveToFirst();
+        long linkedTransactionId = c.getLong(c.getColumnIndex(TableTransactions.COLUMN_LINKED_TRANSACTION_ID));
+        c.close();
+        return linkedTransactionId;
+    }
+
     private Cursor getCursor (String column) {
         return contentResolver.query(
                 DatabaseContentProvider.CONTENT_URI_TRANSACTIONS,

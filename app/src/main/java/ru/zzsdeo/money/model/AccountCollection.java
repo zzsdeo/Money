@@ -13,9 +13,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.Set;
 
 import ru.zzsdeo.money.db.DatabaseContentProvider;
 import ru.zzsdeo.money.db.TableAccounts;
+import ru.zzsdeo.money.db.TableScheduledTransactions;
+import ru.zzsdeo.money.db.TableTransactions;
 
 public class AccountCollection extends LinkedHashMap<Long, Account> {
 
@@ -79,7 +82,7 @@ public class AccountCollection extends LinkedHashMap<Long, Account> {
         c.close();
     }
 
-    public void addAccount(String name, String cardNumber, float balance) {
+    public long addAccount(String name, String cardNumber, float balance) {
         ContentValues cv = new ContentValues();
         cv.put(TableAccounts.COLUMN_NAME, name);
         cv.put(TableAccounts.COLUMN_CARD_NUMBER, cardNumber);
@@ -87,6 +90,7 @@ public class AccountCollection extends LinkedHashMap<Long, Account> {
         Uri uri = contentResolver.insert(DatabaseContentProvider.CONTENT_URI_ACCOUNTS, cv);
         long id = Long.valueOf(uri.getLastPathSegment());
         put(id, new Account(context, id));
+        return id;
     }
 
     public void removeAccount(long id) {
@@ -96,7 +100,44 @@ public class AccountCollection extends LinkedHashMap<Long, Account> {
                 null
         );
         if (deletedRows > 0) remove(id);
-        // удаление транзакций ассоциированных с этим аккаунтом
+
+        /*// удаление транзакций, ассоциированных с этим аккаунтом
+        TransactionCollection transactionsWithRemovedAccount = new TransactionCollection(context,
+                new String[]{TableTransactions.COLUMN_ACCOUNT_ID + "=" + id,
+                        null});
+        Set<Long> ids = transactionsWithRemovedAccount.keySet();
+        for (long idToRemove : ids) {
+            transactionsWithRemovedAccount.removeTransaction(idToRemove);
+        }
+
+        // удаление запланированных транзакций, ассоциированных с этим аккаунтом
+        ScheduledTransactionCollection scheduledTransactionsWithRemovedAccount = new ScheduledTransactionCollection(context,
+                new String[]{TableScheduledTransactions.COLUMN_ACCOUNT_ID + "=" + id,
+                        null});
+        ids = scheduledTransactionsWithRemovedAccount.keySet();
+        for (long idToRemove : ids) {
+            scheduledTransactionsWithRemovedAccount.removeScheduledTransaction(idToRemove);
+        }
+
+        // удаление ссылок на аккаунт
+        TransactionCollection transactionsWithDestinationAccount = new TransactionCollection(context,
+                new String[]{TableTransactions.COLUMN_DESTINATION_ACCOUNT_ID + "=" + id,
+                        null});
+        for (Transaction transaction : transactionsWithDestinationAccount.values()) {
+            transaction.setDestinationAccountId(0);
+        }
+
+        // удаление ссылок на аккаунт
+        ScheduledTransactionCollection scheduledTransactionsWithDestinationAccount = new ScheduledTransactionCollection(context,
+                new String[]{TableScheduledTransactions.COLUMN_DESTINATION_ACCOUNT_ID + "=" + id,
+                        null});
+        for (ScheduledTransaction transaction : scheduledTransactionsWithDestinationAccount.values()) {
+            transaction.setDestinationAccountId(0);
+        }*/
+
+
+
+
         TransactionCollection transactionCollection = new TransactionCollection(context);
         ArrayList<Long> transactionIdsToRemove = new ArrayList<>();
         for (Transaction transaction : transactionCollection.values()) {

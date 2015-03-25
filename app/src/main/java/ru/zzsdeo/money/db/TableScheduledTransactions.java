@@ -17,6 +17,7 @@ public class TableScheduledTransactions {
     public static final String COLUMN_NEED_APPROVE = "need_approve";
     public static final String COLUMN_REPEATING_TYPE_ID = "repeating_type_id";
     public static final String COLUMN_CATEGORY_ID = "category_id";
+    public static final String COLUMN_LINKED_TRANSACTION_ID = "linked_transaction_id";
 
 
     private static final String DATABASE_CREATE = "create table "
@@ -32,7 +33,8 @@ public class TableScheduledTransactions {
             + COLUMN_DESTINATION_ACCOUNT_ID + " integer not null, "
             + COLUMN_NEED_APPROVE + " integer not null, "
             + COLUMN_REPEATING_TYPE_ID + " integer not null, "
-            + COLUMN_CATEGORY_ID + " integer not null"
+            + COLUMN_CATEGORY_ID + " integer not null, "
+            + COLUMN_LINKED_TRANSACTION_ID + " integer not null"
             + ");";
 
     public static void onCreate(SQLiteDatabase database) {

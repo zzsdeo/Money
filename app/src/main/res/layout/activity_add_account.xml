@@ -26,15 +26,6 @@
             android:hint="Номер карты (если есть)"
             android:layout_margin="10dp" />
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            android:ems="10"
-            android:id="@+id/startBalance"
-            android:layout_margin="10dp"
-            android:hint="Начальный баланс" />
-
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

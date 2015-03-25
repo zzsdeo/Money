@@ -73,13 +73,14 @@ public class CategoryCollection extends LinkedHashMap<Long, Category> {
         c.close();
     }
 
-    public void addCategory(String name, float budget) {
+    public long addCategory(String name, float budget) {
         ContentValues cv = new ContentValues();
         cv.put(TableCategories.COLUMN_NAME, name);
         cv.put(TableCategories.COLUMN_BUDGET, budget);
         Uri uri = contentResolver.insert(DatabaseContentProvider.CONTENT_URI_CATEGORIES, cv);
         long id = Long.valueOf(uri.getLastPathSegment());
         put(id, new Category(context, id));
+        return id;
     }
 
     public void removeCategory(long id) {

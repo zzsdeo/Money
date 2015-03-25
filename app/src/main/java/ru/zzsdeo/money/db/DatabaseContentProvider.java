@@ -373,6 +373,7 @@ public class DatabaseContentProvider extends ContentProvider {
                 TableScheduledTransactions.COLUMN_NEED_APPROVE,
                 TableScheduledTransactions.COLUMN_REPEATING_TYPE_ID,
                 TableScheduledTransactions.COLUMN_CATEGORY_ID,
+                TableScheduledTransactions.COLUMN_LINKED_TRANSACTION_ID,
                 TableTransactions.COLUMN_ID,
                 TableTransactions.COLUMN_ACCOUNT_ID,
                 TableTransactions.COLUMN_DATE_IN_MILL,
@@ -380,7 +381,8 @@ public class DatabaseContentProvider extends ContentProvider {
                 TableTransactions.COLUMN_COMMISSION,
                 TableTransactions.COLUMN_COMMENT,
                 TableTransactions.COLUMN_DESTINATION_ACCOUNT_ID,
-                TableTransactions.COLUMN_CATEGORY_ID
+                TableTransactions.COLUMN_CATEGORY_ID,
+                TableTransactions.COLUMN_LINKED_TRANSACTION_ID
         };
         if (projection != null) {
             HashSet<String> requestedColumns = new HashSet<String>(Arrays.asList(projection));

@@ -72,7 +72,7 @@ public class ScheduledTransactionCollection extends LinkedHashMap<Long, Schedule
         c.close();
     }
 
-    public void addScheduledTransaction(
+    public long addScheduledTransaction(
             long accountId,
             long dateInMill,
             float amount,
@@ -81,7 +81,8 @@ public class ScheduledTransactionCollection extends LinkedHashMap<Long, Schedule
             long destinationAccountId,
             boolean needApprove,
             int repeatingTypeId,
-            long categoryId) {
+            long categoryId,
+            long linkedTransactionId) {
 
         ContentValues cv = new ContentValues();
         cv.put(TableScheduledTransactions.COLUMN_ACCOUNT_ID, accountId);
@@ -98,9 +99,11 @@ public class ScheduledTransactionCollection extends LinkedHashMap<Long, Schedule
         }
         cv.put(TableScheduledTransactions.COLUMN_REPEATING_TYPE_ID, repeatingTypeId);
         cv.put(TableScheduledTransactions.COLUMN_CATEGORY_ID, categoryId);
+        cv.put(TableScheduledTransactions.COLUMN_LINKED_TRANSACTION_ID, linkedTransactionId);
         Uri uri = contentResolver.insert(DatabaseContentProvider.CONTENT_URI_SCHEDULED_TRANSACTIONS, cv);
         long id = Long.valueOf(uri.getLastPathSegment());
         put(id, new ScheduledTransaction(context, id));
+        return id;
     }
 
     public void removeScheduledTransaction(long id) {

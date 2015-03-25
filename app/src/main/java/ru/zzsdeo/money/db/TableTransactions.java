@@ -14,6 +14,7 @@ public class TableTransactions {
     public static final String COLUMN_COMMENT = "comment";
     public static final String COLUMN_DESTINATION_ACCOUNT_ID = "destination_account_id";
     public static final String COLUMN_CATEGORY_ID = "category_id";
+    public static final String COLUMN_LINKED_TRANSACTION_ID = "linked_transaction_id";
 
 
     private static final String DATABASE_CREATE = "create table "
@@ -26,7 +27,8 @@ public class TableTransactions {
             + COLUMN_COMMISSION + " real not null, "
             + COLUMN_COMMENT + " text not null, "
             + COLUMN_DESTINATION_ACCOUNT_ID + " integer not null, "
-            + COLUMN_CATEGORY_ID + " integer not null"
+            + COLUMN_CATEGORY_ID + " integer not null, "
+            + COLUMN_LINKED_TRANSACTION_ID + " integer not null"
             + ");";
 
     public static void onCreate(SQLiteDatabase database) {
