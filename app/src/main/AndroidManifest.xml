@@ -37,6 +37,9 @@
         <activity android:name=".activities.EditCategoryActivity"
             android:label="Редактировать категорию"/>
 
+        <activity android:name=".activities.AddScheduledTransactionActivity"
+            android:label="Добавить запланированную транзакцю"/>
+
         <provider
             android:name="ru.zzsdeo.money.db.DatabaseContentProvider"
             android:authorities="ru.zzsdeo.money.contentprovider"

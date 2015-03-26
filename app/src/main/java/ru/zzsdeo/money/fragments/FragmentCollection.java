@@ -9,5 +9,6 @@ public class FragmentCollection extends ArrayList<IFragment> {
     public FragmentCollection() {
         add(0, new HistoryFragment());
         add(1, new MainFragment());
+        add(2, new SchedulerFragment());
     }
 }

@@ -16,6 +16,7 @@ import com.melnykov.fab.FloatingActionButton;
 
 import ru.zzsdeo.money.Constants;
 import ru.zzsdeo.money.R;
+import ru.zzsdeo.money.activities.AddScheduledTransactionActivity;
 import ru.zzsdeo.money.activities.AddTransactionActivity;
 import ru.zzsdeo.money.activities.MainActivity;
 
@@ -25,7 +26,7 @@ public class SchedulerFragment extends Fragment implements IFragment, View.OnCli
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_history, container, false);
         RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view_history);
-        recyclerView.setAdapter(((MainActivity)getActivity()).historyRecyclerViewAdapter);
+        //recyclerView.setAdapter(((MainActivity)getActivity()).historyRecyclerViewAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
@@ -45,7 +46,7 @@ public class SchedulerFragment extends Fragment implements IFragment, View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab:
-                startActivityForResult(new Intent(getActivity(), AddTransactionActivity.class), Constants.ADD_TRANSACTION_REQUEST_CODE);
+                startActivityForResult(new Intent(getActivity(), AddScheduledTransactionActivity.class), Constants.ADD_SCHEDULED_TRANSACTION_REQUEST_CODE);
                 break;
         }
     }
@@ -54,12 +55,12 @@ public class SchedulerFragment extends Fragment implements IFragment, View.OnCli
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        switch (requestCode) {
+        /*switch (requestCode) {
             case Constants.ADD_TRANSACTION_REQUEST_CODE:
                 if (resultCode == Activity.RESULT_OK) {
                     ((MainActivity)getActivity()).historyRecyclerViewAdapter.refreshDataSet();
                 }
                 break;
-        }
+        }*/
     }
 }

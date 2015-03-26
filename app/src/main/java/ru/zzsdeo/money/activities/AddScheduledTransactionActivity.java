@@ -35,6 +35,7 @@ import ru.zzsdeo.money.model.AccountCollection;
 import ru.zzsdeo.money.model.Category;
 import ru.zzsdeo.money.model.CategoryCollection;
 import ru.zzsdeo.money.model.RepeatingTypes;
+import ru.zzsdeo.money.model.ScheduledTransactionCollection;
 import ru.zzsdeo.money.model.Transaction;
 import ru.zzsdeo.money.model.TransactionCollection;
 
@@ -47,7 +48,7 @@ public class AddScheduledTransactionActivity extends ActionBarActivity
 
     private EditText amount, commission, comment;
     private Spinner destinationAccountId, accountId, categoryId, repeatingTypeId;
-    private TextView date, time;
+    private TextView date, time, repeatingTextView;
     private final Calendar calendar = Calendar.getInstance();
     private CheckBox isTransfer, needApprove;
     private AccountSpinnerAdapter accountSpinnerAdapter, destinationAccountSpinnerAdapter;
@@ -72,6 +73,7 @@ public class AddScheduledTransactionActivity extends ActionBarActivity
         destinationAccountId = (Spinner) findViewById(R.id.spinner2);
         categoryId = (Spinner) findViewById(R.id.spinner3);
         repeatingTypeId = (Spinner) findViewById(R.id.spinner4);
+        repeatingTextView = (TextView) findViewById(R.id.repeatingTextView);
         Button addBtn = (Button) findViewById(R.id.addBtn);
 
         accountSpinnerAdapter = new AccountSpinnerAdapter(this, accountCollection);
@@ -105,8 +107,9 @@ public class AddScheduledTransactionActivity extends ActionBarActivity
             }
         });
 
-        ArrayAdapter<String> repeatingAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, new RepeatingTypes(this).getTypes());
+        ArrayAdapter<String> repeatingAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, R.id.textView, new RepeatingTypes(this).getTypes());
         repeatingTypeId.setAdapter(repeatingAdapter);
+        repeatingTypeId.setOnItemSelectedListener(this);
 
         addBtn.setOnClickListener(this);
     }
@@ -159,54 +162,34 @@ public class AddScheduledTransactionActivity extends ActionBarActivity
                     destination = 0;
                 }
                 long accId = accountId.getSelectedItemId();
-                long linkedTransactionId = new TransactionCollection(this).addTransaction(
+                long linkedTransactionId = new ScheduledTransactionCollection(this).addScheduledTransaction(
                         accId,
                         calendar.getTimeInMillis(),
                         amountFloat,
                         -commissionFloat,
                         commentString,
                         destination,
+                        needApprove.isChecked(),
+                        repeatingTypeId.getSelectedItemPosition(),
                         categoryId.getSelectedItemId(),
                         0
                 );
 
-                // Обновление баланса
-                TransactionCollection transactionCollection = new TransactionCollection(this,
-                        new String[] {
-                                TableTransactions.COLUMN_ACCOUNT_ID + "=" + accId,
-                                null
-                        });
-                float balance = 0;
-                for (Transaction transaction : transactionCollection.values()) {
-                    balance = balance + transaction.getAmount() + transaction.getCommission();
-                }
-                accountCollection.get(accId).setBalance(balance);
-
                 // Создание связанной транзакции
                 if (destAcc != null) {
                     long destAccId = destAcc.getAccountId();
-                    new TransactionCollection(this).addTransaction(
+                    new ScheduledTransactionCollection(this).addScheduledTransaction(
                             destAccId,
                             calendar.getTimeInMillis(),
                             -amountFloat,
                             0,
                             "Перевод с: " + accountCollection.get(accId).getName(),
                             0,
+                            needApprove.isChecked(),
+                            repeatingTypeId.getSelectedItemPosition(),
                             categoryId.getSelectedItemId(),
                             linkedTransactionId
                     );
-
-                    // Обновление баланса связанного счета
-                    transactionCollection = new TransactionCollection(this,
-                            new String[] {
-                                    TableTransactions.COLUMN_ACCOUNT_ID + "=" + destAccId,
-                                    null
-                            });
-                    balance = 0;
-                    for (Transaction transaction : transactionCollection.values()) {
-                        balance = balance + transaction.getAmount() + transaction.getCommission();
-                    }
-                    accountCollection.get(destAccId).setBalance(balance);
                 }
 
                 amount.setText("");
@@ -251,6 +234,17 @@ public class AddScheduledTransactionActivity extends ActionBarActivity
         calendar.set(year, monthOfYear, dayOfMonth);
         Date dateTime = calendar.getTime();
         date.setText(new SimpleDateFormat("dd.MM.yy", Locale.getDefault()).format(dateTime) + "   ");
+        switch (repeatingTypeId.getSelectedItemPosition()) {
+            case 3:
+                repeatingTextView.setText(new SimpleDateFormat("dd", Locale.getDefault()).format(calendar.getTime()));
+                break;
+            case 4:
+                repeatingTextView.setText(new SimpleDateFormat("E", Locale.getDefault()).format(calendar.getTime()));
+                break;
+            default:
+                repeatingTextView.setText("");
+                break;
+        }
     }
 
     @Override
@@ -268,6 +262,19 @@ public class AddScheduledTransactionActivity extends ActionBarActivity
                 ArrayList<Object> ids = accountSpinnerAdapter.getAllItemsIds();
                 int pos = ids.indexOf(id);
                 destinationAccountSpinnerAdapter.removeItem(pos);
+                break;
+            case R.id.spinner4:
+                switch (position) {
+                    case 3:
+                        repeatingTextView.setText(new SimpleDateFormat("dd", Locale.getDefault()).format(calendar.getTime()));
+                        break;
+                    case 4:
+                        repeatingTextView.setText(new SimpleDateFormat("E", Locale.getDefault()).format(calendar.getTime()));
+                        break;
+                    default:
+                        repeatingTextView.setText("");
+                        break;
+                }
                 break;
         }
     }
