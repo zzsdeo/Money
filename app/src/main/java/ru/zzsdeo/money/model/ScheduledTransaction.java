@@ -93,14 +93,6 @@ public class ScheduledTransaction {
         return destinationAccountId;
     }
 
-    public boolean isApproved() {
-        Cursor c = getCursor(TableScheduledTransactions.COLUMN_IS_APPROVED);
-        c.moveToFirst();
-        int isApproved = c.getInt(c.getColumnIndex(TableScheduledTransactions.COLUMN_IS_APPROVED));
-        c.close();
-        return isApproved != 0;
-    }
-
     public void setNeedApprove(boolean needApprove) {
         ContentValues cv = new ContentValues();
         if (needApprove) {
@@ -117,12 +109,6 @@ public class ScheduledTransaction {
         int needApprove = c.getInt(c.getColumnIndex(TableScheduledTransactions.COLUMN_NEED_APPROVE));
         c.close();
         return needApprove != 0;
-    }
-
-    public void approve() {
-        ContentValues cv = new ContentValues();
-        cv.put(TableScheduledTransactions.COLUMN_IS_APPROVED, 1);
-        updateDb(cv);
     }
 
     public void setRepeatingTypeId(int id) {

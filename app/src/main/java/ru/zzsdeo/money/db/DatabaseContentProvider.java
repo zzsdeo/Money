@@ -368,7 +368,6 @@ public class DatabaseContentProvider extends ContentProvider {
                 TableScheduledTransactions.COLUMN_AMOUNT,
                 TableScheduledTransactions.COLUMN_COMMISSION,
                 TableScheduledTransactions.COLUMN_COMMENT,
-                TableScheduledTransactions.COLUMN_IS_APPROVED,
                 TableScheduledTransactions.COLUMN_DESTINATION_ACCOUNT_ID,
                 TableScheduledTransactions.COLUMN_NEED_APPROVE,
                 TableScheduledTransactions.COLUMN_REPEATING_TYPE_ID,

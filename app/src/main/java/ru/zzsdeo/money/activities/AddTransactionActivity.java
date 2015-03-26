@@ -27,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -35,11 +36,13 @@ import java.util.prefs.Preferences;
 import ru.zzsdeo.money.Constants;
 import ru.zzsdeo.money.R;
 import ru.zzsdeo.money.adapters.AbstractSpinnerAdapter;
+import ru.zzsdeo.money.db.TableTransactions;
 import ru.zzsdeo.money.dialogs.Dialogs;
 import ru.zzsdeo.money.model.Account;
 import ru.zzsdeo.money.model.AccountCollection;
 import ru.zzsdeo.money.model.Category;
 import ru.zzsdeo.money.model.CategoryCollection;
+import ru.zzsdeo.money.model.Transaction;
 import ru.zzsdeo.money.model.TransactionCollection;
 
 public class AddTransactionActivity extends ActionBarActivity
@@ -177,9 +180,23 @@ public class AddTransactionActivity extends ActionBarActivity
                         0
                 );
 
+                // Обновление баланса
+                TransactionCollection transactionCollection = new TransactionCollection(this,
+                        new String[] {
+                                TableTransactions.COLUMN_ACCOUNT_ID + "=" + accId,
+                                null
+                        });
+                float balance = 0;
+                for (Transaction transaction : transactionCollection.values()) {
+                    balance = balance + transaction.getAmount() + transaction.getCommission();
+                }
+                accountCollection.get(accId).setBalance(balance);
+
+                // Создание связанной транзакции
                 if (destAcc != null) {
+                    long destAccId = destAcc.getAccountId();
                     new TransactionCollection(this).addTransaction(
-                            destAcc.getAccountId(),
+                            destAccId,
                             calendar.getTimeInMillis(),
                             -amountFloat,
                             0,
@@ -188,6 +205,18 @@ public class AddTransactionActivity extends ActionBarActivity
                             categoryId.getSelectedItemId(),
                             linkedTransactionId
                     );
+
+                    // Обновление баланса связанного счета
+                    transactionCollection = new TransactionCollection(this,
+                            new String[] {
+                                    TableTransactions.COLUMN_ACCOUNT_ID + "=" + destAccId,
+                                    null
+                            });
+                    balance = 0;
+                    for (Transaction transaction : transactionCollection.values()) {
+                        balance = balance + transaction.getAmount() + transaction.getCommission();
+                    }
+                    accountCollection.get(destAccId).setBalance(balance);
                 }
 
                 amount.setText("");

@@ -15,6 +15,7 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Locale;
 
 import ru.zzsdeo.money.Constants;
@@ -22,6 +23,7 @@ import ru.zzsdeo.money.R;
 import ru.zzsdeo.money.activities.EditAccountActivity;
 import ru.zzsdeo.money.activities.EditTransactionActivity;
 import ru.zzsdeo.money.activities.MainActivity;
+import ru.zzsdeo.money.db.TableTransactions;
 import ru.zzsdeo.money.dialogs.Dialogs;
 import ru.zzsdeo.money.model.Account;
 import ru.zzsdeo.money.model.AccountCollection;
@@ -82,8 +84,10 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecy
         };
 
         int sign = 1;
+        boolean disableMenu = false;
         if (transaction.getAmount() < 0) sign = -1;
-        holder.setItems(items, sign);
+        if (transaction.getLinkedTransactionId() != 0) disableMenu = true;
+        holder.setItems(items, sign, disableMenu);
     }
 
     @Override
@@ -107,16 +111,16 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecy
 
     public void removeItem(long id) {
         Transaction transaction = mTransactionCollection.get(id);
-        Account account = mAccounts.get(transaction.getAccountId());
-        float balance = account.getBalance();
-        balance = balance - transaction.getAmount() + transaction.getCommission();
-        account.setBalance(balance);
-
         if (transaction.getDestinationAccountId() != 0) {
-            account = mAccounts.get(transaction.getDestinationAccountId());
-            balance = account.getBalance();
-            balance += transaction.getAmount();
-            account.setBalance(balance);
+            TransactionCollection linkedTransactions = new TransactionCollection(mContext,
+                    new String[] {
+                            TableTransactions.COLUMN_LINKED_TRANSACTION_ID + "=" + transaction.getTransactionId(),
+                            null
+                    });
+            Iterator<Transaction> it = linkedTransactions.values().iterator();
+            Transaction linkedTransaction = it.next();
+            long linkedId = linkedTransaction.getTransactionId();
+            mTransactionCollection.removeTransaction(linkedId);
         }
 
         mTransactionCollection.removeTransaction(id);
@@ -146,7 +150,7 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecy
             mToolbar.setOnMenuItemClickListener(this);
         }
 
-        public void setItems(String[] items, int sign) {
+        public void setItems(String[] items, int sign, boolean disableMenu) {
             mToolbar.setTitle(items[0]);
             mToolbar.setSubtitle(items[1]);
             mTextView1.setText(items[2]);
@@ -158,6 +162,11 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecy
                 mTextView4.setTextColor(Color.GREEN);
             }
             mTextView4.setText(items[5]);
+            if (disableMenu) {
+                for (int i = 0; i < mToolbar.getMenu().size(); i++) {
+                    mToolbar.getMenu().getItem(i).setEnabled(false);
+                }
+            }
         }
 
         @Override

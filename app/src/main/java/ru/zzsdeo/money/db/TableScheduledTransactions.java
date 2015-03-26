@@ -12,7 +12,6 @@ public class TableScheduledTransactions {
     public static final String COLUMN_AMOUNT = "amount";
     public static final String COLUMN_COMMISSION = "commission";
     public static final String COLUMN_COMMENT = "comment";
-    public static final String COLUMN_IS_APPROVED = "is_approved";
     public static final String COLUMN_DESTINATION_ACCOUNT_ID = "destination_account_id";
     public static final String COLUMN_NEED_APPROVE = "need_approve";
     public static final String COLUMN_REPEATING_TYPE_ID = "repeating_type_id";
@@ -29,7 +28,6 @@ public class TableScheduledTransactions {
             + COLUMN_AMOUNT + " real not null, "
             + COLUMN_COMMISSION + " real not null, "
             + COLUMN_COMMENT + " text not null, "
-            + COLUMN_IS_APPROVED + " integer not null, "
             + COLUMN_DESTINATION_ACCOUNT_ID + " integer not null, "
             + COLUMN_NEED_APPROVE + " integer not null, "
             + COLUMN_REPEATING_TYPE_ID + " integer not null, "

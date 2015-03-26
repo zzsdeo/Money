@@ -90,7 +90,6 @@ public class ScheduledTransactionCollection extends LinkedHashMap<Long, Schedule
         cv.put(TableScheduledTransactions.COLUMN_AMOUNT, amount);
         cv.put(TableScheduledTransactions.COLUMN_COMMISSION, commission);
         cv.put(TableScheduledTransactions.COLUMN_COMMENT, comment);
-        cv.put(TableScheduledTransactions.COLUMN_IS_APPROVED, 0);
         cv.put(TableScheduledTransactions.COLUMN_DESTINATION_ACCOUNT_ID, destinationAccountId);
         if (needApprove) {
             cv.put(TableScheduledTransactions.COLUMN_NEED_APPROVE, 1);
