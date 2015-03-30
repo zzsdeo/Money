@@ -14,9 +14,15 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
 
 import ru.zzsdeo.money.Constants;
 import ru.zzsdeo.money.R;
@@ -26,24 +32,51 @@ import ru.zzsdeo.money.db.TableTransactions;
 import ru.zzsdeo.money.dialogs.Dialogs;
 import ru.zzsdeo.money.model.AccountCollection;
 import ru.zzsdeo.money.model.CategoryCollection;
+import ru.zzsdeo.money.model.ScheduledTransaction;
+import ru.zzsdeo.money.model.ScheduledTransactionCollection;
 import ru.zzsdeo.money.model.Transaction;
 import ru.zzsdeo.money.model.TransactionCollection;
 
 public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<SchedulerRecyclerViewAdapter.ViewHolder>  {
 
-    public static final String TRANSACTION_ID = "transaction_id";
+    public static final String SCHEDULED_TRANSACTION_ID = "scheduled_transaction_id";
 
-    private ArrayList<Transaction> mTransactions;
+    private ArrayList<ScheduledTransaction> mTransactions;
     private AccountCollection mAccounts;
     private CategoryCollection mCategories;
     private MainActivity mContext;
-    private TransactionCollection mTransactionCollection;
+    private ScheduledTransactionCollection mTransactionCollection;
     private FragmentManager mFragmentManager;
     private final static String DATE_FORMAT = "dd.MM.yy, HH:mm";
+    private static final Long END_OF_TIME = 31536000000l;
+    private final Calendar calendar = Calendar.getInstance();
+    private final Calendar now = Calendar.getInstance();
+    private ArrayList<Long> datesToDisplay;
 
     public SchedulerRecyclerViewAdapter(MainActivity context) {
-        mTransactionCollection = new TransactionCollection(context, TransactionCollection.SORTED_BY_DATE_DESC);
-        mTransactions = new ArrayList<>(mTransactionCollection.values());
+        mTransactionCollection = new ScheduledTransactionCollection(context, ScheduledTransactionCollection.SORTED_BY_DATE_DESC);
+
+        HashMap<Long, ScheduledTransaction> hashMap = new HashMap<>();
+        for (ScheduledTransaction st : mTransactionCollection.values()) {
+            long endOfTime = now.getTimeInMillis() + END_OF_TIME;
+            switch (st.getRepeatingTypeId()) {
+                case 0:
+                    hashMap.put(st.getDateInMill(), st);
+                    break;
+                case 1:
+                    calendar.setTimeInMillis(st.getDateInMill());
+                    if (calendar.before(now)) calendar.setTimeInMillis(now.getTimeInMillis());
+                    do {
+                        hashMap.put(calendar.getTimeInMillis(), st);
+                        calendar.add(Calendar.DAY_OF_MONTH, 1);
+                    } while (calendar.getTimeInMillis() < endOfTime);
+                    break;
+            }
+        }
+
+        Map<Long, ScheduledTransaction> map = new TreeMap<>(hashMap);
+        datesToDisplay = new ArrayList<>(map.keySet());
+        mTransactions = new ArrayList<>(map.values());
         mAccounts = new AccountCollection(context);
         mCategories = new CategoryCollection(context);
         mContext = context;
@@ -52,13 +85,13 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_card_transaction_history, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_card_transaction_scheduler, parent, false);
         return new ViewHolder(v, this);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Transaction transaction = mTransactions.get(position);
+        ScheduledTransaction transaction = mTransactions.get(position);
         String category, destinationAccount;
         long categoryId = transaction.getCategoryId();
         long destinationAccountId = transaction.getDestinationAccountId();
@@ -77,7 +110,7 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
                 transaction.getComment(),
                 mAccounts.get(transaction.getAccountId()).getName(),
                 destinationAccount,
-                new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(new Date(transaction.getDateInMill())),
+                new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(new Date(datesToDisplay.get(position))),
                 String.valueOf(transaction.getAmount())
         };
 
@@ -95,11 +128,11 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
 
     @Override
     public long getItemId(int position) {
-        return mTransactions.get(position).getTransactionId();
+        return mTransactions.get(position).getScheduledTransactionId();
     }
 
     public void refreshDataSet() {
-        mTransactionCollection = new TransactionCollection(mContext, TransactionCollection.SORTED_BY_DATE_DESC);
+        mTransactionCollection = new ScheduledTransactionCollection(mContext, ScheduledTransactionCollection.SORTED_BY_DATE_DESC);
         mAccounts = new AccountCollection(mContext);
         mCategories = new CategoryCollection(mContext);
         mTransactions.clear();
@@ -108,20 +141,20 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
     }
 
     public void removeItem(long id) {
-        Transaction transaction = mTransactionCollection.get(id);
+        ScheduledTransaction transaction = mTransactionCollection.get(id);
         if (transaction.getDestinationAccountId() != 0) {
-            TransactionCollection linkedTransactions = new TransactionCollection(mContext,
+            ScheduledTransactionCollection linkedTransactions = new ScheduledTransactionCollection(mContext,
                     new String[] {
-                            TableTransactions.COLUMN_LINKED_TRANSACTION_ID + "=" + transaction.getTransactionId(),
+                            TableTransactions.COLUMN_LINKED_TRANSACTION_ID + "=" + transaction.getScheduledTransactionId(),
                             null
                     });
-            Iterator<Transaction> it = linkedTransactions.values().iterator();
-            Transaction linkedTransaction = it.next();
-            long linkedId = linkedTransaction.getTransactionId();
-            mTransactionCollection.removeTransaction(linkedId);
+            Iterator<ScheduledTransaction> it = linkedTransactions.values().iterator();
+            ScheduledTransaction linkedTransaction = it.next();
+            long linkedId = linkedTransaction.getScheduledTransactionId();
+            mTransactionCollection.removeScheduledTransaction(linkedId);
         }
 
-        mTransactionCollection.removeTransaction(id);
+        mTransactionCollection.removeScheduledTransaction(id);
         mTransactions.clear();
         mTransactions.addAll(mTransactionCollection.values());
         notifyDataSetChanged();
@@ -176,7 +209,7 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
         @Override
         public boolean onMenuItemClick(MenuItem menuItem) {
             switch (menuItem.getItemId()) {
-                case R.id.delete_item:
+                /*case R.id.delete_item:
                     Dialogs dialog = new Dialogs();
                     Bundle bundle = new Bundle();
                     bundle.putInt(Dialogs.DIALOG_TYPE, Dialogs.DELETE_TRANSACTION);
@@ -190,7 +223,7 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
                     b.putLong(TRANSACTION_ID, mAdapter.mTransactions.get(getPosition()).getTransactionId());
                     i.putExtras(b);
                     mAdapter.mContext.startActivityForResult(i, Constants.EDIT_TRANSACTION_REQUEST_CODE);
-                    return true;
+                    return true;*/
                 default:
                     return false;
             }

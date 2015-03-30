@@ -20,6 +20,11 @@ public class ScheduledTransactionCollection extends LinkedHashMap<Long, Schedule
     private final ContentResolver contentResolver;
     private final Context context;
 
+    public static final String[] SORTED_BY_DATE_DESC = {
+            null,
+            TableScheduledTransactions.COLUMN_DATE_IN_MILL + " DESC, " + TableScheduledTransactions.COLUMN_ID + " DESC"
+    };
+
     public ScheduledTransactionCollection(Context context) {
         this.context = context;
         contentResolver = context.getContentResolver();

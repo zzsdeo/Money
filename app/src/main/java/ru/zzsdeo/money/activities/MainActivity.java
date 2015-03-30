@@ -15,6 +15,7 @@ import android.widget.TimePicker;
 import com.astuetz.PagerSlidingTabStrip;
 
 import ru.zzsdeo.money.Constants;
+import ru.zzsdeo.money.adapters.SchedulerRecyclerViewAdapter;
 import ru.zzsdeo.money.dialogs.Dialogs;
 import ru.zzsdeo.money.R;
 import ru.zzsdeo.money.adapters.HistoryRecyclerViewAdapter;
@@ -28,6 +29,7 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
     private AccountCollection accountCollection;
     public MainActivityBalanceRecyclerViewAdapter mainActivityBalanceRecyclerViewAdapter;
     public HistoryRecyclerViewAdapter historyRecyclerViewAdapter;
+    public SchedulerRecyclerViewAdapter schedulerRecyclerViewAdapter;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -58,6 +60,7 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
 
         mainActivityBalanceRecyclerViewAdapter = new MainActivityBalanceRecyclerViewAdapter(this);
         historyRecyclerViewAdapter = new HistoryRecyclerViewAdapter(this);
+        schedulerRecyclerViewAdapter = new SchedulerRecyclerViewAdapter(this);
 
         // Initialize the ViewPager and set an adapter
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
