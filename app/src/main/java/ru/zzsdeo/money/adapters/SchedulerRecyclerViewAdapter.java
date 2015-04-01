@@ -64,7 +64,10 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
                     break;
                 case 1:
                     calendar.setTimeInMillis(st.getDateInMill());
-                    if (calendar.before(now)) calendar.setTimeInMillis(now.getTimeInMillis());
+                    //if (calendar.before(now)) calendar.setTimeInMillis(now.getTimeInMillis());
+                    if (calendar.before(now)) {
+                        calendar.set(now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
+                    }
                     do {
                         mTransactions.add(new TransactionsHolder(calendar.getTimeInMillis(), st));
                         calendar.add(Calendar.DAY_OF_MONTH, 1);
