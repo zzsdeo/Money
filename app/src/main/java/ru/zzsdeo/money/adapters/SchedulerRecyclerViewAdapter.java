@@ -41,7 +41,7 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
 
     public static final String SCHEDULED_TRANSACTION_ID = "scheduled_transaction_id";
 
-    private ArrayList<ScheduledTransaction> mTransactions;
+    private ArrayList<TransactionsHolder> mTransactions;
     private AccountCollection mAccounts;
     private CategoryCollection mCategories;
     private MainActivity mContext;
@@ -51,32 +51,41 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
     private static final Long END_OF_TIME = 31536000000l;
     private final Calendar calendar = Calendar.getInstance();
     private final Calendar now = Calendar.getInstance();
-    private ArrayList<Long> datesToDisplay;
 
     public SchedulerRecyclerViewAdapter(MainActivity context) {
         mTransactionCollection = new ScheduledTransactionCollection(context, ScheduledTransactionCollection.SORTED_BY_DATE_DESC);
 
-        HashMap<Long, ScheduledTransaction> hashMap = new HashMap<>();
+        mTransactions = new ArrayList<>();
         for (ScheduledTransaction st : mTransactionCollection.values()) {
             long endOfTime = now.getTimeInMillis() + END_OF_TIME;
             switch (st.getRepeatingTypeId()) {
                 case 0:
-                    hashMap.put(st.getDateInMill(), st);
+                    mTransactions.add(new TransactionsHolder(st.getDateInMill(), st));
                     break;
                 case 1:
                     calendar.setTimeInMillis(st.getDateInMill());
                     if (calendar.before(now)) calendar.setTimeInMillis(now.getTimeInMillis());
                     do {
-                        hashMap.put(calendar.getTimeInMillis(), st);
+                        mTransactions.add(new TransactionsHolder(calendar.getTimeInMillis(), st));
                         calendar.add(Calendar.DAY_OF_MONTH, 1);
                     } while (calendar.getTimeInMillis() < endOfTime);
                     break;
             }
         }
 
-        Map<Long, ScheduledTransaction> map = new TreeMap<>(hashMap);
-        datesToDisplay = new ArrayList<>(map.keySet());
-        mTransactions = new ArrayList<>(map.values());
+        Collections.sort(mTransactions, new Comparator<TransactionsHolder>() {
+            @Override
+            public int compare(TransactionsHolder lhs, TransactionsHolder rhs) {
+                if (lhs.dateTime > rhs.dateTime) {
+                    return 1;
+                } else if (lhs.dateTime < rhs.dateTime) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            }
+        });
+
         mAccounts = new AccountCollection(context);
         mCategories = new CategoryCollection(context);
         mContext = context;
@@ -91,7 +100,7 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        ScheduledTransaction transaction = mTransactions.get(position);
+        ScheduledTransaction transaction = mTransactions.get(position).scheduledTransaction;
         String category, destinationAccount;
         long categoryId = transaction.getCategoryId();
         long destinationAccountId = transaction.getDestinationAccountId();
@@ -110,7 +119,7 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
                 transaction.getComment(),
                 mAccounts.get(transaction.getAccountId()).getName(),
                 destinationAccount,
-                new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(new Date(datesToDisplay.get(position))),
+                new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(new Date(mTransactions.get(position).dateTime)),
                 String.valueOf(transaction.getAmount())
         };
 
@@ -128,15 +137,17 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
 
     @Override
     public long getItemId(int position) {
-        return mTransactions.get(position).getScheduledTransactionId();
+        return mTransactions.get(position).scheduledTransaction.getScheduledTransactionId();
     }
 
     public void refreshDataSet() {
         mTransactionCollection = new ScheduledTransactionCollection(mContext, ScheduledTransactionCollection.SORTED_BY_DATE_DESC);
         mAccounts = new AccountCollection(mContext);
         mCategories = new CategoryCollection(mContext);
-        mTransactions.clear();
-        mTransactions.addAll(mTransactionCollection.values());
+
+        /*mTransactions.clear();
+        mTransactions.addAll(mTransactionCollection.values());*/
+
         notifyDataSetChanged();
     }
 
@@ -155,8 +166,10 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
         }
 
         mTransactionCollection.removeScheduledTransaction(id);
-        mTransactions.clear();
-        mTransactions.addAll(mTransactionCollection.values());
+
+        /*mTransactions.clear();
+        mTransactions.addAll(mTransactionCollection.values());*/
+
         notifyDataSetChanged();
     }
 
@@ -230,4 +243,13 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
         }
     }
 
+    private static class TransactionsHolder {
+        public ScheduledTransaction scheduledTransaction;
+        public long dateTime;
+
+        public TransactionsHolder(long dateTime, ScheduledTransaction scheduledTransaction) {
+            this.dateTime = dateTime;
+            this.scheduledTransaction = scheduledTransaction;
+        }
+    }
 }
