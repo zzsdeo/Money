@@ -49,25 +49,51 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
     private FragmentManager mFragmentManager;
     private final static String DATE_FORMAT = "dd.MM.yy, HH:mm";
     private static final Long END_OF_TIME = 31536000000l;
-    private final Calendar calendar = Calendar.getInstance();
-    private final Calendar now = Calendar.getInstance();
 
     public SchedulerRecyclerViewAdapter(MainActivity context) {
         mTransactionCollection = new ScheduledTransactionCollection(context, ScheduledTransactionCollection.SORTED_BY_DATE_DESC);
 
-        mTransactions = new ArrayList<>();
+        /*mTransactions = new ArrayList<>();
         for (ScheduledTransaction st : mTransactionCollection.values()) {
+            Calendar now = Calendar.getInstance();
             long endOfTime = now.getTimeInMillis() + END_OF_TIME;
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(st.getDateInMill());
             switch (st.getRepeatingTypeId()) {
-                case 0:
+                case 0: // один раз
                     mTransactions.add(new TransactionsHolder(st.getDateInMill(), st));
                     break;
-                case 1:
-                    calendar.setTimeInMillis(st.getDateInMill());
-                    if (calendar.before(now)) calendar.setTimeInMillis(now.getTimeInMillis());
+                case 1: // каждый день
                     do {
                         mTransactions.add(new TransactionsHolder(calendar.getTimeInMillis(), st));
                         calendar.add(Calendar.DAY_OF_MONTH, 1);
+                    } while (calendar.getTimeInMillis() < endOfTime);
+                    break;
+                case 2: // каждый будний день
+                    do {
+                        if (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY && calendar.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+                            mTransactions.add(new TransactionsHolder(calendar.getTimeInMillis(), st));
+                        }
+                        calendar.add(Calendar.DAY_OF_WEEK, 1);
+                    } while (calendar.getTimeInMillis() < endOfTime);
+                    break;
+                case 3: // каждое определенное число
+                    do {
+                        mTransactions.add(new TransactionsHolder(calendar.getTimeInMillis(), st));
+                        calendar.add(Calendar.MONTH, 1);
+                    } while (calendar.getTimeInMillis() < endOfTime);
+                    break;
+                case 4: // каждый определенный день недели
+                    do {
+                        mTransactions.add(new TransactionsHolder(calendar.getTimeInMillis(), st));
+                        calendar.add(Calendar.DAY_OF_MONTH, 7);
+                    } while (calendar.getTimeInMillis() < endOfTime);
+                    break;
+                case 5: // каждый последний день месяца
+                    do {
+                        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+                        mTransactions.add(new TransactionsHolder(calendar.getTimeInMillis(), st));
+                        calendar.add(Calendar.MONTH, 1);
                     } while (calendar.getTimeInMillis() < endOfTime);
                     break;
             }
@@ -84,8 +110,9 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
                     return 0;
                 }
             }
-        });
+        });*/
 
+        mTransactions = getSortedTransactions();
         mAccounts = new AccountCollection(context);
         mCategories = new CategoryCollection(context);
         mContext = context;
@@ -144,10 +171,7 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
         mTransactionCollection = new ScheduledTransactionCollection(mContext, ScheduledTransactionCollection.SORTED_BY_DATE_DESC);
         mAccounts = new AccountCollection(mContext);
         mCategories = new CategoryCollection(mContext);
-
-        /*mTransactions.clear();
-        mTransactions.addAll(mTransactionCollection.values());*/
-
+        mTransactions = getSortedTransactions();
         notifyDataSetChanged();
     }
 
@@ -166,10 +190,7 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
         }
 
         mTransactionCollection.removeScheduledTransaction(id);
-
-        /*mTransactions.clear();
-        mTransactions.addAll(mTransactionCollection.values());*/
-
+        mTransactions = getSortedTransactions();
         notifyDataSetChanged();
     }
 
@@ -241,6 +262,68 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
                     return false;
             }
         }
+    }
+
+    private ArrayList<TransactionsHolder> getSortedTransactions() {
+        mTransactions = new ArrayList<>();
+        for (ScheduledTransaction st : mTransactionCollection.values()) {
+            Calendar now = Calendar.getInstance();
+            long endOfTime = now.getTimeInMillis() + END_OF_TIME;
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(st.getDateInMill());
+            switch (st.getRepeatingTypeId()) {
+                case 0: // один раз
+                    mTransactions.add(new TransactionsHolder(st.getDateInMill(), st));
+                    break;
+                case 1: // каждый день
+                    do {
+                        mTransactions.add(new TransactionsHolder(calendar.getTimeInMillis(), st));
+                        calendar.add(Calendar.DAY_OF_MONTH, 1);
+                    } while (calendar.getTimeInMillis() < endOfTime);
+                    break;
+                case 2: // каждый будний день
+                    do {
+                        if (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY && calendar.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+                            mTransactions.add(new TransactionsHolder(calendar.getTimeInMillis(), st));
+                        }
+                        calendar.add(Calendar.DAY_OF_WEEK, 1);
+                    } while (calendar.getTimeInMillis() < endOfTime);
+                    break;
+                case 3: // каждое определенное число
+                    do {
+                        mTransactions.add(new TransactionsHolder(calendar.getTimeInMillis(), st));
+                        calendar.add(Calendar.MONTH, 1);
+                    } while (calendar.getTimeInMillis() < endOfTime);
+                    break;
+                case 4: // каждый определенный день недели
+                    do {
+                        mTransactions.add(new TransactionsHolder(calendar.getTimeInMillis(), st));
+                        calendar.add(Calendar.DAY_OF_MONTH, 7);
+                    } while (calendar.getTimeInMillis() < endOfTime);
+                    break;
+                case 5: // каждый последний день месяца
+                    do {
+                        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+                        mTransactions.add(new TransactionsHolder(calendar.getTimeInMillis(), st));
+                        calendar.add(Calendar.MONTH, 1);
+                    } while (calendar.getTimeInMillis() < endOfTime);
+                    break;
+            }
+        }
+
+        Collections.sort(mTransactions, new Comparator<TransactionsHolder>() {
+            @Override
+            public int compare(TransactionsHolder lhs, TransactionsHolder rhs) {
+                if (lhs.dateTime > rhs.dateTime) {
+                    return 1;
+                } else if (lhs.dateTime < rhs.dateTime) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            }
+        });
+        return mTransactions;
     }
 
     private static class TransactionsHolder {
