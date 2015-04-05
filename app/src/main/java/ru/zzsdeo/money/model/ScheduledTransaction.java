@@ -65,6 +65,20 @@ public class ScheduledTransaction {
         return amount;
     }
 
+    public void setCommission(float commission) {
+        ContentValues cv = new ContentValues();
+        cv.put(TableScheduledTransactions.COLUMN_COMMISSION, commission);
+        updateDb(cv);
+    }
+
+    public float getCommission() {
+        Cursor c = getCursor(TableScheduledTransactions.COLUMN_COMMISSION);
+        c.moveToFirst();
+        float commission = c.getFloat(c.getColumnIndex(TableScheduledTransactions.COLUMN_COMMISSION));
+        c.close();
+        return commission;
+    }
+
     public void setComment(String comment) {
         ContentValues cv = new ContentValues();
         cv.put(TableScheduledTransactions.COLUMN_COMMENT, comment);

@@ -28,13 +28,15 @@ public class Dialogs extends DialogFragment implements DatePickerDialog.OnDateSe
     public static final int TIME_PICKER = 40;
     public static final int DELETE_CATEGORY = 50;
     public static final int DELETE_TRANSACTION = 60;
+    public static final int DELETE_SCHEDULED_TRANSACTION = 70;
 
     private Bundle bundle;
     private DialogListener dialogListener;
+    private int selection;
 
     public interface DialogListener {
         public void onDialogPositiveClick(DialogFragment dialog, int dialogType);
-        public void onDialogPositiveClick(DialogFragment dialog, int dialogType, long id);
+        public void onDialogPositiveClick(DialogFragment dialog, int dialogType, long id, int selection);
 
         public void onDialogNegativeClick(DialogFragment dialog, int dialogType);
 
@@ -81,7 +83,7 @@ public class Dialogs extends DialogFragment implements DatePickerDialog.OnDateSe
                 builder.setPositiveButton("Да", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dialogListener.onDialogPositiveClick(Dialogs.this, DELETE_ACCOUNT, bundle.getLong(ID));
+                        dialogListener.onDialogPositiveClick(Dialogs.this, DELETE_ACCOUNT, bundle.getLong(ID), 0);
                     }
                 });
                 return builder.create();
@@ -122,7 +124,7 @@ public class Dialogs extends DialogFragment implements DatePickerDialog.OnDateSe
                 builder.setPositiveButton("Да", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dialogListener.onDialogPositiveClick(Dialogs.this, DELETE_CATEGORY, bundle.getLong(ID));
+                        dialogListener.onDialogPositiveClick(Dialogs.this, DELETE_CATEGORY, bundle.getLong(ID), 0);
                     }
                 });
                 return builder.create();
@@ -137,7 +139,28 @@ public class Dialogs extends DialogFragment implements DatePickerDialog.OnDateSe
                 builder.setPositiveButton("Да", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dialogListener.onDialogPositiveClick(Dialogs.this, DELETE_TRANSACTION, bundle.getLong(ID));
+                        dialogListener.onDialogPositiveClick(Dialogs.this, DELETE_TRANSACTION, bundle.getLong(ID), 0);
+                    }
+                });
+                return builder.create();
+            case DELETE_SCHEDULED_TRANSACTION:
+                selection = 0;
+                builder.setSingleChoiceItems(new CharSequence[] {"Удалить выбранную транзакцию", "Удалить все транзакции серии"}, 0, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        selection = which;
+                    }
+                });
+                builder.setNegativeButton("Нет", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialogListener.onDialogNegativeClick(Dialogs.this, DELETE_SCHEDULED_TRANSACTION);
+                    }
+                });
+                builder.setPositiveButton("Да", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialogListener.onDialogPositiveClick(Dialogs.this, DELETE_SCHEDULED_TRANSACTION, bundle.getLong(ID), selection);
                     }
                 });
                 return builder.create();

@@ -1,8 +1,14 @@
 package ru.zzsdeo.money.activities;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.DialogFragment;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
@@ -14,6 +20,8 @@ import android.widget.TimePicker;
 
 import com.astuetz.PagerSlidingTabStrip;
 
+import java.util.Calendar;
+
 import ru.zzsdeo.money.Constants;
 import ru.zzsdeo.money.adapters.SchedulerRecyclerViewAdapter;
 import ru.zzsdeo.money.dialogs.Dialogs;
@@ -23,6 +31,8 @@ import ru.zzsdeo.money.adapters.MainActivityBalanceRecyclerViewAdapter;
 import ru.zzsdeo.money.adapters.MainPagerAdapter;
 import ru.zzsdeo.money.model.AccountCollection;
 import ru.zzsdeo.money.model.TransactionCollection;
+import ru.zzsdeo.money.services.BootStartUpReceiver;
+import ru.zzsdeo.money.services.UpdateTransactionsIntentService;
 
 public class MainActivity extends ActionBarActivity implements Dialogs.DialogListener {
 
@@ -55,6 +65,24 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // проверяем и запускаем периодическое обновление запланированных транзакций
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+        String versionName = "";
+        try {
+            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            versionName = pInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        if (!sharedPreferences.getString(Constants.VERSION_NAME, "").equals(versionName)) {
+            Intent i = new Intent(this, UpdateTransactionsIntentService.class);
+            PendingIntent pi = PendingIntent.getService(this, Constants.UPDATE_TRANSACTIONS_INTENT_SERVICE_REQUEST_CODE, i, 0);
+            AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            alarm.setRepeating(AlarmManager.RTC, Calendar.getInstance().getTimeInMillis(), 4*AlarmManager.INTERVAL_HOUR, pi);
+
+            // TODO sharedPreferences.edit().putString(Constants.VERSION_NAME, versionName).apply();
+        }
 
         accountCollection = new AccountCollection(this);
 
@@ -116,6 +144,11 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
                     mainActivityBalanceRecyclerViewAdapter.refreshDataSet();
                 }
                 break;
+            case Constants.ADD_SCHEDULED_TRANSACTION_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    schedulerRecyclerViewAdapter.refreshDataSet();
+                }
+                break;
         }
     }
 
@@ -130,11 +163,21 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
     }
 
     @Override
-    public void onDialogPositiveClick(DialogFragment dialog, int dialogType, long id) {
+    public void onDialogPositiveClick(DialogFragment dialog, int dialogType, long id, int selection) {
         switch (dialogType) {
             case Dialogs.DELETE_TRANSACTION:
                 historyRecyclerViewAdapter.removeItem(id);
                 mainActivityBalanceRecyclerViewAdapter.refreshDataSet();
+                dialog.dismiss();
+                break;
+            case Dialogs.DELETE_SCHEDULED_TRANSACTION:
+                switch (selection) {
+                    case 0:
+
+                        break;
+                    case 1:
+                        break;
+                }
                 dialog.dismiss();
                 break;
         }
@@ -144,6 +187,9 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
     public void onDialogNegativeClick(DialogFragment dialog, int dialogType) {
         switch (dialogType) {
             case Dialogs.DELETE_TRANSACTION:
+                dialog.dismiss();
+                break;
+            case Dialogs.DELETE_SCHEDULED_TRANSACTION:
                 dialog.dismiss();
                 break;
         }
