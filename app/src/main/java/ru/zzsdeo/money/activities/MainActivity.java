@@ -6,6 +6,7 @@ import android.app.DialogFragment;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -32,6 +33,7 @@ import ru.zzsdeo.money.adapters.MainPagerAdapter;
 import ru.zzsdeo.money.model.AccountCollection;
 import ru.zzsdeo.money.model.TransactionCollection;
 import ru.zzsdeo.money.services.BootStartUpReceiver;
+import ru.zzsdeo.money.services.ServiceReceiver;
 import ru.zzsdeo.money.services.UpdateTransactionsIntentService;
 
 public class MainActivity extends ActionBarActivity implements Dialogs.DialogListener {
@@ -40,6 +42,7 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
     public MainActivityBalanceRecyclerViewAdapter mainActivityBalanceRecyclerViewAdapter;
     public HistoryRecyclerViewAdapter historyRecyclerViewAdapter;
     public SchedulerRecyclerViewAdapter schedulerRecyclerViewAdapter;
+    private ServiceReceiver serviceReceiver;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -65,6 +68,11 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // слушаем интент сервисы
+
+        serviceReceiver = new ServiceReceiver();
+        registerReceiver(serviceReceiver, new IntentFilter(ServiceReceiver.BROADCAST_ACTION));
 
         // проверяем и запускаем периодическое обновление запланированных транзакций
         SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
@@ -116,6 +124,12 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(serviceReceiver);
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -144,7 +158,7 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
                     mainActivityBalanceRecyclerViewAdapter.refreshDataSet();
                 }
                 break;
-            case Constants.ADD_SCHEDULED_TRANSACTION_REQUEST_CODE:
+            case Constants.EDIT_SCHEDULED_TRANSACTION_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
                     schedulerRecyclerViewAdapter.refreshDataSet();
                 }
@@ -163,7 +177,7 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
     }
 
     @Override
-    public void onDialogPositiveClick(DialogFragment dialog, int dialogType, long id, int selection) {
+    public void onDialogPositiveClick(DialogFragment dialog, int dialogType, long id) {
         switch (dialogType) {
             case Dialogs.DELETE_TRANSACTION:
                 historyRecyclerViewAdapter.removeItem(id);
@@ -171,13 +185,7 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
                 dialog.dismiss();
                 break;
             case Dialogs.DELETE_SCHEDULED_TRANSACTION:
-                switch (selection) {
-                    case 0:
-
-                        break;
-                    case 1:
-                        break;
-                }
+                schedulerRecyclerViewAdapter.removeItem(id);
                 dialog.dismiss();
                 break;
         }

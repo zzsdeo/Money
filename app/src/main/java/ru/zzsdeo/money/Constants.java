@@ -10,6 +10,7 @@ public class Constants {
     public static final int ADD_TRANSACTION_REQUEST_CODE = 70;
     public static final int EDIT_TRANSACTION_REQUEST_CODE = 80;
     public static final int ADD_SCHEDULED_TRANSACTION_REQUEST_CODE = 90;
+    public static final int EDIT_SCHEDULED_TRANSACTION_REQUEST_CODE = 100;
 
     public static final int UPDATE_TRANSACTIONS_INTENT_SERVICE_REQUEST_CODE = 10;
 

@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -134,11 +135,6 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
         notifyDataSetChanged();
     }
 
-    public void removeCurrentItem(long id) {
-        ScheduledTransaction transaction = mTransactionCollection.get(id);
-
-    }
-
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, Toolbar.OnMenuItemClickListener {
         private TextView mTextView1, mTextView2, mTextView3, mTextView4;
         private Toolbar mToolbar;
@@ -188,15 +184,15 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
         @Override
         public boolean onMenuItemClick(MenuItem menuItem) {
             switch (menuItem.getItemId()) {
-                /*case R.id.delete_item:
+                case R.id.delete_item:
                     Dialogs dialog = new Dialogs();
                     Bundle bundle = new Bundle();
-                    bundle.putInt(Dialogs.DIALOG_TYPE, Dialogs.DELETE_TRANSACTION);
-                    bundle.putLong(Dialogs.ID, mAdapter.mTransactions.get(getPosition()).getTransactionId());
+                    bundle.putInt(Dialogs.DIALOG_TYPE, Dialogs.DELETE_SCHEDULED_TRANSACTION);
+                    bundle.putLong(Dialogs.ID, mAdapter.mTransactions.get(getPosition()).scheduledTransaction.getScheduledTransactionId());
                     dialog.setArguments(bundle);
                     dialog.show(mAdapter.mFragmentManager, Dialogs.DIALOGS_TAG);
                     return true;
-                case R.id.edit_item:
+                /*case R.id.edit_item:
                     Intent i = new Intent(mAdapter.mContext, EditTransactionActivity.class);
                     Bundle b = new Bundle();
                     b.putLong(TRANSACTION_ID, mAdapter.mTransactions.get(getPosition()).getTransactionId());

@@ -55,12 +55,12 @@ public class SchedulerFragment extends Fragment implements IFragment, View.OnCli
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        /*switch (requestCode) {
-            case Constants.ADD_TRANSACTION_REQUEST_CODE:
+        switch (requestCode) {
+            case Constants.ADD_SCHEDULED_TRANSACTION_REQUEST_CODE:
                 if (resultCode == Activity.RESULT_OK) {
-                    ((MainActivity)getActivity()).historyRecyclerViewAdapter.refreshDataSet();
+                    ((MainActivity)getActivity()).schedulerRecyclerViewAdapter.refreshDataSet();
                 }
                 break;
-        }*/
+        }
     }
 }
