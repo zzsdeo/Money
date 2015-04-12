@@ -145,7 +145,17 @@ public class EditScheduledTransactionActivity extends ActionBarActivity
         ArrayAdapter<String> repeatingAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, R.id.textView, new RepeatingTypes(this).getTypes());
         repeatingTypeId.setAdapter(repeatingAdapter);
         repeatingTypeId.setOnItemSelectedListener(this);
-        repeatingTypeId.setSelection(scheduledTransaction.getRepeatingTypeId());
+        selection = scheduledTransaction.getRepeatingTypeId();
+        repeatingTypeId.setSelection(selection);
+
+        switch (selection) {
+            case 3:
+                repeatingTextView.setText(new SimpleDateFormat("dd", Locale.getDefault()).format(calendar.getTime()));
+                break;
+            case 4:
+                repeatingTextView.setText(new SimpleDateFormat("E", Locale.getDefault()).format(calendar.getTime()));
+                break;
+        }
 
         addBtn.setText("Сохранить");
         addBtn.setOnClickListener(this);
@@ -211,6 +221,13 @@ public class EditScheduledTransactionActivity extends ActionBarActivity
                     destination = 0;
                 }
                 long accId = accountId.getSelectedItemId();
+
+                scheduledTransaction.setAccountId(accId);
+                scheduledTransaction.setDateInMill(calendar.getTimeInMillis());
+                scheduledTransaction.setAmount(amountFloat);
+                scheduledTransaction.setCommission();
+
+
                 long linkedTransactionId = new ScheduledTransactionCollection(this).addScheduledTransaction(
                         accId,
                         calendar.getTimeInMillis(),
