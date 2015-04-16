@@ -27,6 +27,7 @@ import java.util.TreeMap;
 
 import ru.zzsdeo.money.Constants;
 import ru.zzsdeo.money.R;
+import ru.zzsdeo.money.activities.EditScheduledTransactionActivity;
 import ru.zzsdeo.money.activities.EditTransactionActivity;
 import ru.zzsdeo.money.activities.MainActivity;
 import ru.zzsdeo.money.db.TableTransactions;
@@ -192,13 +193,13 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
                     dialog.setArguments(bundle);
                     dialog.show(mAdapter.mFragmentManager, Dialogs.DIALOGS_TAG);
                     return true;
-                /*case R.id.edit_item:
-                    Intent i = new Intent(mAdapter.mContext, EditTransactionActivity.class);
+                case R.id.edit_item:
+                    Intent i = new Intent(mAdapter.mContext, EditScheduledTransactionActivity.class);
                     Bundle b = new Bundle();
-                    b.putLong(TRANSACTION_ID, mAdapter.mTransactions.get(getPosition()).getTransactionId());
+                    b.putLong(SCHEDULED_TRANSACTION_ID, mAdapter.mTransactions.get(getPosition()).scheduledTransaction.getScheduledTransactionId());
                     i.putExtras(b);
-                    mAdapter.mContext.startActivityForResult(i, Constants.EDIT_TRANSACTION_REQUEST_CODE);
-                    return true;*/
+                    mAdapter.mContext.startActivityForResult(i, Constants.EDIT_SCHEDULED_TRANSACTION_REQUEST_CODE);
+                    return true;
                 default:
                     return false;
             }
@@ -260,7 +261,13 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
                 } else if (lhs.dateTime < rhs.dateTime) {
                     return -1;
                 } else {
-                    return 0;
+                    if (lhs.scheduledTransaction.getScheduledTransactionId() > rhs.scheduledTransaction.getScheduledTransactionId()) {
+                        return 1;
+                    } else if (lhs.scheduledTransaction.getScheduledTransactionId() < rhs.scheduledTransaction.getScheduledTransactionId()) {
+                        return -1;
+                    } else {
+                        return 0;
+                    }
                 }
             }
         });

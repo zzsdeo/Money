@@ -38,7 +38,10 @@
             android:label="Редактировать категорию"/>
 
         <activity android:name=".activities.AddScheduledTransactionActivity"
-            android:label="Добавить запланированную транзакцю"/>
+            android:label="Добавить запланированную транзакцию"/>
+
+        <activity android:name=".activities.EditScheduledTransactionActivity"
+            android:label="Редактировать запланированную транзакцию"/>
 
         <provider
             android:name="ru.zzsdeo.money.db.DatabaseContentProvider"

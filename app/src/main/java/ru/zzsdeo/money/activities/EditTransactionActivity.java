@@ -102,7 +102,7 @@ public class EditTransactionActivity extends ActionBarActivity
 
         amount.setText(String.valueOf(transaction.getAmount()));
 
-        commission.setText(String.valueOf(transaction.getCommission()));
+        commission.setText(String.valueOf(-transaction.getCommission()));
 
         comment.setText(transaction.getComment());
 
@@ -208,7 +208,7 @@ public class EditTransactionActivity extends ActionBarActivity
                 transaction.setAccountId(accId);
                 transaction.setDateInMill(calendar.getTimeInMillis());
                 transaction.setAmount(amountFloat);
-                transaction.setCommission(commissionFloat);
+                transaction.setCommission(-commissionFloat);
                 transaction.setComment(commentString);
                 transaction.setDestinationAccountId(destination);
                 transaction.setCategoryId(categoryId.getSelectedItemId());

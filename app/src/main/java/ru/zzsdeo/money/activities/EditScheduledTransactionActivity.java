@@ -105,7 +105,7 @@ public class EditScheduledTransactionActivity extends ActionBarActivity
 
         amount.setText(String.valueOf(scheduledTransaction.getAmount()));
 
-        commission.setText(String.valueOf(scheduledTransaction.getCommission()));
+        commission.setText(String.valueOf(-scheduledTransaction.getCommission()));
 
         comment.setText(scheduledTransaction.getComment());
 
@@ -225,21 +225,13 @@ public class EditScheduledTransactionActivity extends ActionBarActivity
                 scheduledTransaction.setAccountId(accId);
                 scheduledTransaction.setDateInMill(calendar.getTimeInMillis());
                 scheduledTransaction.setAmount(amountFloat);
-                scheduledTransaction.setCommission();
-
-
-                long linkedTransactionId = new ScheduledTransactionCollection(this).addScheduledTransaction(
-                        accId,
-                        calendar.getTimeInMillis(),
-                        amountFloat,
-                        -commissionFloat,
-                        commentString,
-                        destination,
-                        needApprove.isChecked(),
-                        repeatingTypeId.getSelectedItemPosition(),
-                        categoryId.getSelectedItemId(),
-                        0
-                );
+                scheduledTransaction.setCommission(-commissionFloat);
+                scheduledTransaction.setComment(commentString);
+                scheduledTransaction.setDestinationAccountId(destination);
+                scheduledTransaction.setNeedApprove(needApprove.isChecked());
+                scheduledTransaction.setRepeatingTypeId(repeatingTypeId.getSelectedItemPosition());
+                scheduledTransaction.setCategoryId(categoryId.getSelectedItemId());
+                scheduledTransaction.setLinkedTransactionId(0);
 
                 // Создание связанной транзакции
                 if (destAcc != null) {
@@ -254,7 +246,7 @@ public class EditScheduledTransactionActivity extends ActionBarActivity
                             needApprove.isChecked(),
                             repeatingTypeId.getSelectedItemPosition(),
                             categoryId.getSelectedItemId(),
-                            linkedTransactionId
+                            scheduledTransaction.getScheduledTransactionId()
                     );
                 }
 
