@@ -18,11 +18,25 @@ public class MainFragment extends Fragment implements IFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         View v = inflater.inflate(R.layout.fragment_main, container, false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        DefaultItemAnimator defaultItemAnimator = new DefaultItemAnimator();
+
+        // баланс
+
         RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view_accounts_main);
         recyclerView.setAdapter(((MainActivity)getActivity()).mainActivityBalanceRecyclerViewAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setItemAnimator(defaultItemAnimator);
+
+        // требуется подтверждение
+
+        RecyclerView recyclerViewNeedConfirm = (RecyclerView) v.findViewById(R.id.recycler_view_need_confirm);
+        recyclerViewNeedConfirm.setAdapter(((MainActivity)getActivity()).needConfirmRecyclerViewAdapter);
+        recyclerViewNeedConfirm.setLayoutManager(linearLayoutManager);
+        recyclerViewNeedConfirm.setItemAnimator(defaultItemAnimator);
+
         return v;
     }
 
