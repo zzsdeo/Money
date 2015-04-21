@@ -23,6 +23,7 @@ import java.util.Locale;
 
 import ru.zzsdeo.money.Constants;
 import ru.zzsdeo.money.R;
+import ru.zzsdeo.money.activities.AddToHistoryActivity;
 import ru.zzsdeo.money.activities.EditScheduledTransactionActivity;
 import ru.zzsdeo.money.activities.MainActivity;
 import ru.zzsdeo.money.db.TableScheduledTransactions;
@@ -49,7 +50,7 @@ public class NeedConfirmRecyclerViewAdapter extends RecyclerView.Adapter<NeedCon
         mTransactionCollection = new ScheduledTransactionCollection(context, new String[] {
                 TableScheduledTransactions.COLUMN_DATE_IN_MILL + " <= " + Calendar.getInstance().getTimeInMillis() +
                         " AND " + TableScheduledTransactions.COLUMN_REPEATING_TYPE_ID + " = " + 0,
-                TableScheduledTransactions.COLUMN_DATE_IN_MILL + " DESC, " + TableScheduledTransactions.COLUMN_ID + " DESC"
+                TableScheduledTransactions.COLUMN_DATE_IN_MILL + " ASC, " + TableScheduledTransactions.COLUMN_ID + " ASC"
         });
         mTransactions = new ArrayList<>(mTransactionCollection.values());
         mAccounts = new AccountCollection(context);
@@ -110,7 +111,7 @@ public class NeedConfirmRecyclerViewAdapter extends RecyclerView.Adapter<NeedCon
         mTransactionCollection = new ScheduledTransactionCollection(mContext, new String[] {
                 TableScheduledTransactions.COLUMN_DATE_IN_MILL + " <= " + Calendar.getInstance().getTimeInMillis() +
                         " AND " + TableScheduledTransactions.COLUMN_REPEATING_TYPE_ID + " = " + 0,
-                TableScheduledTransactions.COLUMN_DATE_IN_MILL + " DESC, " + TableScheduledTransactions.COLUMN_ID + " DESC"
+                TableScheduledTransactions.COLUMN_DATE_IN_MILL + " ASC, " + TableScheduledTransactions.COLUMN_ID + " ASC"
         });
         mAccounts = new AccountCollection(mContext);
         mCategories = new CategoryCollection(mContext);
@@ -119,7 +120,7 @@ public class NeedConfirmRecyclerViewAdapter extends RecyclerView.Adapter<NeedCon
         notifyDataSetChanged();
     }
 
-    public void removeItem(long id) {
+    /*public void removeItem(long id) { TODO все работает, но дублирует функционал из SchedulerRecyclerViewAdapter
         ScheduledTransaction transaction = mTransactionCollection.get(id);
         if (transaction.getDestinationAccountId() != 0) {
             ScheduledTransactionCollection linkedTransactions = new ScheduledTransactionCollection(mContext,
@@ -137,7 +138,7 @@ public class NeedConfirmRecyclerViewAdapter extends RecyclerView.Adapter<NeedCon
         mTransactions.clear();
         mTransactions.addAll(mTransactionCollection.values());
         notifyDataSetChanged();
-    }
+    }*/
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, Toolbar.OnMenuItemClickListener {
         private TextView mTextView1, mTextView2, mTextView3, mTextView4;
@@ -156,7 +157,7 @@ public class NeedConfirmRecyclerViewAdapter extends RecyclerView.Adapter<NeedCon
             mTextView4 = (TextView) view.findViewById(R.id.recycler_card_history_text4);
 
             mToolbar = (Toolbar) view.findViewById(R.id.recycler_card_history_toolbar);
-            mToolbar.inflateMenu(R.menu.recycler_card_history_toolbar);
+            mToolbar.inflateMenu(R.menu.recycler_card_need_confirm_toolbar);
             mToolbar.setOnMenuItemClickListener(this);
         }
 
@@ -196,13 +197,13 @@ public class NeedConfirmRecyclerViewAdapter extends RecyclerView.Adapter<NeedCon
                     dialog.setArguments(bundle);
                     dialog.show(mAdapter.mFragmentManager, Dialogs.DIALOGS_TAG);
                     return true;
-                /*case R.id.edit_item:
-                    Intent i = new Intent(mAdapter.mContext, EditScheduledTransactionActivity.class);
+                case R.id.edit_item:
+                    Intent i = new Intent(mAdapter.mContext, AddToHistoryActivity.class);
                     Bundle b = new Bundle();
                     b.putLong(SCHEDULED_TRANSACTION_ID, mAdapter.mTransactions.get(getPosition()).getScheduledTransactionId());
                     i.putExtras(b);
-                    mAdapter.mContext.startActivityForResult(i, Constants.EDIT_SCHEDULED_TRANSACTION_REQUEST_CODE);
-                    return true;*/
+                    mAdapter.mContext.startActivityForResult(i, Constants.ADD_TO_HISTORY_REQUEST_CODE);
+                    return true;
                 default:
                     return false;
             }

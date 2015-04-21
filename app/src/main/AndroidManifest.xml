@@ -43,6 +43,9 @@
         <activity android:name=".activities.EditScheduledTransactionActivity"
             android:label="Редактировать запланированную транзакцию"/>
 
+        <activity android:name=".activities.AddToHistoryActivity"
+            android:label="Подтвердить и добавить в историю"/>
+
         <provider
             android:name="ru.zzsdeo.money.db.DatabaseContentProvider"
             android:authorities="ru.zzsdeo.money.contentprovider"

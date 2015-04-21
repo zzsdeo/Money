@@ -59,6 +59,7 @@ public class SchedulerFragment extends Fragment implements IFragment, View.OnCli
             case Constants.ADD_SCHEDULED_TRANSACTION_REQUEST_CODE:
                 if (resultCode == Activity.RESULT_OK) {
                     ((MainActivity)getActivity()).schedulerRecyclerViewAdapter.refreshDataSet();
+                    ((MainActivity)getActivity()).needConfirmRecyclerViewAdapter.refreshDataSet();
                 }
                 break;
         }

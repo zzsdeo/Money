@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import ru.zzsdeo.money.MyLinearLayoutManager;
 import ru.zzsdeo.money.R;
 import ru.zzsdeo.money.activities.MainActivity;
 import ru.zzsdeo.money.adapters.MainActivityBalanceRecyclerViewAdapter;
@@ -20,25 +21,18 @@ public class MainFragment extends Fragment implements IFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_main, container, false);
-        //LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        //DefaultItemAnimator defaultItemAnimator = new DefaultItemAnimator();
 
         // баланс
 
         RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view_accounts_main);
         recyclerView.setAdapter(((MainActivity)getActivity()).mainActivityBalanceRecyclerViewAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        //recyclerView.setItemAnimator(new DefaultItemAnimator());
-        /*int rvHeight = ((MainActivity)getActivity()).mainActivityBalanceRecyclerViewAdapter.
-        recyclerView.getLayoutParams().height = ;*/
-
+        recyclerView.setLayoutManager(new MyLinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
 
         // требуется подтверждение
 
         RecyclerView recyclerViewNeedConfirm = (RecyclerView) v.findViewById(R.id.recycler_view_need_confirm);
         recyclerViewNeedConfirm.setAdapter(((MainActivity)getActivity()).needConfirmRecyclerViewAdapter);
-        recyclerViewNeedConfirm.setLayoutManager(new LinearLayoutManager(getActivity()));
-        //recyclerViewNeedConfirm.setItemAnimator(new DefaultItemAnimator());
+        recyclerViewNeedConfirm.setLayoutManager(new MyLinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
 
         return v;
     }

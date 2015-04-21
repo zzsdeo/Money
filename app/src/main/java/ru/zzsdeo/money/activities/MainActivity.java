@@ -171,6 +171,13 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
                     needConfirmRecyclerViewAdapter.refreshDataSet();
                 }
                 break;
+            case Constants.ADD_TO_HISTORY_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    historyRecyclerViewAdapter.refreshDataSet();
+                    mainActivityBalanceRecyclerViewAdapter.refreshDataSet();
+                    needConfirmRecyclerViewAdapter.refreshDataSet();
+                    schedulerRecyclerViewAdapter.refreshDataSet();
+                }
         }
     }
 
@@ -194,6 +201,7 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
                 break;
             case Dialogs.DELETE_SCHEDULED_TRANSACTION:
                 schedulerRecyclerViewAdapter.removeItem(id);
+                needConfirmRecyclerViewAdapter.refreshDataSet();
                 dialog.dismiss();
                 break;
         }
