@@ -185,6 +185,7 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
                     mainActivityBalanceRecyclerViewAdapter.refreshDataSet();
                     needConfirmRecyclerViewAdapter.refreshDataSet();
                     schedulerRecyclerViewAdapter.refreshDataSet();
+                    needCategoryRecyclerViewAdapter.refreshDataSet();
                 }
         }
     }

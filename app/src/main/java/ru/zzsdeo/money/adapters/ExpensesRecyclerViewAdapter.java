@@ -15,7 +15,9 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 
@@ -33,19 +35,20 @@ import ru.zzsdeo.money.model.TransactionCollection;
 
 public class ExpensesRecyclerViewAdapter extends RecyclerView.Adapter<ExpensesRecyclerViewAdapter.ViewHolder>  {
 
-    private ArrayList<Transaction> mTransactions;
     private ArrayList<Category> mCategoryList;
-    private AccountCollection mAccounts;
     private CategoryCollection mCategories;
     private MainActivity mContext;
-    private TransactionCollection mTransactionCollection;
+    private HashMap<Long, Float> mExpenses;
+    private final Calendar calendar = Calendar.getInstance();
+
 
     public ExpensesRecyclerViewAdapter(MainActivity context) {
-        mTransactionCollection = new TransactionCollection(context, TransactionCollection.SORTED_BY_DATE_DESC);
-        mTransactions = new ArrayList<>(mTransactionCollection.values());
-        mAccounts = new AccountCollection(context);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
         mCategories = new CategoryCollection(context, CategoryCollection.WITH_BUDGET);
         mCategoryList = new ArrayList<>(mCategories.values());
+        mExpenses = getExpenses();
         mContext = context;
     }
 
@@ -60,7 +63,7 @@ public class ExpensesRecyclerViewAdapter extends RecyclerView.Adapter<ExpensesRe
         Category category = mCategoryList.get(position);
         holder.setItems(category.getName(),
                 Math.round(category.getBudget()),
-                50);
+                Math.round(mExpenses.get(category.getCategoryId())));
     }
 
     @Override
@@ -74,13 +77,10 @@ public class ExpensesRecyclerViewAdapter extends RecyclerView.Adapter<ExpensesRe
     }
 
     public void refreshDataSet() {
-        mTransactionCollection = new TransactionCollection(mContext, TransactionCollection.SORTED_BY_DATE_DESC);
-        mAccounts = new AccountCollection(mContext);
         mCategories = new CategoryCollection(mContext, CategoryCollection.WITH_BUDGET);
         mCategoryList.clear();
         mCategoryList.addAll(mCategories.values());
-        mTransactions.clear();
-        mTransactions.addAll(mTransactionCollection.values());
+        mExpenses = getExpenses();
         notifyDataSetChanged();
     }
 
@@ -108,5 +108,23 @@ public class ExpensesRecyclerViewAdapter extends RecyclerView.Adapter<ExpensesRe
             //Log.d("my", "onClick " + getPosition() + " " + mItem);
 
         }
+    }
+
+    private HashMap<Long, Float> getExpenses() {
+        TransactionCollection transactionCollection;
+        HashMap<Long, Float> expenses = new HashMap<>();
+        for (Category category : mCategoryList) {
+            transactionCollection = new TransactionCollection(mContext, new String[]{
+                    TableTransactions.COLUMN_DATE_IN_MILL + " => " + calendar.getTimeInMillis() +
+                    " AND " + TableTransactions.COLUMN_CATEGORY_ID + " = " + category.getCategoryId(),
+                    null
+            });
+            float amount = 0;
+            for (Transaction transaction : transactionCollection.values()) {
+                amount = amount + transaction.getAmount() + transaction.getCommission();
+            }
+            expenses.put(category.getCategoryId(), amount);
+        }
+        return expenses;
     }
 }
