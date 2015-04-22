@@ -24,6 +24,11 @@ public class TransactionCollection extends LinkedHashMap<Long, Transaction> {
             TableTransactions.COLUMN_DATE_IN_MILL + " DESC, " + TableTransactions.COLUMN_ID + " DESC"
     };
 
+    public static final String[] WITHOUT_CATEGORY = {
+            TableTransactions.COLUMN_CATEGORY_ID + " = " + 0,
+            TableTransactions.COLUMN_DATE_IN_MILL + " ASC, " + TableTransactions.COLUMN_ID + " ASC"
+    };
+
     public TransactionCollection(Context context) {
         this.context = context;
         contentResolver = context.getContentResolver();

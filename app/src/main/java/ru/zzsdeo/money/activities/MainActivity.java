@@ -24,6 +24,8 @@ import com.astuetz.PagerSlidingTabStrip;
 import java.util.Calendar;
 
 import ru.zzsdeo.money.Constants;
+import ru.zzsdeo.money.adapters.ExpensesRecyclerViewAdapter;
+import ru.zzsdeo.money.adapters.NeedCategoryRecyclerViewAdapter;
 import ru.zzsdeo.money.adapters.NeedConfirmRecyclerViewAdapter;
 import ru.zzsdeo.money.adapters.SchedulerRecyclerViewAdapter;
 import ru.zzsdeo.money.dialogs.Dialogs;
@@ -44,6 +46,8 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
     public HistoryRecyclerViewAdapter historyRecyclerViewAdapter;
     public SchedulerRecyclerViewAdapter schedulerRecyclerViewAdapter;
     public NeedConfirmRecyclerViewAdapter needConfirmRecyclerViewAdapter;
+    public NeedCategoryRecyclerViewAdapter needCategoryRecyclerViewAdapter;
+    public ExpensesRecyclerViewAdapter expensesRecyclerViewAdapter;
     private ServiceReceiver serviceReceiver;
 
     @Override
@@ -100,6 +104,8 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
         historyRecyclerViewAdapter = new HistoryRecyclerViewAdapter(this);
         schedulerRecyclerViewAdapter = new SchedulerRecyclerViewAdapter(this);
         needConfirmRecyclerViewAdapter = new NeedConfirmRecyclerViewAdapter(this);
+        needCategoryRecyclerViewAdapter = new NeedCategoryRecyclerViewAdapter(this);
+        expensesRecyclerViewAdapter = new ExpensesRecyclerViewAdapter(this);
 
         // Initialize the ViewPager and set an adapter
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
@@ -157,12 +163,14 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
                     historyRecyclerViewAdapter.refreshDataSet();
                     schedulerRecyclerViewAdapter.refreshDataSet();
                     needConfirmRecyclerViewAdapter.refreshDataSet();
+                    needCategoryRecyclerViewAdapter.refreshDataSet();
                 }
                 break;
             case Constants.EDIT_TRANSACTION_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
                     historyRecyclerViewAdapter.refreshDataSet();
                     mainActivityBalanceRecyclerViewAdapter.refreshDataSet();
+                    needCategoryRecyclerViewAdapter.refreshDataSet();
                 }
                 break;
             case Constants.EDIT_SCHEDULED_TRANSACTION_REQUEST_CODE:

@@ -34,6 +34,18 @@ public class MainFragment extends Fragment implements IFragment {
         recyclerViewNeedConfirm.setAdapter(((MainActivity)getActivity()).needConfirmRecyclerViewAdapter);
         recyclerViewNeedConfirm.setLayoutManager(new MyLinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
 
+        // требуется категория
+
+        RecyclerView recyclerViewNeedCategory = (RecyclerView) v.findViewById(R.id.recycler_view_need_category);
+        recyclerViewNeedCategory.setAdapter(((MainActivity)getActivity()).needCategoryRecyclerViewAdapter);
+        recyclerViewNeedCategory.setLayoutManager(new MyLinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+
+        // расходы
+
+        RecyclerView recyclerViewExpenses = (RecyclerView) v.findViewById(R.id.recycler_view_expenses);
+        recyclerViewExpenses.setAdapter(((MainActivity)getActivity()).expensesRecyclerViewAdapter);
+        recyclerViewExpenses.setLayoutManager(new MyLinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+
         return v;
     }
 

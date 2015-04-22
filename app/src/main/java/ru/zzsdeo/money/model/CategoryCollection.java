@@ -15,11 +15,17 @@ import java.util.LinkedHashMap;
 import ru.zzsdeo.money.db.DatabaseContentProvider;
 import ru.zzsdeo.money.db.TableAccounts;
 import ru.zzsdeo.money.db.TableCategories;
+import ru.zzsdeo.money.db.TableTransactions;
 
 public class CategoryCollection extends LinkedHashMap<Long, Category> {
 
     private final ContentResolver contentResolver;
     private final Context context;
+
+    public static final String[] WITH_BUDGET = {
+            TableCategories.COLUMN_BUDGET + " != " + 0,
+            null
+    };
 
     public CategoryCollection(Context context) {
         this.context = context;
