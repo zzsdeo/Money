@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -46,10 +47,12 @@ public class ExpensesRecyclerViewAdapter extends RecyclerView.Adapter<ExpensesRe
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
         mCategories = new CategoryCollection(context, CategoryCollection.WITH_BUDGET);
         mCategoryList = new ArrayList<>(mCategories.values());
-        mExpenses = getExpenses();
         mContext = context;
+        mExpenses = getExpenses();
     }
 
     @Override
@@ -115,7 +118,7 @@ public class ExpensesRecyclerViewAdapter extends RecyclerView.Adapter<ExpensesRe
         HashMap<Long, Float> expenses = new HashMap<>();
         for (Category category : mCategoryList) {
             transactionCollection = new TransactionCollection(mContext, new String[]{
-                    TableTransactions.COLUMN_DATE_IN_MILL + " => " + calendar.getTimeInMillis() +
+                    TableTransactions.COLUMN_DATE_IN_MILL + " >= " + calendar.getTimeInMillis() +
                     " AND " + TableTransactions.COLUMN_CATEGORY_ID + " = " + category.getCategoryId(),
                     null
             });
@@ -123,7 +126,7 @@ public class ExpensesRecyclerViewAdapter extends RecyclerView.Adapter<ExpensesRe
             for (Transaction transaction : transactionCollection.values()) {
                 amount = amount + transaction.getAmount() + transaction.getCommission();
             }
-            expenses.put(category.getCategoryId(), amount);
+            expenses.put(category.getCategoryId(), -amount);
         }
         return expenses;
     }
