@@ -34,6 +34,7 @@
                 android:layout_margin="10dp"
                 android:textSize="18sp"
                 android:textStyle="bold"
+                android:id="@+id/need_confirm"
                 android:textColor="@color/material_deep_teal_500" />
 
             <android.support.v7.widget.RecyclerView
@@ -49,6 +50,7 @@
                 android:layout_margin="10dp"
                 android:textSize="18sp"
                 android:textStyle="bold"
+                android:id="@+id/without_category"
                 android:textColor="@color/material_deep_teal_500" />
 
             <android.support.v7.widget.RecyclerView

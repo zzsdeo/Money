@@ -88,7 +88,7 @@ public class ExpensesRecyclerViewAdapter extends RecyclerView.Adapter<ExpensesRe
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView mTextView;
+        private TextView mTextView, mExp, mMax;
         private ProgressBar mProgressBar;
 
         public ViewHolder(View view) {
@@ -96,12 +96,21 @@ public class ExpensesRecyclerViewAdapter extends RecyclerView.Adapter<ExpensesRe
             view.setOnClickListener(this);
 
             mTextView = (TextView) view.findViewById(R.id.text);
+            mExp = (TextView) view.findViewById(R.id.expense);
+            mMax = (TextView) view.findViewById(R.id.max);
 
             mProgressBar = (ProgressBar) view.findViewById(R.id.progress);
         }
 
         public void setItems(String name, int max, int progress) {
             mTextView.setText(name);
+            if (progress > max) {
+                mExp.setTextColor(Color.RED);
+            } else {
+                mExp.setTextColor(Color.BLACK);
+            }
+            mExp.setText(String.valueOf(progress));
+            mMax.setText(String.valueOf(max));
             mProgressBar.setMax(max);
             mProgressBar.setProgress(progress);
         }

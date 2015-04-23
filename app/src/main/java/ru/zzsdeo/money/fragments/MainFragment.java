@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import ru.zzsdeo.money.MyLinearLayoutManager;
 import ru.zzsdeo.money.R;
@@ -30,11 +31,25 @@ public class MainFragment extends Fragment implements IFragment {
 
         // требуется подтверждение
 
+        TextView needConfirm = (TextView) v.findViewById(R.id.need_confirm);
+        if (((MainActivity)getActivity()).needConfirmRecyclerViewAdapter.getItemCount() == 0) {
+            needConfirm.setVisibility(View.GONE);
+        } else {
+            needConfirm.setVisibility(View.VISIBLE);
+        }
+
         RecyclerView recyclerViewNeedConfirm = (RecyclerView) v.findViewById(R.id.recycler_view_need_confirm);
         recyclerViewNeedConfirm.setAdapter(((MainActivity)getActivity()).needConfirmRecyclerViewAdapter);
         recyclerViewNeedConfirm.setLayoutManager(new MyLinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
 
         // требуется категория
+
+        TextView needCategory = (TextView) v.findViewById(R.id.without_category);
+        if (((MainActivity)getActivity()).needCategoryRecyclerViewAdapter.getItemCount() == 0) {
+            needCategory.setVisibility(View.GONE);
+        } else {
+            needCategory.setVisibility(View.VISIBLE);
+        }
 
         RecyclerView recyclerViewNeedCategory = (RecyclerView) v.findViewById(R.id.recycler_view_need_category);
         recyclerViewNeedCategory.setAdapter(((MainActivity)getActivity()).needCategoryRecyclerViewAdapter);
@@ -47,12 +62,6 @@ public class MainFragment extends Fragment implements IFragment {
         recyclerViewExpenses.setLayoutManager(new MyLinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
 
         return v;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
     }
 
     @Override

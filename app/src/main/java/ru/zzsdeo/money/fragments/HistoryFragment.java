@@ -62,6 +62,7 @@ public class HistoryFragment extends Fragment implements IFragment, View.OnClick
                     ((MainActivity)getActivity()).historyRecyclerViewAdapter.refreshDataSet();
                     ((MainActivity)getActivity()).mainActivityBalanceRecyclerViewAdapter.refreshDataSet();
                     ((MainActivity)getActivity()).needCategoryRecyclerViewAdapter.refreshDataSet();
+                    ((MainActivity)getActivity()).expensesRecyclerViewAdapter.refreshDataSet();
                 }
                 break;
         }

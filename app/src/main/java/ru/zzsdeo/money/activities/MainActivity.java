@@ -164,6 +164,7 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
                     schedulerRecyclerViewAdapter.refreshDataSet();
                     needConfirmRecyclerViewAdapter.refreshDataSet();
                     needCategoryRecyclerViewAdapter.refreshDataSet();
+                    expensesRecyclerViewAdapter.refreshDataSet();
                 }
                 break;
             case Constants.EDIT_TRANSACTION_REQUEST_CODE:
@@ -171,6 +172,7 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
                     historyRecyclerViewAdapter.refreshDataSet();
                     mainActivityBalanceRecyclerViewAdapter.refreshDataSet();
                     needCategoryRecyclerViewAdapter.refreshDataSet();
+                    expensesRecyclerViewAdapter.refreshDataSet();
                 }
                 break;
             case Constants.EDIT_SCHEDULED_TRANSACTION_REQUEST_CODE:
@@ -186,6 +188,7 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
                     needConfirmRecyclerViewAdapter.refreshDataSet();
                     schedulerRecyclerViewAdapter.refreshDataSet();
                     needCategoryRecyclerViewAdapter.refreshDataSet();
+                    expensesRecyclerViewAdapter.refreshDataSet();
                 }
         }
     }
@@ -206,6 +209,7 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
             case Dialogs.DELETE_TRANSACTION:
                 historyRecyclerViewAdapter.removeItem(id);
                 mainActivityBalanceRecyclerViewAdapter.refreshDataSet();
+                expensesRecyclerViewAdapter.refreshDataSet();
                 dialog.dismiss();
                 break;
             case Dialogs.DELETE_SCHEDULED_TRANSACTION:

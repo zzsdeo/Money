@@ -6,7 +6,6 @@ package ru.zzsdeo.money;
 public class TODO {
     /**
      * TODO
-     * Использование бюджета
      * Скрытие подзаголовков при пустых recyclerview
      * Распознавание из смс
      * ScrollView в активити
