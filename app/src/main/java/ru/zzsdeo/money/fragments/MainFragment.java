@@ -18,6 +18,8 @@ import ru.zzsdeo.money.adapters.MainActivityBalanceRecyclerViewAdapter;
 
 public class MainFragment extends Fragment implements IFragment {
 
+    private TextView needConfirm, needCategory;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
@@ -31,12 +33,7 @@ public class MainFragment extends Fragment implements IFragment {
 
         // требуется подтверждение
 
-        TextView needConfirm = (TextView) v.findViewById(R.id.need_confirm);
-        if (((MainActivity)getActivity()).needConfirmRecyclerViewAdapter.getItemCount() == 0) {
-            needConfirm.setVisibility(View.GONE);
-        } else {
-            needConfirm.setVisibility(View.VISIBLE);
-        }
+        needConfirm = (TextView) v.findViewById(R.id.need_confirm);
 
         RecyclerView recyclerViewNeedConfirm = (RecyclerView) v.findViewById(R.id.recycler_view_need_confirm);
         recyclerViewNeedConfirm.setAdapter(((MainActivity)getActivity()).needConfirmRecyclerViewAdapter);
@@ -44,12 +41,7 @@ public class MainFragment extends Fragment implements IFragment {
 
         // требуется категория
 
-        TextView needCategory = (TextView) v.findViewById(R.id.without_category);
-        if (((MainActivity)getActivity()).needCategoryRecyclerViewAdapter.getItemCount() == 0) {
-            needCategory.setVisibility(View.GONE);
-        } else {
-            needCategory.setVisibility(View.VISIBLE);
-        }
+        needCategory = (TextView) v.findViewById(R.id.without_category);
 
         RecyclerView recyclerViewNeedCategory = (RecyclerView) v.findViewById(R.id.recycler_view_need_category);
         recyclerViewNeedCategory.setAdapter(((MainActivity)getActivity()).needCategoryRecyclerViewAdapter);
@@ -62,6 +54,23 @@ public class MainFragment extends Fragment implements IFragment {
         recyclerViewExpenses.setLayoutManager(new MyLinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
 
         return v;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        if (((MainActivity)getActivity()).needConfirmRecyclerViewAdapter.getItemCount() == 0) {
+            needConfirm.setVisibility(View.GONE);
+        } else {
+            needConfirm.setVisibility(View.VISIBLE);
+        }
+
+        if (((MainActivity)getActivity()).needCategoryRecyclerViewAdapter.getItemCount() == 0) {
+            needCategory.setVisibility(View.GONE);
+        } else {
+            needCategory.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

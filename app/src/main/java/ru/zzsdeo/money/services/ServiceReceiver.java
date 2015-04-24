@@ -13,12 +13,18 @@ public class ServiceReceiver extends BroadcastReceiver {
     public static final String ACTION = "action";
 
     public static final int REFRESH_SCHEDULED_TRANSACTIONS = 10;
+    public static final int REFRESH_ALL = 20;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         switch (intent.getIntExtra(ACTION, 0)) {
             case REFRESH_SCHEDULED_TRANSACTIONS:
                 ((MainActivity) context).schedulerRecyclerViewAdapter.refreshDataSet();
+                break;
+            case REFRESH_ALL:
+                ((MainActivity) context).historyRecyclerViewAdapter.refreshDataSet();
+                ((MainActivity) context).mainActivityBalanceRecyclerViewAdapter.refreshDataSet();
+                ((MainActivity) context).needCategoryRecyclerViewAdapter.refreshDataSet();
                 break;
         }
     }

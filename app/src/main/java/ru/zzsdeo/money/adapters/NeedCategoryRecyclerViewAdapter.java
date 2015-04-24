@@ -204,6 +204,7 @@ public class NeedCategoryRecyclerViewAdapter extends RecyclerView.Adapter<NeedCa
             }
             mAdapter.refreshDataSet();
             mAdapter.mContext.historyRecyclerViewAdapter.refreshDataSet();
+            mAdapter.mContext.expensesRecyclerViewAdapter.refreshDataSet();
             return true;
         }
     }
