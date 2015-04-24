@@ -12,6 +12,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -20,6 +21,8 @@ import android.widget.DatePicker;
 import android.widget.TimePicker;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
+import com.github.ksoichiro.android.observablescrollview.ScrollState;
 
 import java.util.Calendar;
 
@@ -39,7 +42,7 @@ import ru.zzsdeo.money.services.BootStartUpReceiver;
 import ru.zzsdeo.money.services.ServiceReceiver;
 import ru.zzsdeo.money.services.UpdateTransactionsIntentService;
 
-public class MainActivity extends ActionBarActivity implements Dialogs.DialogListener {
+public class MainActivity extends ActionBarActivity implements Dialogs.DialogListener, ObservableScrollViewCallbacks {
 
     private AccountCollection accountCollection;
     public MainActivityBalanceRecyclerViewAdapter mainActivityBalanceRecyclerViewAdapter;
@@ -240,5 +243,29 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
     @Override
     public void onTimeSet(TimePicker view, int dialogType, int hourOfDay, int minute) {
 
+    }
+
+    @Override
+    public void onScrollChanged(int i, boolean b, boolean b2) {
+
+    }
+
+    @Override
+    public void onDownMotionEvent() {
+
+    }
+
+    @Override
+    public void onUpOrCancelMotionEvent(ScrollState scrollState) {
+        ActionBar ab = getSupportActionBar();
+        if (scrollState == ScrollState.UP) {
+            if (ab.isShowing()) {
+                ab.hide();
+            }
+        } else if (scrollState == ScrollState.DOWN) {
+            if (!ab.isShowing()) {
+                ab.show();
+            }
+        }
     }
 }

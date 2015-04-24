@@ -13,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
+import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.melnykov.fab.FloatingActionButton;
 
 import ru.zzsdeo.money.Constants;
@@ -26,10 +28,11 @@ public class HistoryFragment extends Fragment implements IFragment, View.OnClick
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_history, container, false);
-        RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view_history);
+        ObservableRecyclerView recyclerView = (ObservableRecyclerView) v.findViewById(R.id.recycler_view_history);
         recyclerView.setAdapter(((MainActivity)getActivity()).historyRecyclerViewAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setScrollViewCallbacks((ObservableScrollViewCallbacks) getActivity());
 
         FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.fab);
         fab.attachToRecyclerView(recyclerView);
