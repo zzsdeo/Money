@@ -28,6 +28,7 @@ import ru.zzsdeo.money.activities.EditTransactionActivity;
 import ru.zzsdeo.money.activities.MainActivity;
 import ru.zzsdeo.money.db.TableTransactions;
 import ru.zzsdeo.money.dialogs.Dialogs;
+import ru.zzsdeo.money.fragments.MainFragment;
 import ru.zzsdeo.money.model.AccountCollection;
 import ru.zzsdeo.money.model.Category;
 import ru.zzsdeo.money.model.CategoryCollection;
@@ -110,26 +111,14 @@ public class NeedCategoryRecyclerViewAdapter extends RecyclerView.Adapter<NeedCa
         mTransactions.clear();
         mTransactions.addAll(mTransactionCollection.values());
         notifyDataSetChanged();
-    }
 
-    public void removeItem(long id) {
-        Transaction transaction = mTransactionCollection.get(id);
-        if (transaction.getDestinationAccountId() != 0) {
-            TransactionCollection linkedTransactions = new TransactionCollection(mContext,
-                    new String[] {
-                            TableTransactions.COLUMN_LINKED_TRANSACTION_ID + " = " + transaction.getTransactionId(),
-                            null
-                    });
-            Iterator<Transaction> it = linkedTransactions.values().iterator();
-            Transaction linkedTransaction = it.next();
-            long linkedId = linkedTransaction.getTransactionId();
-            mTransactionCollection.removeTransaction(linkedId);
+        // Скрываем заголовок
+
+        if (getItemCount() == 0) {
+            ((MainFragment) mContext.mainPagerAdapter.getItem(1)).needCategory.setVisibility(View.GONE);
+        } else {
+            ((MainFragment) mContext.mainPagerAdapter.getItem(1)).needCategory.setVisibility(View.VISIBLE);
         }
-
-        mTransactionCollection.removeTransaction(id);
-        mTransactions.clear();
-        mTransactions.addAll(mTransactionCollection.values());
-        notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, Toolbar.OnMenuItemClickListener {

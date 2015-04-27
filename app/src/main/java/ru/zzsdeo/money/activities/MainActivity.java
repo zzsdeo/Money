@@ -51,6 +51,7 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
     public NeedConfirmRecyclerViewAdapter needConfirmRecyclerViewAdapter;
     public NeedCategoryRecyclerViewAdapter needCategoryRecyclerViewAdapter;
     public ExpensesRecyclerViewAdapter expensesRecyclerViewAdapter;
+    public MainPagerAdapter mainPagerAdapter;
     private ServiceReceiver serviceReceiver;
 
     @Override
@@ -112,7 +113,7 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
 
         // Initialize the ViewPager and set an adapter
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
-        MainPagerAdapter mainPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
+        mainPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
         pager.setAdapter(mainPagerAdapter);
 
         // Bind the tabs to the ViewPager

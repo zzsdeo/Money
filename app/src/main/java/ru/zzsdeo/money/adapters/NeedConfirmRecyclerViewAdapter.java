@@ -29,6 +29,7 @@ import ru.zzsdeo.money.activities.MainActivity;
 import ru.zzsdeo.money.db.TableScheduledTransactions;
 import ru.zzsdeo.money.db.TableTransactions;
 import ru.zzsdeo.money.dialogs.Dialogs;
+import ru.zzsdeo.money.fragments.MainFragment;
 import ru.zzsdeo.money.model.AccountCollection;
 import ru.zzsdeo.money.model.CategoryCollection;
 import ru.zzsdeo.money.model.ScheduledTransaction;
@@ -118,6 +119,14 @@ public class NeedConfirmRecyclerViewAdapter extends RecyclerView.Adapter<NeedCon
         mTransactions.clear();
         mTransactions.addAll(mTransactionCollection.values());
         notifyDataSetChanged();
+
+        // Скрываем заголовок
+
+        if (getItemCount() == 0) {
+            ((MainFragment) mContext.mainPagerAdapter.getItem(1)).needConfirm.setVisibility(View.GONE);
+        } else {
+            ((MainFragment) mContext.mainPagerAdapter.getItem(1)).needConfirm.setVisibility(View.VISIBLE);
+        }
     }
 
     /*public void removeItem(long id) { TODO все работает, но дублирует функционал из SchedulerRecyclerViewAdapter

@@ -22,6 +22,13 @@
                 android:textStyle="bold"
                 android:textColor="@color/material_deep_teal_500" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Несоответствие баланса: "
+                android:layout_margin="10dp"
+                android:textColor="@color/material_blue_600" />
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_view_accounts_main"
                 android:scrollbars="vertical"

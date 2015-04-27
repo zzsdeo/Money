@@ -23,7 +23,7 @@ import ru.zzsdeo.money.adapters.MainActivityBalanceRecyclerViewAdapter;
 
 public class MainFragment extends Fragment implements IFragment {
 
-    private TextView needConfirm, needCategory;
+    public TextView needConfirm, needCategory;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
