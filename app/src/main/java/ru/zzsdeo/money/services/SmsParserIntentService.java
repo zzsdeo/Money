@@ -2,10 +2,12 @@ package ru.zzsdeo.money.services;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import java.util.Iterator;
 
+import ru.zzsdeo.money.Constants;
 import ru.zzsdeo.money.db.TableAccounts;
 import ru.zzsdeo.money.db.TableTransactions;
 import ru.zzsdeo.money.model.Account;
@@ -32,6 +34,8 @@ public class SmsParserIntentService extends IntentService {
             float amount = 0;
             float commission = 0;
             String comment = "";
+            float dostupno = 0;
+            String cardNumber = "";
 
             String[] parsedSms = sms.split("\\;");
             for (String str : parsedSms) {
@@ -45,6 +49,7 @@ public class SmsParserIntentService extends IntentService {
                         Iterator<Account> it = ac.values().iterator();
                         Account a = it.next();
                         accountId = a.getAccountId();
+                        cardNumber = a.getCardNumber();
                     }
                 }
                 if (!str.endsWith("RUR") & !str.matches("Oplata|Cash\\-in|Snyatie\\snalichnih|Zachislenie|Oplata\\sv\\sI\\-net|Predauth|Perevod|Poluchen\\sperevod|Card\\d\\d\\d\\d|\\d\\d\\.\\d\\d\\.\\d\\d\\s\\d\\d\\:\\d\\d\\:\\d\\d|Telecard")) {
@@ -59,10 +64,10 @@ public class SmsParserIntentService extends IntentService {
                 if (str.matches("([0-9\\.]+(\\sRUR))|(Summa\\s[0-9\\.]+(\\sRUR))")) {
                     amount = Float.parseFloat(str.replaceAll("\\sRUR", "").replaceAll("Summa\\s", "").trim());
                 }
-                /*if (str.matches("dostupno:\\s[0-9\\.]+(\\sRUR)")) {
-                    //cv.put("balance", Double.parseDouble(str.replaceAll("dostupno:\\s|\\sRUR", "").trim()));
+                if (str.matches("dostupno:\\s[0-9\\.]+(\\sRUR)")) {
+                    dostupno = Float.parseFloat(str.replaceAll("dostupno:\\s|\\sRUR", "").trim());
                 }
-                if (str.matches("ispolzovano:\\s[0-9\\.]+(\\sRUR)")) {
+                /*if (str.matches("ispolzovano:\\s[0-9\\.]+(\\sRUR)")) {
                     //cv.put("indebtedness", Double.parseDouble(str.replaceAll("ispolzovano:\\s|\\sRUR", "").trim()));
                 }*/
                 if (str.matches("komissiya:\\s[0-9\\.]+(\\sRUR)")) {
@@ -72,6 +77,10 @@ public class SmsParserIntentService extends IntentService {
             }
 
             if (accountId != 0) {
+                if (!cardNumber.isEmpty()) {
+                    SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+                    sharedPreferences.edit().putFloat(cardNumber, dostupno).apply();
+                }
                 if (sign < 0) amount = -amount;
                 new TransactionCollection(getApplicationContext()).addTransaction(
                         accountId,
