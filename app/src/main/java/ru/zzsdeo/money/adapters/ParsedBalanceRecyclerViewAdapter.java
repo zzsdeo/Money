@@ -15,6 +15,8 @@ import java.util.HashMap;
 
 import ru.zzsdeo.money.Constants;
 import ru.zzsdeo.money.R;
+import ru.zzsdeo.money.activities.MainActivity;
+import ru.zzsdeo.money.fragments.MainFragment;
 import ru.zzsdeo.money.model.Account;
 import ru.zzsdeo.money.model.AccountCollection;
 import ru.zzsdeo.money.model.Category;
@@ -39,12 +41,20 @@ public class ParsedBalanceRecyclerViewAdapter extends RecyclerView.Adapter<Parse
         mItems.clear();
         getData();
         notifyDataSetChanged();
+
+        // Скрываем заголовок
+
+        if (getItemCount() == 0) {
+            ((MainFragment) ((MainActivity)mContext).mainPagerAdapter.getItem(1)).parsedBalance.setVisibility(View.GONE);
+        } else {
+            ((MainFragment) ((MainActivity)mContext).mainPagerAdapter.getItem(1)).parsedBalance.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_card_parsed_balance, parent, false);
-        return new ViewHolder(v);
+        return new ViewHolder(v, this);
     }
 
     @Override
@@ -65,13 +75,15 @@ public class ParsedBalanceRecyclerViewAdapter extends RecyclerView.Adapter<Parse
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView mTextView1, mTextView2;
         private ImageButton mDelete;
+        private ParsedBalanceRecyclerViewAdapter parsedBalanceRecyclerViewAdapter;
 
-        public ViewHolder(View view) {
+        public ViewHolder(View view, ParsedBalanceRecyclerViewAdapter parsedBalanceRecyclerViewAdapter) {
             super(view);
             mTextView1 = (TextView) view.findViewById(R.id.text1);
             mTextView2 = (TextView) view.findViewById(R.id.text2);
             mDelete = (ImageButton) view.findViewById(R.id.btn_clear);
             mDelete.setOnClickListener(this);
+            this.parsedBalanceRecyclerViewAdapter = parsedBalanceRecyclerViewAdapter;
         }
 
         public void setItems(String[] items) {
@@ -81,6 +93,7 @@ public class ParsedBalanceRecyclerViewAdapter extends RecyclerView.Adapter<Parse
 
         @Override
         public void onClick(View view) {
+            parsedBalanceRecyclerViewAdapter.mSharedPreferences.edit().remove()
             Log.d("my", "onClick " + getPosition() + " " );
         }
     }

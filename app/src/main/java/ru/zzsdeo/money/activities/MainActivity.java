@@ -30,6 +30,7 @@ import ru.zzsdeo.money.Constants;
 import ru.zzsdeo.money.adapters.ExpensesRecyclerViewAdapter;
 import ru.zzsdeo.money.adapters.NeedCategoryRecyclerViewAdapter;
 import ru.zzsdeo.money.adapters.NeedConfirmRecyclerViewAdapter;
+import ru.zzsdeo.money.adapters.ParsedBalanceRecyclerViewAdapter;
 import ru.zzsdeo.money.adapters.SchedulerRecyclerViewAdapter;
 import ru.zzsdeo.money.dialogs.Dialogs;
 import ru.zzsdeo.money.R;
@@ -51,6 +52,7 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
     public NeedConfirmRecyclerViewAdapter needConfirmRecyclerViewAdapter;
     public NeedCategoryRecyclerViewAdapter needCategoryRecyclerViewAdapter;
     public ExpensesRecyclerViewAdapter expensesRecyclerViewAdapter;
+    public ParsedBalanceRecyclerViewAdapter parsedBalanceRecyclerViewAdapter;
     public MainPagerAdapter mainPagerAdapter;
     private ServiceReceiver serviceReceiver;
 
@@ -110,6 +112,7 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
         needConfirmRecyclerViewAdapter = new NeedConfirmRecyclerViewAdapter(this);
         needCategoryRecyclerViewAdapter = new NeedCategoryRecyclerViewAdapter(this);
         expensesRecyclerViewAdapter = new ExpensesRecyclerViewAdapter(this);
+        parsedBalanceRecyclerViewAdapter = new ParsedBalanceRecyclerViewAdapter(this);
 
         // Initialize the ViewPager and set an adapter
         ViewPager pager = (ViewPager) findViewById(R.id.pager);

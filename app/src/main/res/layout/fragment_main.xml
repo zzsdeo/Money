@@ -13,6 +13,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Несоответствие баланса"
+                android:layout_margin="10dp"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/material_deep_teal_500"
+                android:id="@+id/parsed_balance_title"/>
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_view_parsed_balance"
                 android:scrollbars="vertical"

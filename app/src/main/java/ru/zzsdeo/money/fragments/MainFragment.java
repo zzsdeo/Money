@@ -23,7 +23,7 @@ import ru.zzsdeo.money.adapters.MainActivityBalanceRecyclerViewAdapter;
 
 public class MainFragment extends Fragment implements IFragment {
 
-    public TextView needConfirm, needCategory;
+    public TextView needConfirm, needCategory, parsedBalance;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -32,6 +32,14 @@ public class MainFragment extends Fragment implements IFragment {
 
         ObservableScrollView observableScrollView = (ObservableScrollView) v.findViewById(R.id.observable_scroll_view);
         observableScrollView.setScrollViewCallbacks((ObservableScrollViewCallbacks) getActivity());
+
+        // несоответствие баланса
+
+        parsedBalance = (TextView) v.findViewById(R.id.parsed_balance_title);
+
+        RecyclerView recyclerViewParsedBalance = (RecyclerView) v.findViewById(R.id.recycler_view_parsed_balance);
+        recyclerViewParsedBalance.setAdapter(((MainActivity)getActivity()).parsedBalanceRecyclerViewAdapter);
+        recyclerViewParsedBalance.setLayoutManager(new MyLinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
 
         // баланс
 
@@ -78,6 +86,12 @@ public class MainFragment extends Fragment implements IFragment {
             needCategory.setVisibility(View.GONE);
         } else {
             needCategory.setVisibility(View.VISIBLE);
+        }
+
+        if (((MainActivity)getActivity()).parsedBalanceRecyclerViewAdapter.getItemCount() == 0) {
+            parsedBalance.setVisibility(View.GONE);
+        } else {
+            parsedBalance.setVisibility(View.VISIBLE);
         }
     }
 

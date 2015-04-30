@@ -29,7 +29,7 @@
                 android:layout_height="match_parent"
                 android:id="@+id/text1"
                 android:layout_weight="1"
-                android:gravity="start"
+                android:gravity="center_vertical|start"
                 android:textColor="@android:color/holo_blue_light" />
 
             <TextView
@@ -37,7 +37,7 @@
                 android:layout_height="match_parent"
                 android:id="@+id/text2"
                 android:layout_weight="1"
-                android:gravity="end"
+                android:gravity="center_vertical|end"
                 android:textColor="@android:color/black" />
 
             <ImageButton
