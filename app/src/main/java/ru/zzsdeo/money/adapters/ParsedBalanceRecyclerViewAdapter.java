@@ -44,10 +44,12 @@ public class ParsedBalanceRecyclerViewAdapter extends RecyclerView.Adapter<Parse
 
         // Скрываем заголовок
 
+        MainFragment mf = ((MainFragment) ((MainActivity)mContext).mainPagerAdapter.getItem(1));
+
         if (getItemCount() == 0) {
-            ((MainFragment) ((MainActivity)mContext).mainPagerAdapter.getItem(1)).parsedBalance.setVisibility(View.GONE);
+            if (mf.isVisible()) mf.parsedBalance.setVisibility(View.GONE);
         } else {
-            ((MainFragment) ((MainActivity)mContext).mainPagerAdapter.getItem(1)).parsedBalance.setVisibility(View.VISIBLE);
+            if (mf.isVisible()) mf.parsedBalance.setVisibility(View.VISIBLE);
         }
     }
 
@@ -93,8 +95,12 @@ public class ParsedBalanceRecyclerViewAdapter extends RecyclerView.Adapter<Parse
 
         @Override
         public void onClick(View view) {
-            parsedBalanceRecyclerViewAdapter.mSharedPreferences.edit().remove()
-            Log.d("my", "onClick " + getPosition() + " " );
+            String[] s = parsedBalanceRecyclerViewAdapter.mItems.
+                    get(getPosition());
+            parsedBalanceRecyclerViewAdapter.
+                    mSharedPreferences.edit().
+                    remove(s[2]).apply();
+            parsedBalanceRecyclerViewAdapter.refreshDataSet();
         }
     }
 
@@ -104,7 +110,7 @@ public class ParsedBalanceRecyclerViewAdapter extends RecyclerView.Adapter<Parse
             if (balance != 0) {
                 float diff = account.getBalance() - balance;
                 String balanceString = String.valueOf(balance) + " (" + String.valueOf(diff) + ")";
-                mItems.add(new String[] {account.getName(), balanceString});
+                mItems.add(new String[] {account.getName(), balanceString, account.getCardNumber()});
             }
         }
     }

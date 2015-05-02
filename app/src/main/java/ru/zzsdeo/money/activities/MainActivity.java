@@ -95,13 +95,13 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        if (!sharedPreferences.getString(Constants.VERSION_NAME, "").equals(versionName)) {
+        if (!versionName.equals(sharedPreferences.getString(Constants.VERSION_NAME, ""))) {
             Intent i = new Intent(this, UpdateTransactionsIntentService.class);
             PendingIntent pi = PendingIntent.getService(this, Constants.UPDATE_TRANSACTIONS_INTENT_SERVICE_REQUEST_CODE, i, 0);
             AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
             alarm.setRepeating(AlarmManager.RTC, Calendar.getInstance().getTimeInMillis(), 4*AlarmManager.INTERVAL_HOUR, pi);
 
-            // TODO sharedPreferences.edit().putString(Constants.VERSION_NAME, versionName).apply();
+            sharedPreferences.edit().putString(Constants.VERSION_NAME, versionName).apply();
         }
 
         accountCollection = new AccountCollection(this);

@@ -114,10 +114,12 @@ public class NeedCategoryRecyclerViewAdapter extends RecyclerView.Adapter<NeedCa
 
         // Скрываем заголовок
 
+        MainFragment mf = ((MainFragment) mContext.mainPagerAdapter.getItem(1));
+
         if (getItemCount() == 0) {
-            ((MainFragment) mContext.mainPagerAdapter.getItem(1)).needCategory.setVisibility(View.GONE);
+            if (mf.isVisible()) mf.needCategory.setVisibility(View.GONE);
         } else {
-            ((MainFragment) mContext.mainPagerAdapter.getItem(1)).needCategory.setVisibility(View.VISIBLE);
+            if (mf.isVisible()) mf.needCategory.setVisibility(View.VISIBLE);
         }
     }
 

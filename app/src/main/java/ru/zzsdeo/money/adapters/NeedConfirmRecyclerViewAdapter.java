@@ -122,10 +122,12 @@ public class NeedConfirmRecyclerViewAdapter extends RecyclerView.Adapter<NeedCon
 
         // Скрываем заголовок
 
+        MainFragment mf = ((MainFragment) mContext.mainPagerAdapter.getItem(1));
+
         if (getItemCount() == 0) {
-            ((MainFragment) mContext.mainPagerAdapter.getItem(1)).needConfirm.setVisibility(View.GONE);
+            if (mf.isVisible()) mf.needConfirm.setVisibility(View.GONE);
         } else {
-            ((MainFragment) mContext.mainPagerAdapter.getItem(1)).needConfirm.setVisibility(View.VISIBLE);
+            if (mf.isVisible()) mf.needConfirm.setVisibility(View.VISIBLE);
         }
     }
 

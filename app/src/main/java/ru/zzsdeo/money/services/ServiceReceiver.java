@@ -25,6 +25,7 @@ public class ServiceReceiver extends BroadcastReceiver {
                 ((MainActivity) context).historyRecyclerViewAdapter.refreshDataSet();
                 ((MainActivity) context).mainActivityBalanceRecyclerViewAdapter.refreshDataSet();
                 ((MainActivity) context).needCategoryRecyclerViewAdapter.refreshDataSet();
+                ((MainActivity) context).parsedBalanceRecyclerViewAdapter.refreshDataSet();
                 break;
         }
     }

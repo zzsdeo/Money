@@ -97,6 +97,6 @@ public class MainFragment extends Fragment implements IFragment {
 
     @Override
     public int getIconResId() {
-        return android.R.drawable.star_on;
+        return R.mipmap.ic_action_action_account_balance_wallet;
     }
 }

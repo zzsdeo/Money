@@ -42,7 +42,7 @@ public class SchedulerFragment extends Fragment implements IFragment, View.OnCli
 
     @Override
     public int getIconResId() {
-        return android.R.drawable.ic_menu_camera;
+        return R.mipmap.ic_action_action_assignment;
     }
 
     @Override

@@ -43,9 +43,12 @@
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:background="@android:drawable/ic_menu_close_clear_cancel"
+                android:background="@mipmap/ic_action_content_clear"
                 android:id="@+id/btn_clear"
-                android:contentDescription="delete" />
+                android:contentDescription="Удалить"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                />
         </LinearLayout>
 
     </android.support.v7.widget.CardView>

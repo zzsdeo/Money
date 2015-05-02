@@ -43,7 +43,7 @@ public class HistoryFragment extends Fragment implements IFragment, View.OnClick
 
     @Override
     public int getIconResId() {
-        return android.R.drawable.ic_menu_agenda;
+        return R.mipmap.ic_action_action_history;
     }
 
     @Override
