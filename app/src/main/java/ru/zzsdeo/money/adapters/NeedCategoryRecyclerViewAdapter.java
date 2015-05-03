@@ -52,6 +52,7 @@ public class NeedCategoryRecyclerViewAdapter extends RecyclerView.Adapter<NeedCa
         mCategories = new CategoryCollection(context);
         mCategoryList = new ArrayList<>(mCategories.values());
         mContext = context;
+        setHasStableIds(true);
     }
 
     @Override

@@ -53,6 +53,7 @@ public class ExpensesRecyclerViewAdapter extends RecyclerView.Adapter<ExpensesRe
         mCategoryList = new ArrayList<>(mCategories.values());
         mContext = context;
         mExpenses = getExpenses();
+        setHasStableIds(true);
     }
 
     @Override

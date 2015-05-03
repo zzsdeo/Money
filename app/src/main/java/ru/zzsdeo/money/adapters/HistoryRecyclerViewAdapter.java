@@ -50,6 +50,7 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecy
         mCategories = new CategoryCollection(context);
         mContext = context;
         mFragmentManager = context.getFragmentManager();
+        setHasStableIds(true);
     }
 
     @Override

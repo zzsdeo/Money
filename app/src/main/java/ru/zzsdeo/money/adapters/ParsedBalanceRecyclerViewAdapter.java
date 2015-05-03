@@ -34,6 +34,7 @@ public class ParsedBalanceRecyclerViewAdapter extends RecyclerView.Adapter<Parse
         mSharedPreferences = context.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
         mContext = context;
         getData();
+        setHasStableIds(true);
     }
 
     public void refreshDataSet() {

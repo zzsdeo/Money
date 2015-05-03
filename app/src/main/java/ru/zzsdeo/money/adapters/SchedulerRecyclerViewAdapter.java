@@ -59,6 +59,7 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
         mCategories = new CategoryCollection(context);
         mContext = context;
         mFragmentManager = context.getFragmentManager();
+        setHasStableIds(true);
     }
 
     @Override

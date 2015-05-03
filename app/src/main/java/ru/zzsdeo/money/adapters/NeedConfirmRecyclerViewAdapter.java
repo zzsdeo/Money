@@ -58,6 +58,7 @@ public class NeedConfirmRecyclerViewAdapter extends RecyclerView.Adapter<NeedCon
         mCategories = new CategoryCollection(context);
         mContext = context;
         mFragmentManager = context.getFragmentManager();
+        setHasStableIds(true);
     }
 
     @Override

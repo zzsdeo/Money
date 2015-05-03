@@ -31,6 +31,7 @@ public class MainActivityBalanceRecyclerViewAdapter extends RecyclerView.Adapter
         mAccountCollection = new AccountCollection(context);
         mAccounts = new ArrayList<>(mAccountCollection.values());
         mContext = context;
+        setHasStableIds(true);
     }
 
     public void refreshDataSet() {
