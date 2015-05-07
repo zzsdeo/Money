@@ -6,7 +6,8 @@
     <com.github.ksoichiro.android.observablescrollview.ObservableScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/observable_scroll_view">
+        android:id="@+id/observable_scroll_view"
+        android:layout_marginBottom="10dp">
 
         <LinearLayout
             android:orientation="vertical"

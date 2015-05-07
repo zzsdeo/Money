@@ -75,6 +75,11 @@ public class ParsedBalanceRecyclerViewAdapter extends RecyclerView.Adapter<Parse
         return mItems.size();
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView mTextView1, mTextView2;
         private ImageButton mDelete;

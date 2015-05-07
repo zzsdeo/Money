@@ -55,6 +55,7 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
     public ParsedBalanceRecyclerViewAdapter parsedBalanceRecyclerViewAdapter;
     public MainPagerAdapter mainPagerAdapter;
     private ServiceReceiver serviceReceiver;
+    private int oldScrollY;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -113,6 +114,8 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
         needCategoryRecyclerViewAdapter = new NeedCategoryRecyclerViewAdapter(this);
         expensesRecyclerViewAdapter = new ExpensesRecyclerViewAdapter(this);
         parsedBalanceRecyclerViewAdapter = new ParsedBalanceRecyclerViewAdapter(this);
+
+        oldScrollY = 0;
 
         // Initialize the ViewPager and set an adapter
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
@@ -250,13 +253,25 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
     }
 
     @Override
-    public void onScrollChanged(int i, boolean b, boolean b2) {
-
+    public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
+        /*ActionBar ab = getSupportActionBar();
+        if (dragging) {
+            if ((oldScrollY - scrollY) >= 0) {
+                if (!ab.isShowing()) ab.show();
+            } else {
+                if (ab.isShowing()) ab.hide();
+            }
+        } else {
+            oldScrollY = scrollY;
+        }*/
+        //Log.d("my", "onScrollChanged: scrollY: " + scrollY + " firstScroll: " + firstScroll + " dragging: " + dragging);
+        //Log.d("my", "diff: " + (oldScrollY-scrollY));
     }
 
     @Override
     public void onDownMotionEvent() {
-
+        /*ActionBar ab = getSupportActionBar();
+        if (ab.isShowing()) ab.hide();*/
     }
 
     @Override

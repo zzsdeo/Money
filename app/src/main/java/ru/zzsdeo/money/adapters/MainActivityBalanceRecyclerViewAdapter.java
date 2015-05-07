@@ -62,6 +62,11 @@ public class MainActivityBalanceRecyclerViewAdapter extends RecyclerView.Adapter
         return mAccounts.size();
     }
 
+    @Override
+    public long getItemId(int position) {
+        return mAccounts.get(position).getAccountId();
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView mTextView1, mTextView2;
 

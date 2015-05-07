@@ -40,12 +40,14 @@ public class MainFragment extends Fragment implements IFragment {
         RecyclerView recyclerViewParsedBalance = (RecyclerView) v.findViewById(R.id.recycler_view_parsed_balance);
         recyclerViewParsedBalance.setAdapter(((MainActivity)getActivity()).parsedBalanceRecyclerViewAdapter);
         recyclerViewParsedBalance.setLayoutManager(new MyLinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        recyclerViewParsedBalance.setItemAnimator(new DefaultItemAnimator());
 
         // баланс
 
         RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view_accounts_main);
         recyclerView.setAdapter(((MainActivity)getActivity()).mainActivityBalanceRecyclerViewAdapter);
         recyclerView.setLayoutManager(new MyLinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         // требуется подтверждение
 
@@ -54,6 +56,7 @@ public class MainFragment extends Fragment implements IFragment {
         RecyclerView recyclerViewNeedConfirm = (RecyclerView) v.findViewById(R.id.recycler_view_need_confirm);
         recyclerViewNeedConfirm.setAdapter(((MainActivity)getActivity()).needConfirmRecyclerViewAdapter);
         recyclerViewNeedConfirm.setLayoutManager(new MyLinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        recyclerViewNeedConfirm.setItemAnimator(new DefaultItemAnimator());
 
         // требуется категория
 
@@ -62,12 +65,14 @@ public class MainFragment extends Fragment implements IFragment {
         RecyclerView recyclerViewNeedCategory = (RecyclerView) v.findViewById(R.id.recycler_view_need_category);
         recyclerViewNeedCategory.setAdapter(((MainActivity)getActivity()).needCategoryRecyclerViewAdapter);
         recyclerViewNeedCategory.setLayoutManager(new MyLinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        recyclerViewNeedCategory.setItemAnimator(new DefaultItemAnimator());
 
         // расходы
 
         RecyclerView recyclerViewExpenses = (RecyclerView) v.findViewById(R.id.recycler_view_expenses);
         recyclerViewExpenses.setAdapter(((MainActivity)getActivity()).expensesRecyclerViewAdapter);
         recyclerViewExpenses.setLayoutManager(new MyLinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        recyclerViewExpenses.setItemAnimator(new DefaultItemAnimator());
 
         return v;
     }
