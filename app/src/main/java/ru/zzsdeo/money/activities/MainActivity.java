@@ -37,6 +37,7 @@ import ru.zzsdeo.money.R;
 import ru.zzsdeo.money.adapters.HistoryRecyclerViewAdapter;
 import ru.zzsdeo.money.adapters.MainActivityBalanceRecyclerViewAdapter;
 import ru.zzsdeo.money.adapters.MainPagerAdapter;
+import ru.zzsdeo.money.fragments.FragmentCollection;
 import ru.zzsdeo.money.model.AccountCollection;
 import ru.zzsdeo.money.model.TransactionCollection;
 import ru.zzsdeo.money.services.BootStartUpReceiver;
@@ -55,7 +56,8 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
     public ParsedBalanceRecyclerViewAdapter parsedBalanceRecyclerViewAdapter;
     public MainPagerAdapter mainPagerAdapter;
     private ServiceReceiver serviceReceiver;
-    private int oldScrollY;
+    private int[] oldScrollY;
+    private ViewPager pager;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -115,10 +117,9 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
         expensesRecyclerViewAdapter = new ExpensesRecyclerViewAdapter(this);
         parsedBalanceRecyclerViewAdapter = new ParsedBalanceRecyclerViewAdapter(this);
 
-        oldScrollY = 0;
 
         // Initialize the ViewPager and set an adapter
-        ViewPager pager = (ViewPager) findViewById(R.id.pager);
+        pager = (ViewPager) findViewById(R.id.pager);
         mainPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
         pager.setAdapter(mainPagerAdapter);
 
@@ -126,6 +127,11 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
         PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         tabs.setViewPager(pager);
         pager.setCurrentItem(1);
+
+        oldScrollY = new int[mainPagerAdapter.getCount()];
+        for (int i = 0; i < mainPagerAdapter.getCount(); i++) {
+            oldScrollY[i] = 0;
+        }
 
     }
 
@@ -254,29 +260,26 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
 
     @Override
     public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
-        /*ActionBar ab = getSupportActionBar();
+        ActionBar ab = getSupportActionBar();
         if (dragging) {
-            if ((oldScrollY - scrollY) >= 0) {
+            if ((oldScrollY[pager.getCurrentItem()] - scrollY) > 0) {
                 if (!ab.isShowing()) ab.show();
             } else {
                 if (ab.isShowing()) ab.hide();
             }
         } else {
-            oldScrollY = scrollY;
-        }*/
-        //Log.d("my", "onScrollChanged: scrollY: " + scrollY + " firstScroll: " + firstScroll + " dragging: " + dragging);
-        //Log.d("my", "diff: " + (oldScrollY-scrollY));
+            oldScrollY[pager.getCurrentItem()] = scrollY;
+        }
     }
 
     @Override
     public void onDownMotionEvent() {
-        /*ActionBar ab = getSupportActionBar();
-        if (ab.isShowing()) ab.hide();*/
+
     }
 
     @Override
     public void onUpOrCancelMotionEvent(ScrollState scrollState) {
-        ActionBar ab = getSupportActionBar();
+        /*ActionBar ab = getSupportActionBar();
         if (scrollState == ScrollState.UP) {
             if (ab.isShowing()) {
                 ab.hide();
@@ -285,6 +288,6 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
             if (!ab.isShowing()) {
                 ab.show();
             }
-        }
+        }*/
     }
 }

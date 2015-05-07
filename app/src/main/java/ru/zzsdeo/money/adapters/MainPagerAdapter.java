@@ -29,6 +29,11 @@ public class MainPagerAdapter extends FragmentPagerAdapter implements PagerSlidi
     }
 
     @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
     public int getPageIconResId(int i) {
         return fragmentCollection.get(i).getIconResId();
     }
