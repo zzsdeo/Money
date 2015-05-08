@@ -264,7 +264,7 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
         if (dragging) {
             if ((oldScrollY[pager.getCurrentItem()] - scrollY) > 0) {
                 if (!ab.isShowing()) ab.show();
-            } else {
+            } else if ((oldScrollY[pager.getCurrentItem()] - scrollY) < 0) {
                 if (ab.isShowing()) ab.hide();
             }
         } else {
@@ -279,15 +279,6 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
 
     @Override
     public void onUpOrCancelMotionEvent(ScrollState scrollState) {
-        /*ActionBar ab = getSupportActionBar();
-        if (scrollState == ScrollState.UP) {
-            if (ab.isShowing()) {
-                ab.hide();
-            }
-        } else if (scrollState == ScrollState.DOWN) {
-            if (!ab.isShowing()) {
-                ab.show();
-            }
-        }*/
+
     }
 }
