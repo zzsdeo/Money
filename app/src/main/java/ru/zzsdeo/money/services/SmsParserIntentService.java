@@ -8,12 +8,7 @@ import android.util.Log;
 import java.util.Iterator;
 
 import ru.zzsdeo.money.Constants;
-import ru.zzsdeo.money.db.TableAccounts;
-import ru.zzsdeo.money.db.TableTransactions;
-import ru.zzsdeo.money.model.Account;
-import ru.zzsdeo.money.model.AccountCollection;
-import ru.zzsdeo.money.model.Transaction;
-import ru.zzsdeo.money.model.TransactionCollection;
+
 
 public class SmsParserIntentService extends IntentService {
 
@@ -41,7 +36,7 @@ public class SmsParserIntentService extends IntentService {
             for (String str : parsedSms) {
                 str = str.trim();
                 if (str.matches("Card\\d\\d\\d\\d")) {
-                    AccountCollection ac = new AccountCollection(getApplicationContext(), new String[] {
+                    /*AccountCollection ac = new AccountCollection(getApplicationContext(), new String[] {
                             TableAccounts.COLUMN_CARD_NUMBER + " LIKE '" + str.substring(4) + "'",
                             null
                     });
@@ -50,7 +45,7 @@ public class SmsParserIntentService extends IntentService {
                         Account a = it.next();
                         accountId = a.getAccountId();
                         cardNumber = a.getCardNumber();
-                    }
+                    }*/
                 }
                 if (!str.endsWith("RUR") & !str.matches("Oplata|Cash\\-in|Snyatie\\snalichnih|Zachislenie|Oplata\\sv\\sI\\-net|Predauth|Perevod|Poluchen\\sperevod|Card\\d\\d\\d\\d|\\d\\d\\.\\d\\d\\.\\d\\d\\s\\d\\d\\:\\d\\d\\:\\d\\d|Telecard")) {
                     comment = str;
@@ -82,7 +77,7 @@ public class SmsParserIntentService extends IntentService {
                     sharedPreferences.edit().putFloat(cardNumber, dostupno).apply();
                 }
                 if (sign < 0) amount = -amount;
-                new TransactionCollection(getApplicationContext()).addTransaction(
+                /*new TransactionCollection(getApplicationContext()).addTransaction(
                         accountId,
                         dateInMill,
                         amount,
@@ -103,7 +98,7 @@ public class SmsParserIntentService extends IntentService {
                 for (Transaction transaction : transactionCollection.values()) {
                     balance = balance + transaction.getAmount() + transaction.getCommission();
                 }
-                new AccountCollection(getApplicationContext()).get(accountId).setBalance(balance);
+                new AccountCollection(getApplicationContext()).get(accountId).setBalance(balance);*/
             }
 
             // посылаем сообщение на обновление списка транзакций

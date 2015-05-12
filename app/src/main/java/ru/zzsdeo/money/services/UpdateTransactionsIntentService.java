@@ -24,7 +24,7 @@ public class UpdateTransactionsIntentService extends IntentService {
 
         // отрезаем от повторяющихся транзакций те, которые уже просрочены, и выделяем их в отдельные неповторяющиеся транзакции
 
-        long nowInMill = Calendar.getInstance().getTimeInMillis();
+        /*long nowInMill = Calendar.getInstance().getTimeInMillis();
         ScheduledTransactionCollection scheduledTransactionCollection = new ScheduledTransactionCollection(getApplicationContext(),
                 new String[] {
                         TableScheduledTransactions.COLUMN_DATE_IN_MILL + " <= " + nowInMill +
@@ -101,11 +101,11 @@ public class UpdateTransactionsIntentService extends IntentService {
 
         Intent i = new Intent(ServiceReceiver.BROADCAST_ACTION);
         i.putExtra(ServiceReceiver.ACTION, ServiceReceiver.REFRESH_SCHEDULED_TRANSACTIONS);
-        sendBroadcast(i);
+        sendBroadcast(i);*/
     }
 
     private void cutTransaction(long dateInMill, ScheduledTransactionCollection scheduledTransactionCollection, long id) {
-        scheduledTransactionCollection.addScheduledTransaction(
+        /*scheduledTransactionCollection.addScheduledTransaction(
                 scheduledTransactionCollection.get(id).getAccountId(),
                 dateInMill,
                 scheduledTransactionCollection.get(id).getAmount(),
@@ -116,6 +116,6 @@ public class UpdateTransactionsIntentService extends IntentService {
                 0,
                 scheduledTransactionCollection.get(id).getCategoryId(),
                 scheduledTransactionCollection.get(id).getLinkedTransactionId()
-        );
+        );*/
     }
 }

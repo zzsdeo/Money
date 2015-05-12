@@ -6,8 +6,6 @@ package ru.zzsdeo.money;
 public class TODO {
     /**
      * TODO
-     * Автодополнение в комментариях
-     * Отчеты
      * Графики в лэндскейпе
      * Линт
      * Строки

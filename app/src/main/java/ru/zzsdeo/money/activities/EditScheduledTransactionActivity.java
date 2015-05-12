@@ -26,22 +26,14 @@ import java.util.LinkedHashMap;
 import java.util.Locale;
 
 import ru.zzsdeo.money.R;
-import ru.zzsdeo.money.adapters.AbstractSpinnerAdapter;
-import ru.zzsdeo.money.adapters.HistoryRecyclerViewAdapter;
 import ru.zzsdeo.money.adapters.SchedulerRecyclerViewAdapter;
 import ru.zzsdeo.money.db.TableScheduledTransactions;
-import ru.zzsdeo.money.db.TableTransactions;
 import ru.zzsdeo.money.dialogs.Dialogs;
-import ru.zzsdeo.money.model.Account;
-import ru.zzsdeo.money.model.AccountCollection;
-import ru.zzsdeo.money.model.Category;
-import ru.zzsdeo.money.model.CategoryCollection;
 import ru.zzsdeo.money.model.RepeatingTypes;
 import ru.zzsdeo.money.model.ScheduledTransaction;
 import ru.zzsdeo.money.model.ScheduledTransactionCollection;
-import ru.zzsdeo.money.model.Transaction;
-import ru.zzsdeo.money.model.TransactionCollection;
 
+/*
 public class EditScheduledTransactionActivity extends ActionBarActivity
         implements
         View.OnClickListener,
@@ -355,4 +347,8 @@ public class EditScheduledTransactionActivity extends ActionBarActivity
             return ((Account)object).getAccountId();
         }
     }
+}*/
+
+public class EditScheduledTransactionActivity extends ActionBarActivity {
+
 }

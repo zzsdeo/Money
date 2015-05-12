@@ -1,5 +1,6 @@
 package ru.zzsdeo.money.adapters;
 
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -36,12 +37,14 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
     private MainActivity mContext;
     private ScheduledTransactionCollection mTransactionCollection;
     private final static String DATE_FORMAT = "dd.MM.yy, HH:mm";
+    private FragmentManager mFragmentManager;
     private static final Long END_OF_TIME = 31536000000l;
 
     public SchedulerRecyclerViewAdapter(MainActivity context) {
         mTransactionCollection = new ScheduledTransactionCollection(context, ScheduledTransactionCollection.SORTED_BY_DATE_DESC);
         mTransactions = getSortedTransactions();
         mContext = context;
+        mFragmentManager = context.getFragmentManager();
         setHasStableIds(true);
     }
 
@@ -54,16 +57,17 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         ScheduledTransaction transaction = mTransactions.get(position).scheduledTransaction;
+        float balance = mTransactions.get(position).getBalance();
 
         String[] items = new String[] {
                 transaction.getComment(),
                 String.valueOf(transaction.getAmount()),
                 new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(new Date(mTransactions.get(position).dateTime)),
-                "120"
+                String.valueOf(balance)
         };
 
         int sign = 1;
-        //if (transaction.getAmount() < 0) sign = -1; //TODO знак в зависимости от баланса
+        if (balance < 0) sign = -1;
         holder.setItems(items, sign);
     }
 
@@ -202,16 +206,34 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
                 }
             }
         });
+
+        // рассчитываем балансы
+
+        float balance = 0;
+        for (TransactionsHolder transactionsHolder : mTransactions) {
+            balance = balance + transactionsHolder.scheduledTransaction.getAmount();
+            transactionsHolder.setBalance(balance);
+        }
+
         return mTransactions;
     }
 
     private static class TransactionsHolder {
         public ScheduledTransaction scheduledTransaction;
         public long dateTime;
+        private float balance;
 
         public TransactionsHolder(long dateTime, ScheduledTransaction scheduledTransaction) {
             this.dateTime = dateTime;
             this.scheduledTransaction = scheduledTransaction;
+        }
+
+        public void setBalance(float balance) {
+            this.balance = balance;
+        }
+
+        public float getBalance() {
+            return balance;
         }
     }
 }

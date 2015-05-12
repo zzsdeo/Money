@@ -9,13 +9,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp">
 
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/spinner1"
-            android:layout_margin="10dp"
-            android:layout_gravity="center_vertical" />
-
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -63,39 +56,12 @@
             android:layout_margin="10dp"
             android:hint="Сумма" />
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            android:ems="10"
-            android:id="@+id/commission"
-            android:layout_margin="10dp"
-            android:hint="Комиссия" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/comment"
             android:hint="Комментарий"
-            android:layout_margin="10dp" />
-
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Перевод между счетами"
-            android:id="@+id/checkBox2"
-            android:layout_margin="10dp" />
-
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/spinner2"
-            android:layout_margin="10dp"/>
-
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/spinner3"
             android:layout_margin="10dp" />
 
         <LinearLayout

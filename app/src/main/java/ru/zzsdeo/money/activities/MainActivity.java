@@ -14,33 +14,30 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
+import com.melnykov.fab.FloatingActionButton;
 
 import java.util.Calendar;
 
 import ru.zzsdeo.money.Constants;
-import ru.zzsdeo.money.adapters.ExpensesRecyclerViewAdapter;
-import ru.zzsdeo.money.adapters.NeedCategoryRecyclerViewAdapter;
-import ru.zzsdeo.money.adapters.NeedConfirmRecyclerViewAdapter;
-import ru.zzsdeo.money.adapters.ParsedBalanceRecyclerViewAdapter;
+
 import ru.zzsdeo.money.adapters.SchedulerRecyclerViewAdapter;
 import ru.zzsdeo.money.dialogs.Dialogs;
 import ru.zzsdeo.money.R;
-import ru.zzsdeo.money.adapters.HistoryRecyclerViewAdapter;
-import ru.zzsdeo.money.adapters.MainActivityBalanceRecyclerViewAdapter;
-import ru.zzsdeo.money.adapters.MainPagerAdapter;
-import ru.zzsdeo.money.fragments.FragmentCollection;
-import ru.zzsdeo.money.model.AccountCollection;
-import ru.zzsdeo.money.model.TransactionCollection;
+
 import ru.zzsdeo.money.services.BootStartUpReceiver;
 import ru.zzsdeo.money.services.ServiceReceiver;
 import ru.zzsdeo.money.services.UpdateTransactionsIntentService;
@@ -285,7 +282,7 @@ import ru.zzsdeo.money.services.UpdateTransactionsIntentService;
 }*/
 
 
-public class MainActivity extends ActionBarActivity implements Toolbar.OnMenuItemClickListener {
+public class MainActivity extends ActionBarActivity implements Toolbar.OnMenuItemClickListener, View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -297,12 +294,24 @@ public class MainActivity extends ActionBarActivity implements Toolbar.OnMenuIte
         toolbar.setOnMenuItemClickListener(this);
         setSupportActionBar(toolbar);
 
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        recyclerView.setAdapter(new SchedulerRecyclerViewAdapter(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
 
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.attachToRecyclerView(recyclerView);
+        fab.setOnClickListener(this);
     }
 
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
         //TODO редактирование номера карты и баланса
         return false;
+    }
+
+    @Override
+    public void onClick(View v) {
+        startActivityForResult(new Intent(this, AddScheduledTransactionActivity.class), Constants.ADD_SCHEDULED_TRANSACTION_REQUEST_CODE);
     }
 }

@@ -13,38 +13,11 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activities.AddAccountActivity"
-            android:label="Добавить счет"/>
-
-        <activity android:name=".activities.ManageAccountsActivity"
-            android:label="Управление счетами"/>
-
-        <activity android:name=".activities.EditAccountActivity"
-            android:label="Редактировать счет"/>
-
-        <activity android:name=".activities.AddTransactionActivity"
-            android:label="Добавить транзакцию"/>
-
-        <activity android:name=".activities.EditTransactionActivity"
-            android:label="Редактировать транзакцию"/>
-
-        <activity android:name=".activities.ManageCategoriesActivity"
-            android:label="Управление категориями"/>
-
-        <activity android:name=".activities.AddCategoryActivity"
-            android:label="Добавить категорию"/>
-
-        <activity android:name=".activities.EditCategoryActivity"
-            android:label="Редактировать категорию"/>
-
         <activity android:name=".activities.AddScheduledTransactionActivity"
             android:label="Добавить запланированную транзакцию"/>
 
         <activity android:name=".activities.EditScheduledTransactionActivity"
             android:label="Редактировать запланированную транзакцию"/>
-
-        <activity android:name=".activities.AddToHistoryActivity"
-            android:label="Подтвердить и добавить в историю"/>
 
         <provider
             android:name="ru.zzsdeo.money.db.DatabaseContentProvider"
