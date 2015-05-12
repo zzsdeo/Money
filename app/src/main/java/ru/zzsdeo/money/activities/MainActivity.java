@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,7 +45,7 @@ import ru.zzsdeo.money.services.BootStartUpReceiver;
 import ru.zzsdeo.money.services.ServiceReceiver;
 import ru.zzsdeo.money.services.UpdateTransactionsIntentService;
 
-public class MainActivity extends ActionBarActivity implements Dialogs.DialogListener, ObservableScrollViewCallbacks {
+/*public class MainActivity extends ActionBarActivity implements Dialogs.DialogListener, ObservableScrollViewCallbacks {
 
     private AccountCollection accountCollection;
     public MainActivityBalanceRecyclerViewAdapter mainActivityBalanceRecyclerViewAdapter;
@@ -280,5 +281,28 @@ public class MainActivity extends ActionBarActivity implements Dialogs.DialogLis
     @Override
     public void onUpOrCancelMotionEvent(ScrollState scrollState) {
 
+    }
+}*/
+
+
+public class MainActivity extends ActionBarActivity implements Toolbar.OnMenuItemClickListener {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.inflateMenu(R.menu.main_toolbar);
+        toolbar.setOnMenuItemClickListener(this);
+        setSupportActionBar(toolbar);
+
+
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem menuItem) {
+        //TODO редактирование номера карты и баланса
+        return false;
     }
 }

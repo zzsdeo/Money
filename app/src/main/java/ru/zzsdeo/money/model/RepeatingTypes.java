@@ -2,26 +2,19 @@ package ru.zzsdeo.money.model;
 
 import android.content.Context;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import ru.zzsdeo.money.R;
 
-public class RepeatingTypes {
-
-    private final String[] types;
+public class RepeatingTypes extends ArrayList<String> {
 
     public RepeatingTypes(Context context) {
-        types = new String[]{
-                context.getString(R.string.once),
-                "Каждый день",
-                "Каждый будний день",
-                "Каждое определенное число",
-                "Каждый определенный день недели",
-                "Каждый последний день месяца"
-        };
-    }
-
-    public String[] getTypes() {
-        return types;
+        add(context.getString(R.string.once));
+        add("Каждый день");
+        add("Каждый будний день");
+        add("Каждое определенное число");
+        add("Каждый определенный день недели");
+        add("Каждый последний день месяца");
     }
 }

@@ -1,12 +1,10 @@
 package ru.zzsdeo.money.adapters;
 
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,46 +17,31 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
-import java.util.Map;
-import java.util.TreeMap;
 
 import ru.zzsdeo.money.Constants;
 import ru.zzsdeo.money.R;
 import ru.zzsdeo.money.activities.EditScheduledTransactionActivity;
-import ru.zzsdeo.money.activities.EditTransactionActivity;
 import ru.zzsdeo.money.activities.MainActivity;
-import ru.zzsdeo.money.db.TableTransactions;
 import ru.zzsdeo.money.dialogs.Dialogs;
-import ru.zzsdeo.money.model.AccountCollection;
-import ru.zzsdeo.money.model.CategoryCollection;
 import ru.zzsdeo.money.model.ScheduledTransaction;
 import ru.zzsdeo.money.model.ScheduledTransactionCollection;
-import ru.zzsdeo.money.model.Transaction;
-import ru.zzsdeo.money.model.TransactionCollection;
 
 public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<SchedulerRecyclerViewAdapter.ViewHolder>  {
 
     public static final String SCHEDULED_TRANSACTION_ID = "scheduled_transaction_id";
 
     private ArrayList<TransactionsHolder> mTransactions;
-    private AccountCollection mAccounts;
-    private CategoryCollection mCategories;
     private MainActivity mContext;
     private ScheduledTransactionCollection mTransactionCollection;
-    private FragmentManager mFragmentManager;
     private final static String DATE_FORMAT = "dd.MM.yy, HH:mm";
     private static final Long END_OF_TIME = 31536000000l;
 
     public SchedulerRecyclerViewAdapter(MainActivity context) {
         mTransactionCollection = new ScheduledTransactionCollection(context, ScheduledTransactionCollection.SORTED_BY_DATE_DESC);
         mTransactions = getSortedTransactions();
-        mAccounts = new AccountCollection(context);
-        mCategories = new CategoryCollection(context);
         mContext = context;
-        mFragmentManager = context.getFragmentManager();
         setHasStableIds(true);
     }
 
@@ -71,33 +54,17 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         ScheduledTransaction transaction = mTransactions.get(position).scheduledTransaction;
-        String category, destinationAccount;
-        long categoryId = transaction.getCategoryId();
-        long destinationAccountId = transaction.getDestinationAccountId();
-        if (categoryId == 0) {
-            category = "Без категории";
-        } else {
-            category = mCategories.get(categoryId).getName();
-        }
-        if (destinationAccountId == 0) {
-            destinationAccount = "";
-        } else {
-            destinationAccount = "Перевод на: " + mAccounts.get(destinationAccountId).getName();
-        }
+
         String[] items = new String[] {
-                category,
                 transaction.getComment(),
-                mAccounts.get(transaction.getAccountId()).getName(),
-                destinationAccount,
+                String.valueOf(transaction.getAmount()),
                 new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(new Date(mTransactions.get(position).dateTime)),
-                String.valueOf(transaction.getAmount())
+                "120"
         };
 
         int sign = 1;
-        boolean disableMenu = false;
-        if (transaction.getAmount() < 0) sign = -1;
-        if (transaction.getLinkedTransactionId() != 0) disableMenu = true;
-        holder.setItems(items, sign, disableMenu);
+        //if (transaction.getAmount() < 0) sign = -1; //TODO знак в зависимости от баланса
+        holder.setItems(items, sign);
     }
 
     @Override
@@ -112,75 +79,38 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
 
     public void refreshDataSet() {
         mTransactionCollection = new ScheduledTransactionCollection(mContext, ScheduledTransactionCollection.SORTED_BY_DATE_DESC);
-        mAccounts = new AccountCollection(mContext);
-        mCategories = new CategoryCollection(mContext);
         mTransactions = getSortedTransactions();
         notifyDataSetChanged();
     }
 
-    public void removeItem(long id) {
-        ScheduledTransaction transaction = mTransactionCollection.get(id);
-        if (transaction.getDestinationAccountId() != 0) {
-            ScheduledTransactionCollection linkedTransactions = new ScheduledTransactionCollection(mContext,
-                    new String[] {
-                            TableTransactions.COLUMN_LINKED_TRANSACTION_ID + "=" + transaction.getScheduledTransactionId(),
-                            null
-                    });
-            Iterator<ScheduledTransaction> it = linkedTransactions.values().iterator();
-            ScheduledTransaction linkedTransaction = it.next();
-            long linkedId = linkedTransaction.getScheduledTransactionId();
-            mTransactionCollection.removeScheduledTransaction(linkedId);
-        }
-
-        mTransactionCollection.removeScheduledTransaction(id);
-        mTransactions = getSortedTransactions();
-        notifyDataSetChanged();
-    }
-
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, Toolbar.OnMenuItemClickListener {
-        private TextView mTextView1, mTextView2, mTextView3, mTextView4;
+    public static class ViewHolder extends RecyclerView.ViewHolder implements Toolbar.OnMenuItemClickListener {
+        private TextView mTextView1, mTextView2;
         private Toolbar mToolbar;
         private SchedulerRecyclerViewAdapter mAdapter;
 
         public ViewHolder(View view, SchedulerRecyclerViewAdapter historyRecyclerViewAdapter) {
             super(view);
-            view.setOnClickListener(this);
 
             mAdapter = historyRecyclerViewAdapter;
 
-            mTextView1 = (TextView) view.findViewById(R.id.recycler_card_history_text1);
-            mTextView2 = (TextView) view.findViewById(R.id.recycler_card_history_text2);
-            mTextView3 = (TextView) view.findViewById(R.id.recycler_card_history_text3);
-            mTextView4 = (TextView) view.findViewById(R.id.recycler_card_history_text4);
+            mTextView1 = (TextView) view.findViewById(R.id.text1);
+            mTextView2 = (TextView) view.findViewById(R.id.text2);
 
-            mToolbar = (Toolbar) view.findViewById(R.id.recycler_card_history_toolbar);
-            mToolbar.inflateMenu(R.menu.recycler_card_history_toolbar);
+            mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
+            mToolbar.inflateMenu(R.menu.recycler_card_toolbar);
             mToolbar.setOnMenuItemClickListener(this);
         }
 
-        public void setItems(String[] items, int sign, boolean disableMenu) {
+        public void setItems(String[] items, int sign) {
             mToolbar.setTitle(items[0]);
             mToolbar.setSubtitle(items[1]);
             mTextView1.setText(items[2]);
-            mTextView2.setText(items[3]);
-            mTextView3.setText(items[4]);
             if (sign < 0) {
-                mTextView4.setTextColor(Color.RED);
+                mTextView2.setTextColor(Color.RED);
             } else {
-                mTextView4.setTextColor(Color.GREEN);
+                mTextView2.setTextColor(Color.GREEN);
             }
-            mTextView4.setText(items[5]);
-            if (disableMenu) {
-                for (int i = 0; i < mToolbar.getMenu().size(); i++) {
-                    mToolbar.getMenu().getItem(i).setEnabled(false);
-                }
-            }
-        }
-
-        @Override
-        public void onClick(View view) {
-            //Log.d("my", "onClick " + getPosition() + " " + mItem);
-
+            mTextView2.setText(items[3]);
         }
 
         @Override
@@ -209,7 +139,7 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
 
     private ArrayList<TransactionsHolder> getSortedTransactions() {
         mTransactions = new ArrayList<>();
-        for (ScheduledTransaction st : mTransactionCollection.values()) {
+        for (ScheduledTransaction st : mTransactionCollection) {
             Calendar now = Calendar.getInstance();
             long endOfTime = now.getTimeInMillis() + END_OF_TIME;
             Calendar calendar = Calendar.getInstance();

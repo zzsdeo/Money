@@ -16,10 +16,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Method is called during creation of the database
     @Override
     public void onCreate(SQLiteDatabase database) {
-        TableAccounts.onCreate(database);
-        TableCategories.onCreate(database);
         TableScheduledTransactions.onCreate(database);
-        TableTransactions.onCreate(database);
     }
 
     // Method is called during an upgrade of the database,
@@ -27,9 +24,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion,
                           int newVersion) {
-        TableAccounts.onUpgrade(database, oldVersion, newVersion);
-        TableCategories.onUpgrade(database, oldVersion, newVersion);
         TableScheduledTransactions.onUpgrade(database, oldVersion, newVersion);
-        TableTransactions.onUpgrade(database, oldVersion, newVersion);
     }
 }
