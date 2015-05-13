@@ -6,7 +6,9 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.format.DateFormat;
@@ -15,11 +17,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.TimePicker;
+
+import org.w3c.dom.Text;
 
 import java.util.Calendar;
 
+import ru.zzsdeo.money.Constants;
 import ru.zzsdeo.money.R;
 
 public class Dialogs extends DialogFragment implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
@@ -114,7 +122,8 @@ public class Dialogs extends DialogFragment implements DatePickerDialog.OnDateSe
             case SETTINGS:
                 builder.setTitle("Настройки");
                 builder.setIcon(R.mipmap.ic_action_action_account_balance_wallet);
-                builder.setView(getActivity().getLayoutInflater().inflate(R.layout.dialog_settings, null));
+                View v = getActivity().getLayoutInflater().inflate(R.layout.dialog_settings, null);
+                builder.setView(v);
                 builder.setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -125,6 +134,35 @@ public class Dialogs extends DialogFragment implements DatePickerDialog.OnDateSe
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialogListener.onDialogPositiveClick(Dialogs.this, SETTINGS, 0);
+                    }
+                });
+
+                EditText etBalance = (EditText) v.findViewById(R.id.balance);
+                EditText etCardNumber = (EditText) v.findViewById(R.id.card_number);
+                final TextView tvSeekBar = (TextView) v.findViewById(R.id.seek_bar_title);
+                SeekBar seekBar = (SeekBar) v.findViewById(R.id.seek_bar);
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+
+                etBalance.setText(sharedPreferences.getString(Constants.BALANCE, ""));
+                etCardNumber.setText(sharedPreferences.getString(Constants.CARD_NUMBER, ""));
+                int progress = sharedPreferences.getInt(Constants.NUMBER_OF_MONTHS, Constants.DEFAULT_NUM_OF_MONTHS);
+                tvSeekBar.append(String.valueOf(progress));
+                seekBar.setMax(Constants.MAX_NUM_OF_MONTHS - 1);
+                seekBar.setProgress(progress - 1);
+                seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        tvSeekBar.setText("Количество месяцев для планирования: " + (progress + 1));
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+
                     }
                 });
                 return builder.create();

@@ -41,11 +41,12 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:layout_gravity="center_vertical"
-        android:text="Количество месяцев для планирования" />
+        android:text="Количество месяцев для планирования: "
+        android:id="@+id/seek_bar_title"/>
 
     <SeekBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/seekbar"/>
+        android:id="@+id/seek_bar"/>
 
 </LinearLayout>

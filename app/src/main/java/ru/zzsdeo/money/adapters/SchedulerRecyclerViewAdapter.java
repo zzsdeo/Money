@@ -45,7 +45,7 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
 
     public SchedulerRecyclerViewAdapter(MainActivity context) {
         mSharedPreferences = context.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
-        endOfTimeSetting = mSharedPreferences.getInt(Constants.NUMBER_OF_MONTHS, 12) * 2592000000l;
+        endOfTimeSetting = mSharedPreferences.getInt(Constants.NUMBER_OF_MONTHS, Constants.DEFAULT_NUM_OF_MONTHS) * 2592000000l;
         mTransactionCollection = new ScheduledTransactionCollection(context, ScheduledTransactionCollection.SORTED_BY_DATE_DESC);
         mTransactions = getSortedTransactions();
         mContext = context;
@@ -81,7 +81,7 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
     }
 
     public void refreshDataSet() {
-        endOfTimeSetting = mSharedPreferences.getInt(Constants.NUMBER_OF_MONTHS, 12) * 2592000000l;
+        endOfTimeSetting = mSharedPreferences.getInt(Constants.NUMBER_OF_MONTHS, Constants.DEFAULT_NUM_OF_MONTHS) * 2592000000l;
         mTransactionCollection = new ScheduledTransactionCollection(mContext, ScheduledTransactionCollection.SORTED_BY_DATE_DESC);
         mTransactions.clear();
         mTransactions.addAll(getSortedTransactions());
@@ -212,7 +212,11 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
 
         // рассчитываем балансы
 
-        float balance = Float.parseFloat(mSharedPreferences.getString(Constants.BALANCE, "0"));
+        String stringBalance = mSharedPreferences.getString(Constants.BALANCE, "");
+        float balance = 0;
+        if (stringBalance != null) {
+            if (!stringBalance.isEmpty()) balance = Float.parseFloat(stringBalance);
+        }
         for (TransactionsHolder transactionsHolder : mTransactions) {
             balance = balance + transactionsHolder.scheduledTransaction.getAmount();
             transactionsHolder.setBalance(balance);

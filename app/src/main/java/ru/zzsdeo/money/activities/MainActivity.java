@@ -20,6 +20,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.SeekBar;
 import android.widget.TimePicker;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
@@ -331,6 +333,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         schedulerRecyclerViewAdapter = new SchedulerRecyclerViewAdapter(this);
 
+        // заголовок - баланс
+
+        setTitleAsBalance();
+
         // вьюхи
 
         ObservableRecyclerView recyclerView = (ObservableRecyclerView) findViewById(R.id.recycler_view);
@@ -342,12 +348,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.attachToRecyclerView(recyclerView);
         fab.setOnClickListener(this);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        getSupportActionBar().setTitle(sharedPreferences.getString(Constants.BALANCE, "Money"));
     }
 
     @Override
@@ -379,6 +379,21 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         switch (dialogType) {
             case Dialogs.DELETE_SCHEDULED_TRANSACTION:
                 new ScheduledTransactionCollection(this).removeScheduledTransaction(id);
+                schedulerRecyclerViewAdapter.refreshDataSet();
+                dialog.dismiss();
+                break;
+            case Dialogs.SETTINGS:
+                EditText etBalance = (EditText) dialog.getDialog().findViewById(R.id.balance);
+                EditText etCardNumber = (EditText) dialog.getDialog().findViewById(R.id.card_number);
+                SeekBar seekBar = (SeekBar) dialog.getDialog().findViewById(R.id.seek_bar);
+
+                sharedPreferences.edit()
+                        .putString(Constants.BALANCE, etBalance.getText().toString().trim())
+                        .putString(Constants.CARD_NUMBER, etCardNumber.getText().toString().trim())
+                        .putInt(Constants.NUMBER_OF_MONTHS, seekBar.getProgress() + 1)
+                        .apply();
+
+                setTitleAsBalance();
                 schedulerRecyclerViewAdapter.refreshDataSet();
                 dialog.dismiss();
                 break;
@@ -429,5 +444,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 ab.show();
             }
         }
+    }
+
+    private void setTitleAsBalance () {
+        String title = sharedPreferences.getString(Constants.BALANCE, getString(R.string.app_name));
+        if (title != null) {
+            if (title.isEmpty()) title = getString(R.string.app_name);
+        }
+        getSupportActionBar().setTitle(title);
     }
 }
