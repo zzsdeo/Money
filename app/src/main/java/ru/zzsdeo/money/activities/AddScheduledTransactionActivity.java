@@ -118,11 +118,6 @@ public class AddScheduledTransactionActivity extends ActionBarActivity
     }
 
     @Override
-    public void onDialogPositiveClick(DialogFragment dialog, int dialogType) {
-
-    }
-
-    @Override
     public void onDialogPositiveClick(DialogFragment dialog, int dialogType, long id) {
 
     }

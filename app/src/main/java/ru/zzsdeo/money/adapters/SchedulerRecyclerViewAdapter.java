@@ -1,7 +1,9 @@
 package ru.zzsdeo.money.adapters;
 
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -18,8 +20,8 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import ru.zzsdeo.money.Constants;
 import ru.zzsdeo.money.R;
@@ -38,14 +40,16 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
     private ScheduledTransactionCollection mTransactionCollection;
     private final static String DATE_FORMAT = "dd.MM.yy, HH:mm";
     private FragmentManager mFragmentManager;
-    private static final Long END_OF_TIME = 31536000000l;
+    private long endOfTimeSetting;
+    private SharedPreferences mSharedPreferences;
 
     public SchedulerRecyclerViewAdapter(MainActivity context) {
+        mSharedPreferences = context.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+        endOfTimeSetting = mSharedPreferences.getInt(Constants.NUMBER_OF_MONTHS, 12) * 2592000000l;
         mTransactionCollection = new ScheduledTransactionCollection(context, ScheduledTransactionCollection.SORTED_BY_DATE_DESC);
         mTransactions = getSortedTransactions();
         mContext = context;
         mFragmentManager = context.getFragmentManager();
-        setHasStableIds(true);
     }
 
     @Override
@@ -76,14 +80,11 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
         return mTransactions.size();
     }
 
-    @Override
-    public long getItemId(int position) {
-        return mTransactions.get(position).scheduledTransaction.getScheduledTransactionId();
-    }
-
     public void refreshDataSet() {
+        endOfTimeSetting = mSharedPreferences.getInt(Constants.NUMBER_OF_MONTHS, 12) * 2592000000l;
         mTransactionCollection = new ScheduledTransactionCollection(mContext, ScheduledTransactionCollection.SORTED_BY_DATE_DESC);
-        mTransactions = getSortedTransactions();
+        mTransactions.clear();
+        mTransactions.addAll(getSortedTransactions());
         notifyDataSetChanged();
     }
 
@@ -101,7 +102,7 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
             mTextView2 = (TextView) view.findViewById(R.id.text2);
 
             mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
-            mToolbar.inflateMenu(R.menu.recycler_card_toolbar);
+            mToolbar.inflateMenu(R.menu.card_menu);
             mToolbar.setOnMenuItemClickListener(this);
         }
 
@@ -145,7 +146,7 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
         mTransactions = new ArrayList<>();
         for (ScheduledTransaction st : mTransactionCollection) {
             Calendar now = Calendar.getInstance();
-            long endOfTime = now.getTimeInMillis() + END_OF_TIME;
+            long endOfTime = now.getTimeInMillis() + endOfTimeSetting;
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(st.getDateInMill());
             switch (st.getRepeatingTypeId()) {
@@ -188,6 +189,8 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
             }
         }
 
+        // сортируем по дате
+
         Collections.sort(mTransactions, new Comparator<TransactionsHolder>() {
             @Override
             public int compare(TransactionsHolder lhs, TransactionsHolder rhs) {
@@ -209,7 +212,7 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
 
         // рассчитываем балансы
 
-        float balance = 0;
+        float balance = Float.parseFloat(mSharedPreferences.getString(Constants.BALANCE, "0"));
         for (TransactionsHolder transactionsHolder : mTransactions) {
             balance = balance + transactionsHolder.scheduledTransaction.getAmount();
             transactionsHolder.setBalance(balance);

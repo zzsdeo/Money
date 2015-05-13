@@ -8,11 +8,19 @@ import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.text.format.DateFormat;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.DatePicker;
+import android.widget.LinearLayout;
 import android.widget.TimePicker;
 
 import java.util.Calendar;
+
+import ru.zzsdeo.money.R;
 
 public class Dialogs extends DialogFragment implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
@@ -22,26 +30,23 @@ public class Dialogs extends DialogFragment implements DatePickerDialog.OnDateSe
     public static final String ID = "id";
     public static final String DATE_IN_MILL = "date_in_mill";
 
-    public static final int DELETE_ACCOUNT = 10;
-    public static final int YOU_MUST_ADD_ACCOUNT = 20;
-    public static final int DATE_PICKER = 30;
-    public static final int TIME_PICKER = 40;
-    public static final int DELETE_CATEGORY = 50;
-    public static final int DELETE_TRANSACTION = 60;
-    public static final int DELETE_SCHEDULED_TRANSACTION = 70;
+    public static final int DATE_PICKER = 10;
+    public static final int TIME_PICKER = 20;
+    public static final int DELETE_SCHEDULED_TRANSACTION = 30;
+    public static final int SETTINGS = 40;
 
     private Bundle bundle;
     private DialogListener dialogListener;
 
     public interface DialogListener {
-        public void onDialogPositiveClick(DialogFragment dialog, int dialogType);
-        public void onDialogPositiveClick(DialogFragment dialog, int dialogType, long id);
 
-        public void onDialogNegativeClick(DialogFragment dialog, int dialogType);
+        void onDialogPositiveClick(DialogFragment dialog, int dialogType, long id);
 
-        public void onDateSet(DatePicker view, int dialogType, int year, int monthOfYear, int dayOfMonth);
+        void onDialogNegativeClick(DialogFragment dialog, int dialogType);
 
-        public void onTimeSet(TimePicker view, int dialogType, int hourOfDay, int minute);
+        void onDateSet(DatePicker view, int dialogType, int year, int monthOfYear, int dayOfMonth);
+
+        void onTimeSet(TimePicker view, int dialogType, int hourOfDay, int minute);
     }
 
     @Override
@@ -70,31 +75,7 @@ public class Dialogs extends DialogFragment implements DatePickerDialog.OnDateSe
         final Calendar c = Calendar.getInstance();
         long dateInMill;
         switch (bundle.getInt(DIALOG_TYPE)) {
-            case DELETE_ACCOUNT:
-                builder.setTitle("Вы уверены?");
-                builder.setMessage("Это приведет к удаленнию всех транзакций связанных с данным счетом.");
-                builder.setNegativeButton("Нет", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialogListener.onDialogNegativeClick(Dialogs.this, DELETE_ACCOUNT);
-                    }
-                });
-                builder.setPositiveButton("Да", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialogListener.onDialogPositiveClick(Dialogs.this, DELETE_ACCOUNT, bundle.getLong(ID));
-                    }
-                });
-                return builder.create();
-            case YOU_MUST_ADD_ACCOUNT:
-                builder.setMessage("Для работы приложения необходимо создать хотя бы один счет.");
-                builder.setPositiveButton("Создать", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialogListener.onDialogPositiveClick(Dialogs.this, YOU_MUST_ADD_ACCOUNT);
-                    }
-                });
-                return builder.create();
+
             case DATE_PICKER:
                 dateInMill = bundle.getLong(DATE_IN_MILL, 0);
                 if (dateInMill != 0) c.setTimeInMillis(dateInMill);
@@ -104,6 +85,7 @@ public class Dialogs extends DialogFragment implements DatePickerDialog.OnDateSe
                 int day = c.get(Calendar.DAY_OF_MONTH);
 
                 return new DatePickerDialog(getActivity(), this, year, month, day);
+
             case TIME_PICKER:
                 dateInMill = bundle.getLong(DATE_IN_MILL, 0);
                 if (dateInMill != 0) c.setTimeInMillis(dateInMill);
@@ -112,36 +94,7 @@ public class Dialogs extends DialogFragment implements DatePickerDialog.OnDateSe
                 int minute = c.get(Calendar.MINUTE);
 
                 return new TimePickerDialog(getActivity(), this, hour, minute, DateFormat.is24HourFormat(getActivity()));
-            case DELETE_CATEGORY:
-                builder.setMessage("Вы уверены?");
-                builder.setNegativeButton("Нет", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialogListener.onDialogNegativeClick(Dialogs.this, DELETE_CATEGORY);
-                    }
-                });
-                builder.setPositiveButton("Да", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialogListener.onDialogPositiveClick(Dialogs.this, DELETE_CATEGORY, bundle.getLong(ID));
-                    }
-                });
-                return builder.create();
-            case DELETE_TRANSACTION:
-                builder.setMessage("Вы уверены?");
-                builder.setNegativeButton("Нет", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialogListener.onDialogNegativeClick(Dialogs.this, DELETE_TRANSACTION);
-                    }
-                });
-                builder.setPositiveButton("Да", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialogListener.onDialogPositiveClick(Dialogs.this, DELETE_TRANSACTION, bundle.getLong(ID));
-                    }
-                });
-                return builder.create();
+
             case DELETE_SCHEDULED_TRANSACTION:
                 builder.setMessage("Вы уверены?");
                 builder.setNegativeButton("Нет", new DialogInterface.OnClickListener() {
@@ -157,6 +110,25 @@ public class Dialogs extends DialogFragment implements DatePickerDialog.OnDateSe
                     }
                 });
                 return builder.create();
+
+            case SETTINGS:
+                builder.setTitle("Настройки");
+                builder.setIcon(R.mipmap.ic_action_action_account_balance_wallet);
+                builder.setView(getActivity().getLayoutInflater().inflate(R.layout.dialog_settings, null));
+                builder.setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialogListener.onDialogNegativeClick(Dialogs.this, SETTINGS);
+                    }
+                });
+                builder.setPositiveButton("Сохранить", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialogListener.onDialogPositiveClick(Dialogs.this, SETTINGS, 0);
+                    }
+                });
+                return builder.create();
+
             default:
                 return super.onCreateDialog(savedInstanceState);
         }

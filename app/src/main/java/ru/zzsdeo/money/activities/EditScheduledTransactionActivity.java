@@ -33,23 +33,18 @@ import ru.zzsdeo.money.model.RepeatingTypes;
 import ru.zzsdeo.money.model.ScheduledTransaction;
 import ru.zzsdeo.money.model.ScheduledTransactionCollection;
 
-/*
 public class EditScheduledTransactionActivity extends ActionBarActivity
         implements
         View.OnClickListener,
-        CompoundButton.OnCheckedChangeListener,
         Dialogs.DialogListener,
         AdapterView.OnItemSelectedListener {
 
-    private EditText amount, commission, comment;
-    private Spinner destinationAccountId, accountId, categoryId, repeatingTypeId;
+    private EditText amount, comment;
+    private Spinner repeatingTypeId;
     private TextView date, time, repeatingTextView;
     private final Calendar calendar = Calendar.getInstance();
-    private CheckBox isTransfer, needApprove;
-    private AccountSpinnerAdapter accountSpinnerAdapter, destinationAccountSpinnerAdapter;
-    private AccountCollection accountCollection;
+    private CheckBox needApprove;
     private ScheduledTransaction scheduledTransaction;
-    private long destinationId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,32 +54,16 @@ public class EditScheduledTransactionActivity extends ActionBarActivity
         Bundle bundle = getIntent().getExtras();
         if (bundle == null) finish();
         assert bundle != null;
-        scheduledTransaction = new ScheduledTransactionCollection(this).get(bundle.getLong(SchedulerRecyclerViewAdapter.SCHEDULED_TRANSACTION_ID));
+        scheduledTransaction = new ScheduledTransaction(this, bundle.getLong(SchedulerRecyclerViewAdapter.SCHEDULED_TRANSACTION_ID));
 
-        accountCollection = new AccountCollection(this);
-        CategoryCollection categoryCollection = new CategoryCollection(this);
-
-        accountId = (Spinner) findViewById(R.id.spinner1);
         needApprove = (CheckBox) findViewById(R.id.checkBox1);
         date = (TextView) findViewById(R.id.textView);
         time = (TextView) findViewById(R.id.textView2);
         amount = (EditText) findViewById(R.id.amount);
-        commission = (EditText) findViewById(R.id.commission);
         comment = (EditText) findViewById(R.id.comment);
-        isTransfer = (CheckBox) findViewById(R.id.checkBox2);
-        destinationAccountId = (Spinner) findViewById(R.id.spinner2);
-        categoryId = (Spinner) findViewById(R.id.spinner3);
         repeatingTypeId = (Spinner) findViewById(R.id.spinner4);
         repeatingTextView = (TextView) findViewById(R.id.repeatingTextView);
         Button addBtn = (Button) findViewById(R.id.addBtn);
-
-        accountSpinnerAdapter = new AccountSpinnerAdapter(this, accountCollection);
-        accountId.setAdapter(accountSpinnerAdapter);
-        accountId.setOnItemSelectedListener(this);
-        ArrayList<Object> ids = accountSpinnerAdapter.getAllItemsIds();
-        long accId = scheduledTransaction.getAccountId();
-        int selection = ids.indexOf(accId);
-        accountId.setSelection(selection);
 
         needApprove.setChecked(scheduledTransaction.getNeedApprove());
 
@@ -97,47 +76,12 @@ public class EditScheduledTransactionActivity extends ActionBarActivity
 
         amount.setText(String.valueOf(scheduledTransaction.getAmount()));
 
-        commission.setText(String.valueOf(-scheduledTransaction.getCommission()));
-
         comment.setText(scheduledTransaction.getComment());
 
-        if (accountCollection.size() == 1) isTransfer.setVisibility(View.GONE);
-        isTransfer.setOnCheckedChangeListener(this);
-
-        destinationAccountId.setVisibility(View.GONE);
-        destinationAccountSpinnerAdapter = new AccountSpinnerAdapter(this, accountCollection);
-        destinationAccountId.setAdapter(destinationAccountSpinnerAdapter);
-        destinationId = scheduledTransaction.getDestinationAccountId();
-        if (destinationId != 0) {
-            isTransfer.setChecked(true);
-            destinationAccountId.setVisibility(View.VISIBLE);
-            ids.clear();
-            ids = destinationAccountSpinnerAdapter.getAllItemsIds();
-            selection = ids.indexOf(destinationId);
-            destinationAccountId.setSelection(selection);
-        }
-
-        AbstractSpinnerAdapter categoryAdapter = new AbstractSpinnerAdapter(this, categoryCollection, new String[] {"Без категории"}) {
-            @Override
-            public CharSequence getTitle(Object object) {
-                return ((Category)object).getName();
-            }
-
-            @Override
-            public long getObjectId(Object object) {
-                return ((Category)object).getCategoryId();
-            }
-        };
-        categoryId.setAdapter(categoryAdapter);
-        ids.clear();
-        ids = categoryAdapter.getAllItemsIds();
-        selection = ids.indexOf(scheduledTransaction.getCategoryId());
-        categoryId.setSelection(selection);
-
-        ArrayAdapter<String> repeatingAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, R.id.textView, new RepeatingTypes(this).getTypes());
+        ArrayAdapter<String> repeatingAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, R.id.textView, new RepeatingTypes(this));
         repeatingTypeId.setAdapter(repeatingAdapter);
         repeatingTypeId.setOnItemSelectedListener(this);
-        selection = scheduledTransaction.getRepeatingTypeId();
+        int selection = scheduledTransaction.getRepeatingTypeId();
         repeatingTypeId.setSelection(selection);
 
         switch (selection) {
@@ -172,98 +116,26 @@ public class EditScheduledTransactionActivity extends ActionBarActivity
                 time.show(getFragmentManager(), Dialogs.DIALOGS_TAG);
                 break;
             case R.id.addBtn:
-                if (destinationId != 0) {
-                    ScheduledTransactionCollection linkedTransactions = new ScheduledTransactionCollection(this,
-                            new String[] {
-                                    TableScheduledTransactions.COLUMN_LINKED_TRANSACTION_ID + "=" + scheduledTransaction.getScheduledTransactionId(),
-                                    null
-                            });
-                    Iterator<ScheduledTransaction> it = linkedTransactions.values().iterator();
-                    ScheduledTransaction linkedTransaction = it.next();
-                    long id = linkedTransaction.getScheduledTransactionId();
-                    linkedTransactions.removeScheduledTransaction(id);
-                }
-
                 String amountString = amount.getText().toString();
-                String commissionString = commission.getText().toString();
                 String commentString = comment.getText().toString();
-                float amountFloat, commissionFloat;
-                long destination;
-                Account destAcc = null;
+                float amountFloat;
                 if (amountString.isEmpty()) {
                     Toast.makeText(this, "Необходимо ввести сумму", Toast.LENGTH_LONG).show();
                     return;
                 } else {
                     amountFloat = Float.parseFloat(amountString);
                 }
-                if (commissionString.isEmpty()) {
-                    commissionFloat = 0;
-                } else {
-                    commissionFloat = Float.parseFloat(commissionString);
-                }
-                if (isTransfer.isChecked()) {
-                    destination = destinationAccountId.getSelectedItemId();
-                    if (amountFloat > 0) {
-                        Toast.makeText(this, "Сумма должна быть отрицательной", Toast.LENGTH_LONG).show();
-                        return;
-                    } else {
-                        destAcc = accountCollection.get(destination);
-                    }
-                } else {
-                    destination = 0;
-                }
-                long accId = accountId.getSelectedItemId();
 
-                scheduledTransaction.setAccountId(accId);
                 scheduledTransaction.setDateInMill(calendar.getTimeInMillis());
                 scheduledTransaction.setAmount(amountFloat);
-                scheduledTransaction.setCommission(-commissionFloat);
                 scheduledTransaction.setComment(commentString);
-                scheduledTransaction.setDestinationAccountId(destination);
                 scheduledTransaction.setNeedApprove(needApprove.isChecked());
                 scheduledTransaction.setRepeatingTypeId(repeatingTypeId.getSelectedItemPosition());
-                scheduledTransaction.setCategoryId(categoryId.getSelectedItemId());
-                scheduledTransaction.setLinkedTransactionId(0);
-
-                // Создание связанной транзакции
-                if (destAcc != null) {
-                    long destAccId = destAcc.getAccountId();
-                    new ScheduledTransactionCollection(this).addScheduledTransaction(
-                            destAccId,
-                            calendar.getTimeInMillis(),
-                            -amountFloat,
-                            0,
-                            "Перевод с: " + accountCollection.get(accId).getName(),
-                            0,
-                            needApprove.isChecked(),
-                            repeatingTypeId.getSelectedItemPosition(),
-                            categoryId.getSelectedItemId(),
-                            scheduledTransaction.getScheduledTransactionId()
-                    );
-                }
 
                 Toast.makeText(this, "Сохранено", Toast.LENGTH_LONG).show();
                 setResult(RESULT_OK);
                 break;
         }
-    }
-
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        switch (buttonView.getId()) {
-            case R.id.checkBox2:
-                if (isChecked) {
-                    destinationAccountId.setVisibility(View.VISIBLE);
-                } else {
-                    destinationAccountId.setVisibility(View.GONE);
-                }
-                break;
-        }
-    }
-
-    @Override
-    public void onDialogPositiveClick(DialogFragment dialog, int dialogType) {
-
     }
 
     @Override
@@ -305,11 +177,6 @@ public class EditScheduledTransactionActivity extends ActionBarActivity
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         switch (parent.getId()) {
-            case R.id.spinner1:
-                ArrayList<Object> ids = accountSpinnerAdapter.getAllItemsIds();
-                int pos = ids.indexOf(id);
-                destinationAccountSpinnerAdapter.removeItem(pos);
-                break;
             case R.id.spinner4:
                 switch (position) {
                     case 3:
@@ -330,25 +197,4 @@ public class EditScheduledTransactionActivity extends ActionBarActivity
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
-
-    private class AccountSpinnerAdapter extends AbstractSpinnerAdapter {
-
-        public AccountSpinnerAdapter(Context context, LinkedHashMap collection) {
-            super(context, collection);
-        }
-
-        @Override
-        public CharSequence getTitle(Object object) {
-            return ((Account)object).getName();
-        }
-
-        @Override
-        public long getObjectId(Object object) {
-            return ((Account)object).getAccountId();
-        }
-    }
-}*/
-
-public class EditScheduledTransactionActivity extends ActionBarActivity {
-
 }
