@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -62,17 +64,23 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
     public void onBindViewHolder(ViewHolder holder, int position) {
         ScheduledTransaction transaction = mTransactions.get(position).scheduledTransaction;
         float balance = mTransactions.get(position).getBalance();
+        long dateTime = mTransactions.get(position).dateTime;
 
         String[] items = new String[] {
                 transaction.getComment(),
                 String.valueOf(transaction.getAmount()),
-                new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(new Date(mTransactions.get(position).dateTime)),
+                new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(new Date(dateTime)),
                 String.valueOf(balance)
         };
 
         int sign = 1;
         if (balance < 0) sign = -1;
-        holder.setItems(items, sign);
+
+        boolean overdue = false;
+        long nowInMill = Calendar.getInstance().getTimeInMillis();
+        if (transaction.getNeedApprove() && transaction.getRepeatingTypeId() == 0 && dateTime <= nowInMill) overdue = true;
+
+        holder.setItems(items, sign, overdue);
     }
 
     @Override
@@ -92,6 +100,7 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
         private TextView mTextView1, mTextView2;
         private Toolbar mToolbar;
         private SchedulerRecyclerViewAdapter mAdapter;
+        private ImageView mImageView;
 
         public ViewHolder(View view, SchedulerRecyclerViewAdapter historyRecyclerViewAdapter) {
             super(view);
@@ -104,9 +113,11 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
             mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
             mToolbar.inflateMenu(R.menu.card_menu);
             mToolbar.setOnMenuItemClickListener(this);
+
+            mImageView = (ImageView) view.findViewById(R.id.image);
         }
 
-        public void setItems(String[] items, int sign) {
+        public void setItems(String[] items, int sign, boolean overdue) {
             mToolbar.setTitle(items[0]);
             mToolbar.setSubtitle(items[1]);
             mTextView1.setText(items[2]);
@@ -116,6 +127,11 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
                 mTextView2.setTextColor(Color.GREEN);
             }
             mTextView2.setText(items[3]);
+            if (overdue) {
+                mImageView.setVisibility(View.VISIBLE);
+            } else {
+                mImageView.setVisibility(View.INVISIBLE);
+            }
         }
 
         @Override
