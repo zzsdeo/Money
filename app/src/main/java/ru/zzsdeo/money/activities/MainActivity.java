@@ -5,6 +5,7 @@ import android.app.DialogFragment;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -37,6 +38,7 @@ import ru.zzsdeo.money.adapters.SchedulerRecyclerViewAdapter;
 import ru.zzsdeo.money.R;
 import ru.zzsdeo.money.dialogs.Dialogs;
 import ru.zzsdeo.money.model.ScheduledTransactionCollection;
+import ru.zzsdeo.money.services.ServiceReceiver;
 import ru.zzsdeo.money.services.UpdateTransactionsIntentService;
 
 /*public class MainActivity extends ActionBarActivity implements Dialogs.DialogListener, ObservableScrollViewCallbacks {
@@ -281,8 +283,10 @@ import ru.zzsdeo.money.services.UpdateTransactionsIntentService;
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener, Dialogs.DialogListener, ObservableScrollViewCallbacks {
 
-    private SchedulerRecyclerViewAdapter schedulerRecyclerViewAdapter;
+    public SchedulerRecyclerViewAdapter schedulerRecyclerViewAdapter;
     private SharedPreferences sharedPreferences;
+    private ServiceReceiver serviceReceiver;
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -309,6 +313,11 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // слушаем интент сервисы
+
+        serviceReceiver = new ServiceReceiver();
+        registerReceiver(serviceReceiver, new IntentFilter(ServiceReceiver.BROADCAST_ACTION));
 
         // проверяем и запускаем периодическое обновление запланированных транзакций
 
@@ -348,6 +357,12 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.attachToRecyclerView(recyclerView);
         fab.setOnClickListener(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(serviceReceiver);
     }
 
     @Override
@@ -446,7 +461,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         }
     }
 
-    private void setTitleAsBalance () {
+    public void setTitleAsBalance () {
         String title = sharedPreferences.getString(Constants.BALANCE, getString(R.string.app_name));
         if (title != null) {
             if (title.isEmpty()) title = getString(R.string.app_name);
