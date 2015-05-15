@@ -42,7 +42,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     public SchedulerRecyclerViewAdapter schedulerRecyclerViewAdapter;
     private SharedPreferences sharedPreferences;
     private ServiceReceiver serviceReceiver;
-
+    private ObservableRecyclerView recyclerView;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -60,6 +60,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 dialog.setArguments(bundle);
                 dialog.show(getFragmentManager(), Dialogs.DIALOGS_TAG);
                 return true;
+            case android.R.id.home:
+                recyclerView.scrollVerticallyToPosition(0);
+                return true;
             default:
                 return false;
         }
@@ -69,6 +72,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // слушаем интент сервисы
 
@@ -104,7 +109,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         // вьюхи
 
-        ObservableRecyclerView recyclerView = (ObservableRecyclerView) findViewById(R.id.recycler_view);
+        recyclerView = (ObservableRecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setAdapter(schedulerRecyclerViewAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());

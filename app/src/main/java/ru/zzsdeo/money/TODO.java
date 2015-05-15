@@ -6,6 +6,7 @@ package ru.zzsdeo.money;
 public class TODO {
     /**
      * TODO
+     * ACRA
      * нотификации о просроченных транзакциях
      * виджет с балансом
      * Графики в лэндскейпе
