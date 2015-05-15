@@ -3,9 +3,7 @@ package ru.zzsdeo.money.services;
 import android.app.IntentService;
 import android.content.Intent;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Set;
 
 import ru.zzsdeo.money.db.TableScheduledTransactions;
 import ru.zzsdeo.money.model.ScheduledTransaction;

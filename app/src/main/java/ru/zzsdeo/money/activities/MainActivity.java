@@ -14,9 +14,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,9 +30,8 @@ import com.melnykov.fab.FloatingActionButton;
 import java.util.Calendar;
 
 import ru.zzsdeo.money.Constants;
-
-import ru.zzsdeo.money.adapters.SchedulerRecyclerViewAdapter;
 import ru.zzsdeo.money.R;
+import ru.zzsdeo.money.adapters.SchedulerRecyclerViewAdapter;
 import ru.zzsdeo.money.dialogs.Dialogs;
 import ru.zzsdeo.money.model.ScheduledTransactionCollection;
 import ru.zzsdeo.money.services.ServiceReceiver;
@@ -95,7 +91,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
             alarm.setRepeating(AlarmManager.RTC, Calendar.getInstance().getTimeInMillis(), 4*AlarmManager.INTERVAL_HOUR, pi);
 
-            //sharedPreferences.edit().putString(Constants.VERSION_NAME, versionName).apply();
+            sharedPreferences.edit().putString(Constants.VERSION_NAME, versionName).apply();
         }
 
         // адаптеры

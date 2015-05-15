@@ -8,8 +8,6 @@ import android.net.Uri;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 
 import ru.zzsdeo.money.db.DatabaseContentProvider;
 import ru.zzsdeo.money.db.TableScheduledTransactions;

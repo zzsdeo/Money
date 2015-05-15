@@ -3,9 +3,6 @@ package ru.zzsdeo.money.services;
 import android.app.IntentService;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.util.Log;
-
-import java.util.Iterator;
 
 import ru.zzsdeo.money.Constants;
 

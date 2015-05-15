@@ -3,7 +3,6 @@ package ru.zzsdeo.money.model;
 import android.content.Context;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import ru.zzsdeo.money.R;
 
