@@ -150,7 +150,7 @@ public class Dialogs extends DialogFragment implements DatePickerDialog.OnDateSe
 
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
-
+                        seekBar.requestFocusFromTouch();
                     }
 
                     @Override
