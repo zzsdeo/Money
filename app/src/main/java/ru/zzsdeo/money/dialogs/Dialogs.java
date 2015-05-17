@@ -45,9 +45,9 @@ public class Dialogs extends DialogFragment implements DatePickerDialog.OnDateSe
 
         void onDialogNegativeClick(DialogFragment dialog, int dialogType);
 
-        void onDateSet(DatePicker view, int dialogType, int year, int monthOfYear, int dayOfMonth);
+        void onDateSet(int year, int monthOfYear, int dayOfMonth);
 
-        void onTimeSet(TimePicker view, int dialogType, int hourOfDay, int minute);
+        void onTimeSet(int hourOfDay, int minute);
     }
 
     @Override
@@ -97,14 +97,14 @@ public class Dialogs extends DialogFragment implements DatePickerDialog.OnDateSe
                 return new TimePickerDialog(getActivity(), this, hour, minute, DateFormat.is24HourFormat(getActivity()));
 
             case DELETE_SCHEDULED_TRANSACTION:
-                builder.setMessage("Вы уверены?");
-                builder.setNegativeButton("Нет", new DialogInterface.OnClickListener() {
+                builder.setMessage(getActivity().getString(R.string.are_you_sure));
+                builder.setNegativeButton(getActivity().getString(R.string.no), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialogListener.onDialogNegativeClick(Dialogs.this, DELETE_SCHEDULED_TRANSACTION);
                     }
                 });
-                builder.setPositiveButton("Да", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(getActivity().getString(R.string.yes), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialogListener.onDialogPositiveClick(Dialogs.this, DELETE_SCHEDULED_TRANSACTION, bundle.getLong(ID));
@@ -113,17 +113,17 @@ public class Dialogs extends DialogFragment implements DatePickerDialog.OnDateSe
                 return builder.create();
 
             case SETTINGS:
-                builder.setTitle("Настройки");
+                builder.setTitle(getActivity().getString(R.string.settings));
                 builder.setIcon(R.mipmap.ic_action_action_account_balance_wallet);
                 View v = getActivity().getLayoutInflater().inflate(R.layout.dialog_settings, null);
                 builder.setView(v);
-                builder.setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton(getActivity().getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialogListener.onDialogNegativeClick(Dialogs.this, SETTINGS);
                     }
                 });
-                builder.setPositiveButton("Сохранить", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(getActivity().getString(R.string.save), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialogListener.onDialogPositiveClick(Dialogs.this, SETTINGS, 0);
@@ -139,13 +139,13 @@ public class Dialogs extends DialogFragment implements DatePickerDialog.OnDateSe
                 etBalance.setText(sharedPreferences.getString(Constants.BALANCE, ""));
                 etCardNumber.setText(sharedPreferences.getString(Constants.CARD_NUMBER, ""));
                 int progress = sharedPreferences.getInt(Constants.NUMBER_OF_MONTHS, Constants.DEFAULT_NUM_OF_MONTHS);
-                tvSeekBar.append(String.valueOf(progress));
+                tvSeekBar.append(" " + String.valueOf(progress));
                 seekBar.setMax(Constants.MAX_NUM_OF_MONTHS - 1);
                 seekBar.setProgress(progress - 1);
                 seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        tvSeekBar.setText("Количество месяцев для планирования: " + (progress + 1));
+                        tvSeekBar.setText(getActivity().getString(R.string.num_of_months_to_planning) + " " + (progress + 1));
                     }
 
                     @Override
@@ -167,11 +167,11 @@ public class Dialogs extends DialogFragment implements DatePickerDialog.OnDateSe
 
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-        dialogListener.onDateSet(view, DATE_PICKER, year, monthOfYear, dayOfMonth);
+        dialogListener.onDateSet(year, monthOfYear, dayOfMonth);
     }
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        dialogListener.onTimeSet(view, TIME_PICKER, hourOfDay, minute);
+        dialogListener.onTimeSet(hourOfDay, minute);
     }
 }

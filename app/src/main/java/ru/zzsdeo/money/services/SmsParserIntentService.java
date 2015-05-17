@@ -9,7 +9,7 @@ import ru.zzsdeo.money.Constants;
 
 public class SmsParserIntentService extends IntentService {
 
-    public static final String SMS_PARSER_INTENT_SERVICE_NAME = "sms_parser_intent_service";
+    private static final String SMS_PARSER_INTENT_SERVICE_NAME = "sms_parser_intent_service";
 
     public SmsParserIntentService() {
         super(SMS_PARSER_INTENT_SERVICE_NAME);
@@ -23,7 +23,7 @@ public class SmsParserIntentService extends IntentService {
             String dostupno = "";
             String cardNumber = "";
 
-            String[] parsedSms = sms.split("\\;");
+            String[] parsedSms = sms.split(";");
             for (String str : parsedSms) {
                 str = str.trim();
                 if (str.matches("Card\\d\\d\\d\\d")) {

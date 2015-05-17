@@ -12,7 +12,7 @@
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Запрос подтвержедения транзакции"
+            android:text="@string/transaction_need_approve"
             android:id="@+id/checkBox1"
             android:layout_margin="10dp" />
 
@@ -54,14 +54,14 @@
             android:ems="10"
             android:id="@+id/amount"
             android:layout_margin="10dp"
-            android:hint="Сумма" />
+            android:hint="@string/amount" />
 
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/comment"
-            android:hint="Комментарий"
+            android:hint="@string/comment"
             android:layout_margin="10dp" />
 
         <LinearLayout
@@ -88,7 +88,7 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Добавить"
+            android:text="@string/add"
             android:id="@+id/addBtn"
             android:layout_margin="10dp" />
     </LinearLayout>

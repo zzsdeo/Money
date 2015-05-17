@@ -63,8 +63,8 @@ public class GraphActivity extends Activity {
             @Override
             public void onTap(Series series, DataPointInterface dataPoint) {
                 Toast.makeText(GraphActivity.this,
-                        "Дата: " + new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(dataPoint.getX()) + "\n" +
-                                "Баланс: " + String.valueOf(dataPoint.getY()),
+                        getString(R.string.date) + " " + new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(dataPoint.getX()) + "\n" +
+                                getString(R.string.balance2) + " " + String.valueOf(dataPoint.getY()),
                         Toast.LENGTH_SHORT).show();
             }
         });
@@ -74,8 +74,8 @@ public class GraphActivity extends Activity {
     }
 
     private static class TransactionsHolder {
-        public ScheduledTransaction scheduledTransaction;
-        public long dateTime;
+        public final ScheduledTransaction scheduledTransaction;
+        public final long dateTime;
         private float balance;
 
         public TransactionsHolder(long dateTime, ScheduledTransaction scheduledTransaction) {

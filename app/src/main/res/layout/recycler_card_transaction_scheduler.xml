@@ -24,7 +24,7 @@
                 android:layout_width="5dp"
                 android:layout_height="match_parent"
                 android:background="@android:color/holo_red_light"
-                android:contentDescription="Просрочено"
+                android:contentDescription="@string/overdue"
                 android:id="@+id/image" />
 
             <LinearLayout

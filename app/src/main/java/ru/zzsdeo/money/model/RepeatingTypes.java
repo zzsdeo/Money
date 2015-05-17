@@ -10,10 +10,10 @@ public class RepeatingTypes extends ArrayList<String> {
 
     public RepeatingTypes(Context context) {
         add(context.getString(R.string.once));
-        add("Каждый день");
-        add("Каждый будний день");
-        add("Каждое определенное число");
-        add("Каждый определенный день недели");
-        add("Каждый последний день месяца");
+        add(context.getString(R.string.every_day));
+        add(context.getString(R.string.every_business_day));
+        add(context.getString(R.string.every_day_of_month));
+        add(context.getString(R.string.every_day_of_week));
+        add(context.getString(R.string.every_last_day_of_month));
     }
 }

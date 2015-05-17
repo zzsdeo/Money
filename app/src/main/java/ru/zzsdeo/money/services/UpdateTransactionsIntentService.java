@@ -11,7 +11,7 @@ import ru.zzsdeo.money.model.ScheduledTransactionCollection;
 
 public class UpdateTransactionsIntentService extends IntentService {
 
-    public static final String UPDATE_TRANSACTIONS_INTENT_SERVICE_NAME = "update_transactions_service";
+    private static final String UPDATE_TRANSACTIONS_INTENT_SERVICE_NAME = "update_transactions_service";
 
     public UpdateTransactionsIntentService() {
         super(UPDATE_TRANSACTIONS_INTENT_SERVICE_NAME);

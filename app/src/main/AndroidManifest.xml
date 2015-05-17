@@ -1,4 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="ru.zzsdeo.money">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="ru.zzsdeo.money">
 
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -17,13 +18,13 @@
         </activity>
 
         <activity android:name=".activities.AddScheduledTransactionActivity"
-            android:label="Добавить запланированную транзакцию"/>
+            android:label="@string/add_scheduled_transaction"/>
 
         <activity android:name=".activities.EditScheduledTransactionActivity"
-            android:label="Редактировать запланированную транзакцию"/>
+            android:label="@string/edit_scheduled_transaction"/>
 
         <activity android:name=".activities.GraphActivity"
-            android:label="График"/>
+            android:label="@string/graph"/>
 
         <provider
             android:name="ru.zzsdeo.money.db.DatabaseContentProvider"

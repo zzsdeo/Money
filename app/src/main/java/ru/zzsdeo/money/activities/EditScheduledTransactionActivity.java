@@ -8,11 +8,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -113,7 +111,7 @@ public class EditScheduledTransactionActivity extends ActionBarActivity
                 String commentString = comment.getText().toString();
                 float amountFloat;
                 if (amountString.isEmpty()) {
-                    Toast.makeText(this, "Необходимо ввести сумму", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, getString(R.string.need_amount), Toast.LENGTH_LONG).show();
                     return;
                 } else {
                     amountFloat = Float.parseFloat(amountString);
@@ -125,7 +123,7 @@ public class EditScheduledTransactionActivity extends ActionBarActivity
                 scheduledTransaction.setNeedApprove(needApprove.isChecked());
                 scheduledTransaction.setRepeatingTypeId(repeatingTypeId.getSelectedItemPosition());
 
-                Toast.makeText(this, "Сохранено", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.saved), Toast.LENGTH_LONG).show();
                 setResult(RESULT_OK);
                 break;
         }
@@ -142,7 +140,7 @@ public class EditScheduledTransactionActivity extends ActionBarActivity
     }
 
     @Override
-    public void onDateSet(DatePicker view, int dialogType, int year, int monthOfYear, int dayOfMonth) {
+    public void onDateSet(int year, int monthOfYear, int dayOfMonth) {
         calendar.set(year, monthOfYear, dayOfMonth);
         Date dateTime = calendar.getTime();
         date.setText(new SimpleDateFormat("dd.MM.yy", Locale.getDefault()).format(dateTime) + "   ");
@@ -160,7 +158,7 @@ public class EditScheduledTransactionActivity extends ActionBarActivity
     }
 
     @Override
-    public void onTimeSet(TimePicker view, int dialogType, int hourOfDay, int minute) {
+    public void onTimeSet(int hourOfDay, int minute) {
         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
         calendar.set(Calendar.MINUTE, minute);
         Date dateTime = calendar.getTime();

@@ -18,7 +18,7 @@ public class DatabaseContentProvider extends ContentProvider {
     // database
     private DatabaseHelper database;
 
-    // used for the UriMacher
+    // used for the UriMatcher
     private static final int SCHEDULED_TRANSACTIONS_ITEMS = 10;
     private static final int SCHEDULED_TRANSACTIONS_ITEM_ID = 20;
 
@@ -183,8 +183,8 @@ public class DatabaseContentProvider extends ContentProvider {
                 TableScheduledTransactions.COLUMN_REPEATING_TYPE_ID
         };
         if (projection != null) {
-            HashSet<String> requestedColumns = new HashSet<String>(Arrays.asList(projection));
-            HashSet<String> availableColumns = new HashSet<String>(Arrays.asList(available));
+            HashSet<String> requestedColumns = new HashSet<>(Arrays.asList(projection));
+            HashSet<String> availableColumns = new HashSet<>(Arrays.asList(available));
             // check if all columns which are requested are available
             if (!availableColumns.containsAll(requestedColumns)) {
                 throw new IllegalArgumentException("Unknown columns in projection");

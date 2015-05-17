@@ -1,4 +1,34 @@
 <resources>
     <string name="app_name">Money</string>
     <string name="once">Один раз</string>
+    <string name="transaction_need_approve">Запрос подтвержедения транзакции</string>
+    <string name="amount">Сумма</string>
+    <string name="comment">Комментарий</string>
+    <string name="add">Добавить</string>
+    <string name="balance">Баланс</string>
+    <string name="card_number">Номер карты</string>
+    <string name="num_of_months_to_planning">Количество месяцев для планирования:</string>
+    <string name="overdue">Просрочено</string>
+    <string name="delete">Удалить</string>
+    <string name="edit">Редактировать</string>
+    <string name="up">Вверх</string>
+    <string name="graph">График</string>
+    <string name="need_amount">Необходимо ввести сумму</string>
+    <string name="transaction_successfully_added">Транзакция успешно добавлена</string>
+    <string name="saved">Сохранено</string>
+    <string name="date">Дата: </string>
+    <string name="balance2">Баланс: </string>
+    <string name="are_you_sure">Вы уверены?</string>
+    <string name="no">Нет</string>
+    <string name="yes">Да</string>
+    <string name="settings">Настройки</string>
+    <string name="cancel">Отмена</string>
+    <string name="save">Сохранить</string>
+    <string name="every_day">Каждый день</string>
+    <string name="every_business_day">Каждый будний день</string>
+    <string name="every_day_of_month">Каждое определенное число</string>
+    <string name="every_day_of_week">Каждый определенный день недели</string>
+    <string name="every_last_day_of_month">Каждый последний день месяца</string>
+    <string name="add_scheduled_transaction">Добавить запланированную транзакцию</string>
+    <string name="edit_scheduled_transaction">Редактировать запланированную транзакцию</string>
 </resources>

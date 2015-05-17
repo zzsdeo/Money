@@ -6,11 +6,11 @@
         android:id="@+id/delete_item"
         android:orderInCategory="1"
         app:showAsAction="never"
-        android:title="Удалить"/>
+        android:title="@string/delete"/>
 
     <item
         android:id="@+id/edit_item"
         android:orderInCategory="2"
         app:showAsAction="never"
-        android:title="Редактировать"/>
+        android:title="@string/edit"/>
 </menu>

@@ -36,12 +36,12 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
     public static final String SCHEDULED_TRANSACTION_ID = "scheduled_transaction_id";
 
     private ArrayList<TransactionsHolder> mTransactions;
-    private MainActivity mContext;
+    private final MainActivity mContext;
     private ScheduledTransactionCollection mTransactionCollection;
     private final static String DATE_FORMAT = "dd.MM.yy, HH:mm";
-    private FragmentManager mFragmentManager;
+    private final FragmentManager mFragmentManager;
     private long endOfTimeSetting;
-    private SharedPreferences mSharedPreferences;
+    private final SharedPreferences mSharedPreferences;
 
     public SchedulerRecyclerViewAdapter(MainActivity context) {
         mSharedPreferences = context.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
@@ -95,10 +95,11 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements Toolbar.OnMenuItemClickListener {
-        private TextView mTextView1, mTextView2;
-        private Toolbar mToolbar;
-        private SchedulerRecyclerViewAdapter mAdapter;
-        private ImageView mImageView;
+        private final TextView mTextView1;
+        private final TextView mTextView2;
+        private final Toolbar mToolbar;
+        private final SchedulerRecyclerViewAdapter mAdapter;
+        private final ImageView mImageView;
 
         public ViewHolder(View view, SchedulerRecyclerViewAdapter historyRecyclerViewAdapter) {
             super(view);
@@ -240,8 +241,8 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
     }
 
     private static class TransactionsHolder {
-        public ScheduledTransaction scheduledTransaction;
-        public long dateTime;
+        public final ScheduledTransaction scheduledTransaction;
+        public final long dateTime;
         private float balance;
 
         public TransactionsHolder(long dateTime, ScheduledTransaction scheduledTransaction) {

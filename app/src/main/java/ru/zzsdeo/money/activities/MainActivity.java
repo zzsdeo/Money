@@ -17,10 +17,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.SeekBar;
-import android.widget.TimePicker;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
@@ -194,12 +192,12 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     }
 
     @Override
-    public void onDateSet(DatePicker view, int dialogType, int year, int monthOfYear, int dayOfMonth) {
+    public void onDateSet(int year, int monthOfYear, int dayOfMonth) {
 
     }
 
     @Override
-    public void onTimeSet(TimePicker view, int dialogType, int hourOfDay, int minute) {
+    public void onTimeSet(int hourOfDay, int minute) {
 
     }
 
