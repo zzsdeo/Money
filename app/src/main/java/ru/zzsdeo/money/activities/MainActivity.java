@@ -53,6 +53,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+
             case R.id.edit:
                 Dialogs dialog = new Dialogs();
                 Bundle bundle = new Bundle();
@@ -60,9 +61,15 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 dialog.setArguments(bundle);
                 dialog.show(getFragmentManager(), Dialogs.DIALOGS_TAG);
                 return true;
-            case android.R.id.home:
+
+            case R.id.graph:
+                startActivity(new Intent(this, GraphActivity.class));
+                return true;
+
+            case R.id.up:
                 recyclerView.scrollVerticallyToPosition(0);
                 return true;
+
             default:
                 return false;
         }
@@ -72,8 +79,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // слушаем интент сервисы
 

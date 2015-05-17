@@ -103,14 +103,14 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
         public ViewHolder(View view, SchedulerRecyclerViewAdapter historyRecyclerViewAdapter) {
             super(view);
 
+            mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
+            mToolbar.inflateMenu(R.menu.card_menu);
+            mToolbar.setOnMenuItemClickListener(this);
+
             mAdapter = historyRecyclerViewAdapter;
 
             mTextView1 = (TextView) view.findViewById(R.id.text1);
             mTextView2 = (TextView) view.findViewById(R.id.text2);
-
-            mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
-            mToolbar.inflateMenu(R.menu.card_menu);
-            mToolbar.setOnMenuItemClickListener(this);
 
             mImageView = (ImageView) view.findViewById(R.id.image);
         }

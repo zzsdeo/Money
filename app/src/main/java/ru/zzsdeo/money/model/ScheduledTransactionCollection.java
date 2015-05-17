@@ -93,7 +93,7 @@ public class ScheduledTransactionCollection extends ArrayList<ScheduledTransacti
         cv.put(TableScheduledTransactions.COLUMN_REPEATING_TYPE_ID, repeatingTypeId);
         Uri uri = contentResolver.insert(DatabaseContentProvider.CONTENT_URI_SCHEDULED_TRANSACTIONS, cv);
         long id = Long.valueOf(uri.getLastPathSegment());
-        add(new ScheduledTransaction(context, id));
+        //add(new ScheduledTransaction(context, id));
         return id;
     }
 

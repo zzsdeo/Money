@@ -3,9 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/edit"
+        android:id="@+id/up"
         android:orderInCategory="1"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
+        android:title="Вверх"
+        android:icon="@mipmap/ic_action_hardware_keyboard_arrow_up" />
+
+    <item
+        android:id="@+id/graph"
+        android:orderInCategory="2"
+        app:showAsAction="ifRoom"
+        android:title="График"
+        android:icon="@mipmap/ic_action_action_trending_up" />
+
+    <item
+        android:id="@+id/edit"
+        android:orderInCategory="3"
+        app:showAsAction="ifRoom"
         android:title="Редактировать"
         android:icon="@mipmap/ic_action_action_account_balance_wallet2" />
+
 </menu>

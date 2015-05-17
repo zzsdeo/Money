@@ -22,6 +22,9 @@
         <activity android:name=".activities.EditScheduledTransactionActivity"
             android:label="Редактировать запланированную транзакцию"/>
 
+        <activity android:name=".activities.GraphActivity"
+            android:label="График"/>
+
         <provider
             android:name="ru.zzsdeo.money.db.DatabaseContentProvider"
             android:authorities="ru.zzsdeo.money.contentprovider"
