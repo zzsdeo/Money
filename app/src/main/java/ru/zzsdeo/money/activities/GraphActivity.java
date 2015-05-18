@@ -15,6 +15,7 @@ import com.jjoe64.graphview.series.OnDataPointTapListener;
 import com.jjoe64.graphview.series.PointsGraphSeries;
 import com.jjoe64.graphview.series.Series;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -64,7 +65,10 @@ public class GraphActivity extends Activity {
             public void onTap(Series series, DataPointInterface dataPoint) {
                 Toast.makeText(GraphActivity.this,
                         getString(R.string.date) + " " + new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(dataPoint.getX()) + "\n" +
-                                getString(R.string.balance2) + " " + String.valueOf(dataPoint.getY()),
+                                getString(R.string.balance2) + " " +
+                                String.valueOf(
+                                        BigDecimal.valueOf(
+                                                dataPoint.getY()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()),
                         Toast.LENGTH_SHORT).show();
             }
         });

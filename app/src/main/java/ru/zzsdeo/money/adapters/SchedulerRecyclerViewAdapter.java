@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -157,6 +158,25 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
         }
     }
 
+    private static class TransactionsHolder {
+        public final ScheduledTransaction scheduledTransaction;
+        public final long dateTime;
+        private float balance;
+
+        public TransactionsHolder(long dateTime, ScheduledTransaction scheduledTransaction) {
+            this.dateTime = dateTime;
+            this.scheduledTransaction = scheduledTransaction;
+        }
+
+        public void setBalance(float balance) {
+            this.balance = balance;
+        }
+
+        public float getBalance() {
+            return BigDecimal.valueOf(balance).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
+        }
+    }
+
     private ArrayList<TransactionsHolder> getSortedTransactions() {
         mTransactions = new ArrayList<>();
         for (ScheduledTransaction st : mTransactionCollection) {
@@ -238,24 +258,5 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
         }
 
         return mTransactions;
-    }
-
-    private static class TransactionsHolder {
-        public final ScheduledTransaction scheduledTransaction;
-        public final long dateTime;
-        private float balance;
-
-        public TransactionsHolder(long dateTime, ScheduledTransaction scheduledTransaction) {
-            this.dateTime = dateTime;
-            this.scheduledTransaction = scheduledTransaction;
-        }
-
-        public void setBalance(float balance) {
-            this.balance = balance;
-        }
-
-        public float getBalance() {
-            return balance;
-        }
     }
 }
