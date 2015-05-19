@@ -3,6 +3,8 @@ package ru.zzsdeo.money.activities;
 import android.app.AlarmManager;
 import android.app.DialogFragment;
 import android.app.PendingIntent;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -18,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RemoteViews;
 import android.widget.SeekBar;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
@@ -34,6 +37,7 @@ import ru.zzsdeo.money.dialogs.Dialogs;
 import ru.zzsdeo.money.model.ScheduledTransactionCollection;
 import ru.zzsdeo.money.services.ServiceReceiver;
 import ru.zzsdeo.money.services.UpdateTransactionsIntentService;
+import ru.zzsdeo.money.widgets.WidgetReceiver;
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener, Dialogs.DialogListener, ObservableScrollViewCallbacks {
 
@@ -174,6 +178,18 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
                 setTitleAsBalance();
                 schedulerRecyclerViewAdapter.refreshDataSet();
+
+                // обновляем виджет
+
+                ComponentName thisAppWidget = new ComponentName(this, WidgetReceiver.class);
+                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+                int ids[] = appWidgetManager.getAppWidgetIds(thisAppWidget);
+
+                Intent update = new Intent();
+                update.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+                update.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+                sendBroadcast(update);
+
                 dialog.dismiss();
                 break;
         }

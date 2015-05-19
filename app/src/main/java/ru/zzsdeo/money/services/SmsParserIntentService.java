@@ -1,10 +1,15 @@
 package ru.zzsdeo.money.services;
 
 import android.app.IntentService;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.widget.RemoteViews;
 
 import ru.zzsdeo.money.Constants;
+import ru.zzsdeo.money.R;
+import ru.zzsdeo.money.widgets.WidgetReceiver;
 
 
 public class SmsParserIntentService extends IntentService {
@@ -44,6 +49,17 @@ public class SmsParserIntentService extends IntentService {
                 Intent i = new Intent(ServiceReceiver.BROADCAST_ACTION);
                 i.putExtra(ServiceReceiver.ACTION, ServiceReceiver.REFRESH_ALL);
                 sendBroadcast(i);
+
+                // обновляем виджет
+
+                ComponentName thisAppWidget = new ComponentName(getApplicationContext(), WidgetReceiver.class);
+                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
+                int ids[] = appWidgetManager.getAppWidgetIds(thisAppWidget);
+
+                Intent update = new Intent();
+                update.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+                update.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+                getApplicationContext().sendBroadcast(update);
             }
         }
     }
