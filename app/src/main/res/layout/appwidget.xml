@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:id="@+id/linear_layout"
-    android:gravity="center_vertical|center_horizontal">
+    android:gravity="top|center_horizontal">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/text"
-        android:gravity="center_vertical|center_horizontal"
-        android:drawableTop="@mipmap/ic_action_action_trending_up" />
+        android:drawableTop="@mipmap/ic_action_action_account_balance_wallet2"
+        android:layout_marginTop="10dp"/>
 
 </LinearLayout>

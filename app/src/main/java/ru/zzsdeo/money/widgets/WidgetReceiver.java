@@ -24,7 +24,7 @@ public class WidgetReceiver extends AppWidgetProvider {
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
             // Get the layout for the App Widget and attach an on-click listener
-            // to the button
+            // to the it
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.appwidget);
             views.setOnClickPendingIntent(R.id.linear_layout, pendingIntent);
             views.setTextViewText(R.id.text,
