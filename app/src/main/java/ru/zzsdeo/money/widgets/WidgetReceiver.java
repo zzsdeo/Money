@@ -20,7 +20,7 @@ public class WidgetReceiver extends AppWidgetProvider {
         for (int appWidgetId : appWidgetIds) {
             // Create an Intent to launch ExampleActivity
             Intent intent = new Intent(context, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
             // Get the layout for the App Widget and attach an on-click listener

@@ -103,7 +103,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
             alarm.setRepeating(AlarmManager.RTC, Calendar.getInstance().getTimeInMillis(), 4*AlarmManager.INTERVAL_HOUR, pi);
 
-            sharedPreferences.edit().putString(Constants.VERSION_NAME, versionName).apply();
+           // sharedPreferences.edit().putString(Constants.VERSION_NAME, versionName).apply();
         }
 
         // адаптеры

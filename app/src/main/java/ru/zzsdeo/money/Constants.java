@@ -15,4 +15,6 @@ public class Constants {
     public static final int MAX_NUM_OF_MONTHS = 24;
 
     public static final String SHARED_PREFERENCES_NAME = "shared_preferences";
+
+    public static final String NOTIFICATION_GROUP_KEY = "notification_group_ru.zzsdeo.money";
 }

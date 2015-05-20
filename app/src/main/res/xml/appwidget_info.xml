@@ -3,5 +3,4 @@
     android:minWidth="40dp"
     android:minHeight="40dp"
     android:updatePeriodMillis="0"
-    android:initialLayout="@layout/appwidget"
-    android:resizeMode="none" />
+    android:initialLayout="@layout/appwidget" />

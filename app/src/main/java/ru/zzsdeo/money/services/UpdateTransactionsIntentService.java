@@ -1,10 +1,19 @@
 package ru.zzsdeo.money.services;
 
 import android.app.IntentService;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 
+import ru.zzsdeo.money.Constants;
+import ru.zzsdeo.money.R;
+import ru.zzsdeo.money.activities.MainActivity;
 import ru.zzsdeo.money.db.TableScheduledTransactions;
 import ru.zzsdeo.money.model.ScheduledTransaction;
 import ru.zzsdeo.money.model.ScheduledTransactionCollection;
@@ -97,6 +106,72 @@ public class UpdateTransactionsIntentService extends IntentService {
         Intent i = new Intent(ServiceReceiver.BROADCAST_ACTION);
         i.putExtra(ServiceReceiver.ACTION, ServiceReceiver.REFRESH_SCHEDULED_TRANSACTIONS);
         sendBroadcast(i);
+
+        // вешаем нотификацию
+
+        scheduledTransactionCollection = new ScheduledTransactionCollection(getApplicationContext(), // просроченные транзакции, требующие подтверждения
+                new String[] {
+                        TableScheduledTransactions.COLUMN_DATE_IN_MILL + " <= " + nowInMill +
+                                " AND " + TableScheduledTransactions.COLUMN_REPEATING_TYPE_ID + " = " + 0 +
+                                " AND " + TableScheduledTransactions.COLUMN_NEED_APPROVE + " = " + 1,
+                        null
+                });
+
+        /*NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+        for (ScheduledTransaction scheduledTransaction : scheduledTransactionCollection) {
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(this)
+                            .setSmallIcon(R.mipmap.ic_action_action_account_balance_wallet2)
+                            .setGroup(Constants.NOTIFICATION_GROUP_KEY)
+                            .setContentTitle(scheduledTransaction.getComment())
+                            .setContentText(
+                                    String.valueOf(
+                                            BigDecimal.valueOf(scheduledTransaction.getAmount()).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue()
+                                    ));
+
+            i = new Intent(getApplicationContext(), MainActivity.class);
+            //i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, i, 0);
+
+            mBuilder.setContentIntent(pendingIntent);
+
+            //NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.notify((int)scheduledTransaction.getScheduledTransactionId(), mBuilder.build());
+        }*/
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.mipmap.ic_action_action_account_balance_wallet2)
+                        .setContentTitle("Транзакции")
+                        .setContentText("Неподтвержденные");
+                        /*.setContentText(
+                                String.valueOf(
+                                        BigDecimal.valueOf(scheduledTransaction.getAmount()).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue()
+                                ));*/
+        NotificationCompat.InboxStyle inboxStyle =
+                new NotificationCompat.InboxStyle();
+        inboxStyle.setBigContentTitle("Event tracker details:");
+        i = new Intent(getApplicationContext(), MainActivity.class);
+        //i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, i, 0);
+
+        mBuilder.setContentIntent(pendingIntent);
+        for (ScheduledTransaction scheduledTransaction : scheduledTransactionCollection) {
+
+            //inboxStyle.addLine(scheduledTransaction.getComment());
+            inboxStyle.addLine("Alex Faaborg   Check this out");
+        }
+
+        mBuilder.setStyle(inboxStyle)
+                .setGroup(Constants.NOTIFICATION_GROUP_KEY)
+
+                .setGroupSummary(true);
+
+
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(10, mBuilder.build());
+
+
     }
 
     private void cutTransaction(long dateInMill, ScheduledTransactionCollection scheduledTransactionCollection, ScheduledTransaction transaction) {
