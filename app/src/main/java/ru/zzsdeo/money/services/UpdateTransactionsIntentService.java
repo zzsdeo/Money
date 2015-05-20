@@ -117,61 +117,51 @@ public class UpdateTransactionsIntentService extends IntentService {
                         null
                 });
 
-        /*NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        /*NotificationCompat.Builder mBuilder =  new NotificationCompat.Builder(this);
+        mBuilder.setSmallIcon(R.mipmap.ic_action_action_account_balance_wallet2)
+                .setGroup(Constants.NOTIFICATION_GROUP_KEY)
+                .setGroupSummary(true);
+
+        i = new Intent(getApplicationContext(), MainActivity.class);
+        //i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, i, 0);
+        mBuilder.setContentIntent(pendingIntent);
+
+        NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+        inboxStyle.setBigContentTitle("Требуется подтверждение:");
+
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         for (ScheduledTransaction scheduledTransaction : scheduledTransactionCollection) {
-            NotificationCompat.Builder mBuilder =
-                    new NotificationCompat.Builder(this)
-                            .setSmallIcon(R.mipmap.ic_action_action_account_balance_wallet2)
-                            .setGroup(Constants.NOTIFICATION_GROUP_KEY)
-                            .setContentTitle(scheduledTransaction.getComment())
-                            .setContentText(
-                                    String.valueOf(
-                                            BigDecimal.valueOf(scheduledTransaction.getAmount()).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue()
-                                    ));
-
-            i = new Intent(getApplicationContext(), MainActivity.class);
-            //i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, i, 0);
-
-            mBuilder.setContentIntent(pendingIntent);
-
-            //NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.notify((int)scheduledTransaction.getScheduledTransactionId(), mBuilder.build());
+            mBuilder.setContentTitle(scheduledTransaction.getComment())
+                    .setContentText(
+                            String.valueOf(
+                                    BigDecimal.valueOf(scheduledTransaction.getAmount()).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue()
+                            ));
+            inboxStyle.addLine(scheduledTransaction.getComment());
+            mBuilder.setStyle(inboxStyle);
+            mNotificationManager.notify(10, mBuilder.build());
         }*/
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.mipmap.ic_action_action_account_balance_wallet2)
-                        .setContentTitle("Транзакции")
-                        .setContentText("Неподтвержденные");
-                        /*.setContentText(
-                                String.valueOf(
-                                        BigDecimal.valueOf(scheduledTransaction.getAmount()).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue()
-                                ));*/
-        NotificationCompat.InboxStyle inboxStyle =
-                new NotificationCompat.InboxStyle();
-        inboxStyle.setBigContentTitle("Event tracker details:");
+
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
         i = new Intent(getApplicationContext(), MainActivity.class);
         //i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, i, 0);
 
-        mBuilder.setContentIntent(pendingIntent);
         for (ScheduledTransaction scheduledTransaction : scheduledTransactionCollection) {
-
-            //inboxStyle.addLine(scheduledTransaction.getComment());
-            inboxStyle.addLine("Alex Faaborg   Check this out");
+            NotificationCompat.Builder mBuilder =  new NotificationCompat.Builder(this);
+            mBuilder.setSmallIcon(R.mipmap.ic_action_action_account_balance_wallet2)
+                    .setGroup(Constants.NOTIFICATION_GROUP_KEY)
+                            //.setGroupSummary(true)
+                    .setContentIntent(pendingIntent)
+                    .setContentTitle(scheduledTransaction.getComment())
+                    .setContentText(
+                            String.valueOf(
+                                    BigDecimal.valueOf(scheduledTransaction.getAmount()).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue()
+                            ));
+            notificationManager.notify((int)scheduledTransaction.getScheduledTransactionId(), mBuilder.build());
         }
-
-        mBuilder.setStyle(inboxStyle)
-                .setGroup(Constants.NOTIFICATION_GROUP_KEY)
-
-                .setGroupSummary(true);
-
-
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(10, mBuilder.build());
-
-
     }
 
     private void cutTransaction(long dateInMill, ScheduledTransactionCollection scheduledTransactionCollection, ScheduledTransaction transaction) {
