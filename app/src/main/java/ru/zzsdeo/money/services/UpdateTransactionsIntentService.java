@@ -117,51 +117,32 @@ public class UpdateTransactionsIntentService extends IntentService {
                         null
                 });
 
-        /*NotificationCompat.Builder mBuilder =  new NotificationCompat.Builder(this);
-        mBuilder.setSmallIcon(R.mipmap.ic_action_action_account_balance_wallet2)
-                .setGroup(Constants.NOTIFICATION_GROUP_KEY)
-                .setGroupSummary(true);
-
         i = new Intent(getApplicationContext(), MainActivity.class);
-        //i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, i, 0);
-        mBuilder.setContentIntent(pendingIntent);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, i, PendingIntent.FLAG_CANCEL_CURRENT);
 
+        String text = "";
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-        inboxStyle.setBigContentTitle("Требуется подтверждение:");
-
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         for (ScheduledTransaction scheduledTransaction : scheduledTransactionCollection) {
-            mBuilder.setContentTitle(scheduledTransaction.getComment())
-                    .setContentText(
-                            String.valueOf(
-                                    BigDecimal.valueOf(scheduledTransaction.getAmount()).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue()
-                            ));
-            inboxStyle.addLine(scheduledTransaction.getComment());
-            mBuilder.setStyle(inboxStyle);
-            mNotificationManager.notify(10, mBuilder.build());
-        }*/
-
-
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        i = new Intent(getApplicationContext(), MainActivity.class);
-        //i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, i, 0);
-
-        for (ScheduledTransaction scheduledTransaction : scheduledTransactionCollection) {
-            NotificationCompat.Builder mBuilder =  new NotificationCompat.Builder(this);
-            mBuilder.setSmallIcon(R.mipmap.ic_action_action_account_balance_wallet2)
-                    .setGroup(Constants.NOTIFICATION_GROUP_KEY)
-                            //.setGroupSummary(true)
-                    .setContentIntent(pendingIntent)
-                    .setContentTitle(scheduledTransaction.getComment())
-                    .setContentText(
-                            String.valueOf(
-                                    BigDecimal.valueOf(scheduledTransaction.getAmount()).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue()
-                            ));
-            notificationManager.notify((int)scheduledTransaction.getScheduledTransactionId(), mBuilder.build());
+            text = text + ", " + scheduledTransaction.getComment();
+            inboxStyle.addLine(scheduledTransaction.getComment() + " " + String.valueOf(
+                    BigDecimal.valueOf(scheduledTransaction.getAmount()).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue()
+            ));
         }
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
+        builder.setSmallIcon(R.mipmap.ic_action_action_account_balance_wallet2)
+                .setContentTitle(getString(R.string.need_confirm))
+                .setContentText(text.replaceFirst("\\,", "").trim())
+                .setGroup(Constants.NOTIFICATION_GROUP_KEY)
+                .setContentIntent(pendingIntent)
+                .setStyle(inboxStyle);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
+        notificationManager.notify(Constants.NOTIFICATION_ID, builder.build());
+
     }
 
     private void cutTransaction(long dateInMill, ScheduledTransactionCollection scheduledTransactionCollection, ScheduledTransaction transaction) {

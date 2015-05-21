@@ -17,4 +17,5 @@ public class Constants {
     public static final String SHARED_PREFERENCES_NAME = "shared_preferences";
 
     public static final String NOTIFICATION_GROUP_KEY = "notification_group_ru.zzsdeo.money";
+    public static final int NOTIFICATION_ID = 10;
 }
