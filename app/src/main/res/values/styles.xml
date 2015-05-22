@@ -5,4 +5,12 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="InboxStyleNotifComment">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="InboxStyleNotifAmount">
+        <item name="android:textSize">10sp</item>
+    </style>
+
 </resources>

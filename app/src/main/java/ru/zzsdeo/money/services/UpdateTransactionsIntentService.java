@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.text.SpannableStringBuilder;
+import android.text.style.TextAppearanceSpan;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
@@ -118,18 +120,32 @@ public class UpdateTransactionsIntentService extends IntentService {
                 });
 
         i = new Intent(getApplicationContext(), MainActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, i, PendingIntent.FLAG_CANCEL_CURRENT);
 
         String text = "";
+        String comment = "";
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
 
         for (ScheduledTransaction scheduledTransaction : scheduledTransactionCollection) {
-            text = text + ", " + scheduledTransaction.getComment();
-            inboxStyle.addLine(scheduledTransaction.getComment() + " " + String.valueOf(
-                    BigDecimal.valueOf(scheduledTransaction.getAmount()).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue()
-            ));
+            comment = scheduledTransaction.getComment();
+            text = text + ", " + comment;
+            SpannableStringBuilder stringBuilder = new SpannableStringBuilder(comment + "   " +
+                    String.valueOf(
+                            BigDecimal.valueOf(scheduledTransaction.getAmount()).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue()
+                    ));
+            stringBuilder.setSpan(
+                    new TextAppearanceSpan(getApplicationContext(), R.style.InboxStyleNotifComment),
+                    0,
+                    comment.length(),
+                    SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE);
+            stringBuilder.setSpan(
+                    new TextAppearanceSpan(getApplicationContext(), R.style.InboxStyleNotifAmount),
+                    comment.length(),
+                    stringBuilder.length(),
+                    SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE);
+            inboxStyle.addLine(stringBuilder);
         }
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
