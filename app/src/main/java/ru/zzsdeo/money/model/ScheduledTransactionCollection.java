@@ -4,7 +4,6 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.net.Uri;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +14,6 @@ import ru.zzsdeo.money.db.TableScheduledTransactions;
 public class ScheduledTransactionCollection extends ArrayList<ScheduledTransaction> {
 
     private final ContentResolver contentResolver;
-    private final Context context;
 
     public static final String[] SORTED_BY_DATE_DESC = {
             null,
@@ -23,7 +21,6 @@ public class ScheduledTransactionCollection extends ArrayList<ScheduledTransacti
     };
 
     public ScheduledTransactionCollection(Context context) {
-        this.context = context;
         contentResolver = context.getContentResolver();
         Cursor c = contentResolver.query(
                 DatabaseContentProvider.CONTENT_URI_SCHEDULED_TRANSACTIONS,
@@ -53,7 +50,6 @@ public class ScheduledTransactionCollection extends ArrayList<ScheduledTransacti
         } else {
             args = null;
         }
-        this.context = context;
         contentResolver = context.getContentResolver();
         Cursor c = contentResolver.query(
                 DatabaseContentProvider.CONTENT_URI_SCHEDULED_TRANSACTIONS,
@@ -74,7 +70,7 @@ public class ScheduledTransactionCollection extends ArrayList<ScheduledTransacti
         c.close();
     }
 
-    public long addScheduledTransaction(
+    public void addScheduledTransaction(
             long dateInMill,
             float amount,
             String comment,
@@ -91,10 +87,7 @@ public class ScheduledTransactionCollection extends ArrayList<ScheduledTransacti
             cv.put(TableScheduledTransactions.COLUMN_NEED_APPROVE, 0);
         }
         cv.put(TableScheduledTransactions.COLUMN_REPEATING_TYPE_ID, repeatingTypeId);
-        Uri uri = contentResolver.insert(DatabaseContentProvider.CONTENT_URI_SCHEDULED_TRANSACTIONS, cv);
-        long id = Long.valueOf(uri.getLastPathSegment());
-        //add(new ScheduledTransaction(context, id));
-        return id;
+        contentResolver.insert(DatabaseContentProvider.CONTENT_URI_SCHEDULED_TRANSACTIONS, cv);
     }
 
     public void removeScheduledTransaction(long id) {

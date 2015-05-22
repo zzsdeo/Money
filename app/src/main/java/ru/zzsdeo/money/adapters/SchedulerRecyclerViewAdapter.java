@@ -31,6 +31,7 @@ import ru.zzsdeo.money.activities.MainActivity;
 import ru.zzsdeo.money.dialogs.Dialogs;
 import ru.zzsdeo.money.model.ScheduledTransaction;
 import ru.zzsdeo.money.model.ScheduledTransactionCollection;
+import ru.zzsdeo.money.services.NotificationIntentService;
 
 public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<SchedulerRecyclerViewAdapter.ViewHolder>  {
 
@@ -43,6 +44,7 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
     private final FragmentManager mFragmentManager;
     private long endOfTimeSetting;
     private final SharedPreferences mSharedPreferences;
+    private boolean overdue = false;
 
     public SchedulerRecyclerViewAdapter(MainActivity context) {
         mSharedPreferences = context.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
@@ -75,7 +77,6 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
         int sign = 1;
         if (balance < 0) sign = -1;
 
-        boolean overdue = false;
         long nowInMill = Calendar.getInstance().getTimeInMillis();
         if (transaction.getNeedApprove() && transaction.getRepeatingTypeId() == 0 && dateTime <= nowInMill) overdue = true;
 
@@ -93,6 +94,7 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
         mTransactions.clear();
         mTransactions.addAll(getSortedTransactions());
         notifyDataSetChanged();
+        if (overdue) mContext.startService(new Intent(mContext, NotificationIntentService.class));
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements Toolbar.OnMenuItemClickListener {

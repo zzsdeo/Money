@@ -5,10 +5,8 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.widget.RemoteViews;
 
 import ru.zzsdeo.money.Constants;
-import ru.zzsdeo.money.R;
 import ru.zzsdeo.money.widgets.WidgetReceiver;
 
 
