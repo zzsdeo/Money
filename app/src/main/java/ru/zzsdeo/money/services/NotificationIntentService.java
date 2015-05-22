@@ -1,10 +1,10 @@
 package ru.zzsdeo.money.services;
 
 import android.app.IntentService;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.text.SpannableStringBuilder;
 import android.text.style.TextAppearanceSpan;
 
@@ -31,6 +31,8 @@ public class NotificationIntentService extends IntentService {
 
         long nowInMill = Calendar.getInstance().getTimeInMillis();
 
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
         ScheduledTransactionCollection scheduledTransactionCollection = new ScheduledTransactionCollection(getApplicationContext(), // просроченные транзакции, требующие подтверждения
                 new String[] {
                         TableScheduledTransactions.COLUMN_DATE_IN_MILL + " <= " + nowInMill +
@@ -38,6 +40,11 @@ public class NotificationIntentService extends IntentService {
                                 " AND " + TableScheduledTransactions.COLUMN_NEED_APPROVE + " = " + 1,
                         null
                 });
+
+        if (scheduledTransactionCollection.isEmpty()) {
+            notificationManager.cancelAll();
+            return;
+        }
 
         Intent i = new Intent(getApplicationContext(), MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, i, 0);
@@ -75,8 +82,6 @@ public class NotificationIntentService extends IntentService {
                 .setContentIntent(pendingIntent)
                 .setStyle(inboxStyle);
 
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
         notificationManager.notify(Constants.NOTIFICATION_ID, builder.build());
-
     }
 }

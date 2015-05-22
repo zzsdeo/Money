@@ -44,7 +44,6 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
     private final FragmentManager mFragmentManager;
     private long endOfTimeSetting;
     private final SharedPreferences mSharedPreferences;
-    private boolean overdue = false;
 
     public SchedulerRecyclerViewAdapter(MainActivity context) {
         mSharedPreferences = context.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
@@ -78,6 +77,7 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
         if (balance < 0) sign = -1;
 
         long nowInMill = Calendar.getInstance().getTimeInMillis();
+        boolean overdue = false;
         if (transaction.getNeedApprove() && transaction.getRepeatingTypeId() == 0 && dateTime <= nowInMill) overdue = true;
 
         holder.setItems(items, sign, overdue);
@@ -94,7 +94,8 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
         mTransactions.clear();
         mTransactions.addAll(getSortedTransactions());
         notifyDataSetChanged();
-        if (overdue) mContext.startService(new Intent(mContext, NotificationIntentService.class));
+
+        mContext.startService(new Intent(mContext, NotificationIntentService.class));
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements Toolbar.OnMenuItemClickListener {
