@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import ru.zzsdeo.money.activities.MainActivity;
+import ru.zzsdeo.money.model.ScheduledTransactionCollection;
 
 public class ServiceReceiver extends BroadcastReceiver {
 
@@ -19,11 +20,13 @@ public class ServiceReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         switch (intent.getIntExtra(ACTION, 0)) {
             case REFRESH_SCHEDULED_TRANSACTIONS:
-                ((MainActivity) context).schedulerRecyclerViewAdapter.refreshDataSet();
+                ((MainActivity) context).schedulerRecyclerViewAdapter.refreshDataSet(
+                        new ScheduledTransactionCollection(context).getTransactionsHolderCollection());
                 break;
             case REFRESH_ALL:
                 ((MainActivity) context).setTitleAsBalance();
-                ((MainActivity) context).schedulerRecyclerViewAdapter.refreshDataSet();
+                ((MainActivity) context).schedulerRecyclerViewAdapter.refreshDataSet(
+                        new ScheduledTransactionCollection(context).getTransactionsHolderCollection());
                 break;
         }
     }

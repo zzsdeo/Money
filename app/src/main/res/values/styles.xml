@@ -1,8 +1,9 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
         <!-- Customize your theme here. -->
+        <item name="actionBarStyle">@style/BlackActionBar</item>
     </style>
 
     <style name="InboxStyleNotifComment">
@@ -11,6 +12,10 @@
 
     <style name="InboxStyleNotifAmount">
         <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="BlackActionBar" parent="Base.Widget.AppCompat.ActionBar">
+        <item name="background">@color/material_deep_teal_500</item>
     </style>
 
 </resources>

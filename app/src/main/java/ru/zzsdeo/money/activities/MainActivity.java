@@ -107,7 +107,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         // адаптеры
 
-        schedulerRecyclerViewAdapter = new SchedulerRecyclerViewAdapter(this);
+        schedulerRecyclerViewAdapter =
+                new SchedulerRecyclerViewAdapter(this,
+                        new ScheduledTransactionCollection(this).getTransactionsHolderCollection());
 
         // заголовок - баланс
 
@@ -146,12 +148,14 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         switch (requestCode) {
             case Constants.ADD_SCHEDULED_TRANSACTION_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
-                    schedulerRecyclerViewAdapter.refreshDataSet();
+                    schedulerRecyclerViewAdapter.refreshDataSet(
+                            new ScheduledTransactionCollection(this).getTransactionsHolderCollection());
                 }
                 break;
             case Constants.EDIT_SCHEDULED_TRANSACTION_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
-                    schedulerRecyclerViewAdapter.refreshDataSet();
+                    schedulerRecyclerViewAdapter.refreshDataSet(
+                            new ScheduledTransactionCollection(this).getTransactionsHolderCollection());
                 }
         }
     }
@@ -161,7 +165,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         switch (dialogType) {
             case Dialogs.DELETE_SCHEDULED_TRANSACTION:
                 new ScheduledTransactionCollection(this).removeScheduledTransaction(id);
-                schedulerRecyclerViewAdapter.refreshDataSet();
+                schedulerRecyclerViewAdapter.refreshDataSet(
+                        new ScheduledTransactionCollection(this).getTransactionsHolderCollection());
                 dialog.dismiss();
                 break;
             case Dialogs.SETTINGS:
@@ -176,7 +181,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                         .apply();
 
                 setTitleAsBalance();
-                schedulerRecyclerViewAdapter.refreshDataSet();
+                schedulerRecyclerViewAdapter.refreshDataSet(
+                        new ScheduledTransactionCollection(this).getTransactionsHolderCollection());
 
                 // обновляем виджет
 
