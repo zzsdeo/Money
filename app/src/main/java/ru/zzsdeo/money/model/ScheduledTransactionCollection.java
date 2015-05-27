@@ -98,12 +98,11 @@ public class ScheduledTransactionCollection extends ArrayList<ScheduledTransacti
     }
 
     public void removeScheduledTransaction(long id) {
-        int deletedRows = contentResolver.delete(
+        contentResolver.delete(
                 DatabaseContentProvider.CONTENT_URI_SCHEDULED_TRANSACTIONS,
                 TableScheduledTransactions.COLUMN_ID + " = " + id,
                 null
         );
-        if (deletedRows > 0) remove(id);
     }
 
     public ArrayList<TransactionsHolder> getTransactionsHolderCollection() {

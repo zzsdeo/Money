@@ -209,6 +209,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             case Dialogs.SETTINGS:
                 dialog.dismiss();
                 break;
+            case Dialogs.DETAILS:
+                dialog.dismiss();
+                break;
         }
     }
 

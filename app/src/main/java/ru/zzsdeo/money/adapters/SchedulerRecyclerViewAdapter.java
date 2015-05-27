@@ -32,10 +32,10 @@ import ru.zzsdeo.money.services.NotificationIntentService;
 public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<SchedulerRecyclerViewAdapter.ViewHolder>  {
 
     public static final String SCHEDULED_TRANSACTION_ID = "scheduled_transaction_id";
+    public static final String DATE_FORMAT = "dd.MM.yy, HH:mm";
 
-    private ArrayList<ScheduledTransactionCollection.TransactionsHolder> mTransactions;
+    public ArrayList<ScheduledTransactionCollection.TransactionsHolder> mTransactions;
     private final MainActivity mContext;
-    private final static String DATE_FORMAT = "dd.MM.yy, HH:mm";
     private final FragmentManager mFragmentManager;
 
     public SchedulerRecyclerViewAdapter(MainActivity context, ArrayList<ScheduledTransactionCollection.TransactionsHolder> mTransactions) {
@@ -97,6 +97,7 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
             mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
             mToolbar.inflateMenu(R.menu.card_menu);
             mToolbar.setOnMenuItemClickListener(this);
+            mToolbar.setOnClickListener(this);
 
             mAdapter = historyRecyclerViewAdapter;
 
@@ -104,8 +105,6 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
             mTextView2 = (TextView) view.findViewById(R.id.text2);
 
             mImageView = (ImageView) view.findViewById(R.id.image);
-
-            view.setOnClickListener(this);
         }
 
         public void setItems(String[] items, int sign, boolean overdue) {
@@ -150,7 +149,12 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
 
         @Override
         public void onClick(View v) {
-            Log.d("my", "position: " + getPosition());
+            Dialogs dialog = new Dialogs();
+            Bundle bundle = new Bundle();
+            bundle.putInt(Dialogs.DIALOG_TYPE, Dialogs.DETAILS);
+            bundle.putInt(Dialogs.ID, getPosition());
+            dialog.setArguments(bundle);
+            dialog.show(mAdapter.mFragmentManager, Dialogs.DIALOGS_TAG);
         }
     }
 }

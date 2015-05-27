@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_gravity="center_vertical"
+            android:drawableLeft="@mipmap/ic_action_editor_format_quote"
+            android:drawableStart="@mipmap/ic_action_editor_format_quote"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:id="@+id/comment"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_gravity="center_vertical"
+            android:drawableLeft="@mipmap/ic_action_editor_attach_money"
+            android:drawableStart="@mipmap/ic_action_editor_attach_money"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:id="@+id/amount"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_gravity="center_vertical"
+            android:drawableLeft="@mipmap/ic_action_action_account_balance_wallet"
+            android:drawableStart="@mipmap/ic_action_action_account_balance_wallet"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:id="@+id/bal"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_gravity="center_vertical"
+            android:drawableLeft="@mipmap/ic_action_av_repeat"
+            android:drawableStart="@mipmap/ic_action_av_repeat"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:id="@+id/repeating_type"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_gravity="center_vertical"
+            android:drawableLeft="@mipmap/ic_action_action_alarm_on"
+            android:drawableStart="@mipmap/ic_action_action_alarm_on"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:id="@+id/need_confirm"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_gravity="center_vertical"
+            android:drawableLeft="@mipmap/ic_action_action_event"
+            android:drawableStart="@mipmap/ic_action_action_event"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:id="@+id/date_time"/>
+
+    </LinearLayout>
+
+</ScrollView>

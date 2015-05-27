@@ -32,4 +32,6 @@
     <string name="add_scheduled_transaction">Добавить запланированную транзакцию</string>
     <string name="edit_scheduled_transaction">Редактировать запланированную транзакцию</string>
     <string name="need_confirm">Требуется подтверждение</string>
+    <string name="details">Подробно</string>
+    <string name="not_need_confirm">Подтверждение не требуется</string>
 </resources>

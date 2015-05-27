@@ -9,6 +9,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.View;
@@ -18,10 +19,18 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 import ru.zzsdeo.money.Constants;
 import ru.zzsdeo.money.R;
+import ru.zzsdeo.money.activities.MainActivity;
+import ru.zzsdeo.money.adapters.SchedulerRecyclerViewAdapter;
+import ru.zzsdeo.money.model.RepeatingTypes;
+import ru.zzsdeo.money.model.ScheduledTransactionCollection;
 
 public class Dialogs extends DialogFragment implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
@@ -35,6 +44,7 @@ public class Dialogs extends DialogFragment implements DatePickerDialog.OnDateSe
     public static final int TIME_PICKER = 20;
     public static final int DELETE_SCHEDULED_TRANSACTION = 30;
     public static final int SETTINGS = 40;
+    public static final int DETAILS = 50;
 
     private Bundle bundle;
     private DialogListener dialogListener;
@@ -158,6 +168,59 @@ public class Dialogs extends DialogFragment implements DatePickerDialog.OnDateSe
 
                     }
                 });
+                return builder.create();
+
+            case DETAILS:
+                ArrayList<ScheduledTransactionCollection.TransactionsHolder> holders = ((MainActivity) getActivity()).schedulerRecyclerViewAdapter.mTransactions;
+                ScheduledTransactionCollection.TransactionsHolder holder = holders.get(bundle.getInt(ID));
+
+                builder.setTitle(getActivity().getString(R.string.details));
+                v = getActivity().getLayoutInflater().inflate(R.layout.dialog_details, null);
+                builder.setView(v);
+                builder.setNegativeButton(getActivity().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialogListener.onDialogNegativeClick(Dialogs.this, DETAILS);
+                    }
+                });
+
+                TextView comment = (TextView) v.findViewById(R.id.comment);
+                TextView amount = (TextView) v.findViewById(R.id.amount);
+                TextView balance = (TextView) v.findViewById(R.id.bal);
+                TextView repeatingType = (TextView) v.findViewById(R.id.repeating_type);
+                TextView needConfirm = (TextView) v.findViewById(R.id.need_confirm);
+                TextView dateTime = (TextView) v.findViewById(R.id.date_time);
+
+                comment.setText(holder.scheduledTransaction.getComment());
+
+                amount.setText(String.valueOf(holder.scheduledTransaction.getAmount()));
+
+                balance.setText(String.valueOf(holder.getBalance()));
+
+                int rt = holder.scheduledTransaction.getRepeatingTypeId();
+                repeatingType.setText(new RepeatingTypes(getActivity()).get(rt));
+                if (rt == 0) {
+                    repeatingType.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.ic_action_av_repeat_one, 0, 0, 0);
+                } else {
+                    repeatingType.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.ic_action_av_repeat, 0, 0, 0);
+                }
+
+                if (holder.scheduledTransaction.getNeedApprove()) {
+                    needConfirm.setText(getActivity().getString(R.string.need_confirm));
+                    needConfirm.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.ic_action_action_alarm_on, 0, 0, 0);
+                } else {
+                    needConfirm.setText(getActivity().getString(R.string.not_need_confirm));
+                    needConfirm.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.ic_action_action_alarm_off, 0, 0, 0);
+                }
+
+                long dt = holder.dateTime;
+                dateTime.setText(new SimpleDateFormat(SchedulerRecyclerViewAdapter.DATE_FORMAT, Locale.getDefault()).format(new Date(dt)));
+                if (dt <= c.getTimeInMillis()) {
+                    dateTime.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.ic_action_social_notifications_on, 0, 0, 0);
+                } else {
+                    dateTime.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.ic_action_action_event, 0, 0, 0);
+                }
+
                 return builder.create();
 
             default:
