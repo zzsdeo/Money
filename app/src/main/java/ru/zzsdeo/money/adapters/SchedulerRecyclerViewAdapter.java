@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -83,7 +84,7 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
         mContext.startService(new Intent(mContext, NotificationIntentService.class));
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements Toolbar.OnMenuItemClickListener {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements Toolbar.OnMenuItemClickListener, View.OnClickListener {
         private final TextView mTextView1;
         private final TextView mTextView2;
         private final Toolbar mToolbar;
@@ -103,6 +104,8 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
             mTextView2 = (TextView) view.findViewById(R.id.text2);
 
             mImageView = (ImageView) view.findViewById(R.id.image);
+
+            view.setOnClickListener(this);
         }
 
         public void setItems(String[] items, int sign, boolean overdue) {
@@ -143,6 +146,11 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
                 default:
                     return false;
             }
+        }
+
+        @Override
+        public void onClick(View v) {
+            Log.d("my", "position: " + getPosition());
         }
     }
 }
