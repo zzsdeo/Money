@@ -110,6 +110,7 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
         public void setItems(String[] items, int sign, boolean overdue) {
             mToolbar.setTitle(items[0]);
             mToolbar.setSubtitle(items[1]);
+            mToolbar.setLogo(R.mipmap.ic_action_action_alarm_on);
             mTextView1.setText(items[2]);
             if (sign < 0) {
                 mTextView2.setTextColor(Color.RED);
