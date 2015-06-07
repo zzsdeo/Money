@@ -14,13 +14,6 @@
         android:layout_marginRight="7dp"
         card_view:cardElevation="2dp">
 
-        <ImageView
-            android:layout_width="5dp"
-            android:layout_height="match_parent"
-            android:background="@android:color/holo_red_light"
-            android:contentDescription="@string/overdue"
-            android:id="@+id/image" />
-
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_height="match_parent"
@@ -28,6 +21,13 @@
             android:minHeight="?attr/actionBarSize"
             android:gravity="top"
             android:background="@drawable/background_pressed" />
+
+        <ImageView
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/holo_red_light"
+            android:contentDescription="@string/overdue"
+            android:id="@+id/image" />
 
         <LinearLayout
             android:orientation="horizontal"
@@ -49,14 +49,18 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:id="@+id/text1"
-                android:layout_weight="1"
-                android:textColor="@android:color/holo_blue_light" />
+                android:layout_weight="2"
+                android:textColor="@android:color/holo_blue_light"
+                android:gravity="center_vertical"
+                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"/>
+
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:id="@+id/text2"
-                android:layout_weight="1"
-                android:gravity="end"
+                android:layout_weight="3"
+                android:gravity="end|center_vertical"
                 android:textColor="@android:color/black" />
         </LinearLayout>
 

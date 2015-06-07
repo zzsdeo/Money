@@ -19,6 +19,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.SeekBar;
 
@@ -173,11 +174,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 EditText etBalance = (EditText) dialog.getDialog().findViewById(R.id.balance);
                 EditText etCardNumber = (EditText) dialog.getDialog().findViewById(R.id.card_number);
                 SeekBar seekBar = (SeekBar) dialog.getDialog().findViewById(R.id.seek_bar);
+                CheckBox checkBox = (CheckBox) dialog.getDialog().findViewById(R.id.checkbox);
 
                 sharedPreferences.edit()
                         .putString(Constants.BALANCE, etBalance.getText().toString().trim())
                         .putString(Constants.CARD_NUMBER, etCardNumber.getText().toString().trim())
                         .putInt(Constants.NUMBER_OF_MONTHS, seekBar.getProgress() + 1)
+                        .putBoolean(Constants.DISPLAY_DATE_TIME, checkBox.isChecked())
                         .apply();
 
                 setTitleAsBalance();

@@ -13,6 +13,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.SeekBar;
@@ -144,6 +145,7 @@ public class Dialogs extends DialogFragment implements DatePickerDialog.OnDateSe
                 EditText etCardNumber = (EditText) v.findViewById(R.id.card_number);
                 final TextView tvSeekBar = (TextView) v.findViewById(R.id.seek_bar_title);
                 SeekBar seekBar = (SeekBar) v.findViewById(R.id.seek_bar);
+                CheckBox checkBox = (CheckBox) v.findViewById(R.id.checkbox);
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 
                 etBalance.setText(sharedPreferences.getString(Constants.BALANCE, ""));
@@ -168,6 +170,7 @@ public class Dialogs extends DialogFragment implements DatePickerDialog.OnDateSe
 
                     }
                 });
+                checkBox.setChecked(sharedPreferences.getBoolean(Constants.DISPLAY_DATE_TIME, true));
                 return builder.create();
 
             case DETAILS:

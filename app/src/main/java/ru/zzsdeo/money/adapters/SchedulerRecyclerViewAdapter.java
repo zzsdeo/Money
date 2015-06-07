@@ -1,12 +1,15 @@
 package ru.zzsdeo.money.adapters;
 
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.TimeUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import ru.zzsdeo.money.Constants;
 import ru.zzsdeo.money.R;
@@ -37,11 +41,13 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
     public ArrayList<ScheduledTransactionCollection.TransactionsHolder> mTransactions;
     private final MainActivity mContext;
     private final FragmentManager mFragmentManager;
+    private long nowInMill;
 
     public SchedulerRecyclerViewAdapter(MainActivity context, ArrayList<ScheduledTransactionCollection.TransactionsHolder> mTransactions) {
         this.mTransactions = mTransactions;
         mContext = context;
         mFragmentManager = context.getFragmentManager();
+        nowInMill = Calendar.getInstance().getTimeInMillis();
     }
 
     @Override
@@ -55,22 +61,22 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
         ScheduledTransaction transaction = mTransactions.get(position).scheduledTransaction;
         float balance = mTransactions.get(position).getBalance();
         long dateTime = mTransactions.get(position).dateTime;
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 
         String[] items = new String[] {
                 transaction.getComment(),
                 String.valueOf(transaction.getAmount()),
-                new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(new Date(dateTime)),
+                getFormattedDateTime(dateTime, sharedPreferences.getBoolean(Constants.DISPLAY_DATE_TIME, true)),
                 String.valueOf(balance)
         };
 
         int sign = 1;
         if (balance < 0) sign = -1;
 
-        long nowInMill = Calendar.getInstance().getTimeInMillis();
         boolean overdue = false;
         if (transaction.getNeedApprove() && transaction.getRepeatingTypeId() == 0 && dateTime <= nowInMill) overdue = true;
 
-        holder.setItems(items, sign, overdue);
+        holder.setItems(items, sign, overdue, transaction.getNeedApprove(), transaction.getRepeatingTypeId());
     }
 
     @Override
@@ -82,6 +88,18 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
         this.mTransactions = mTransactions;
         notifyDataSetChanged();
         mContext.startService(new Intent(mContext, NotificationIntentService.class));
+    }
+
+    private String getFormattedDateTime (long dateInMill, boolean displayDateTime) {
+        if (displayDateTime) {
+            return new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(new Date(dateInMill));
+        } else {
+            long when = nowInMill - dateInMill;
+            if (when < 0) {
+            }
+
+            return "";
+        }
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements Toolbar.OnMenuItemClickListener, View.OnClickListener {
@@ -107,17 +125,26 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
             mImageView = (ImageView) view.findViewById(R.id.image);
         }
 
-        public void setItems(String[] items, int sign, boolean overdue) {
+        public void setItems(String[] items, int sign, boolean overdue, boolean needConfirm, int repeatingType) {
             mToolbar.setTitle(items[0]);
             mToolbar.setSubtitle(items[1]);
-            mToolbar.setLogo(R.mipmap.ic_action_action_alarm_on);
             mTextView1.setText(items[2]);
+            if (needConfirm) {
+                mTextView1.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.ic_stat_action_alarm_on, 0);
+            } else {
+                mTextView1.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            }
             if (sign < 0) {
                 mTextView2.setTextColor(Color.RED);
             } else {
                 mTextView2.setTextColor(Color.GREEN);
             }
             mTextView2.setText(items[3]);
+            if (repeatingType == 0) {
+                mTextView2.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.ic_stat_av_repeat_one, 0, 0, 0);
+            } else {
+                mTextView2.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            }
             if (overdue) {
                 mImageView.setVisibility(View.VISIBLE);
             } else {

@@ -34,4 +34,6 @@
     <string name="need_confirm">Требуется подтверждение</string>
     <string name="details">Подробно</string>
     <string name="not_need_confirm">Подтверждение не требуется</string>
+    <string name="total">Всего</string>
+    <string name="display_date_time">Отображать точную дату в списке транзакций</string>
 </resources>

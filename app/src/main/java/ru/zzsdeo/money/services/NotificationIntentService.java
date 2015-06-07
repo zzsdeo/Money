@@ -72,6 +72,7 @@ public class NotificationIntentService extends IntentService {
                     SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE);
             inboxStyle.addLine(stringBuilder);
         }
+        inboxStyle.setSummaryText(getString(R.string.total) + ": " + scheduledTransactionCollection.size());
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
         builder.setSmallIcon(R.mipmap.ic_action_action_account_balance_wallet2)

@@ -10,6 +10,7 @@ public class Constants {
     public static final String BALANCE = "balance";
     public static final String NUMBER_OF_MONTHS = "number_of_months";
     public static final String CARD_NUMBER = "card_number";
+    public static final String DISPLAY_DATE_TIME = "display_date_time";
 
     public static final int DEFAULT_NUM_OF_MONTHS = 12;
     public static final int MAX_NUM_OF_MONTHS = 24;
@@ -18,4 +19,10 @@ public class Constants {
 
     public static final String NOTIFICATION_GROUP_KEY = "notification_group_ru.zzsdeo.money";
     public static final int NOTIFICATION_ID = 10;
+
+    public static final long TODAY = 86400000l;
+    public static final long TOMORROW = TODAY * 2;
+    public static final long DAY_AFTER_TOMORROW = TODAY * 3;
+    public static final long THREE_DAYS_LATER = TODAY * 4;
+    public static final long THIS_WEEK = 0;
 }
