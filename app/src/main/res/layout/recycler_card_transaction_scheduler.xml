@@ -49,7 +49,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:id="@+id/text1"
-                android:layout_weight="2"
+                android:layout_weight="3"
                 android:textColor="@android:color/holo_blue_light"
                 android:gravity="center_vertical"
                 android:layout_marginRight="5dp"
@@ -59,7 +59,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:id="@+id/text2"
-                android:layout_weight="3"
+                android:layout_weight="2"
                 android:gravity="end|center_vertical"
                 android:textColor="@android:color/black" />
         </LinearLayout>

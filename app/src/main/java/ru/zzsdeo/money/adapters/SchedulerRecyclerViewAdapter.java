@@ -42,12 +42,14 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
     private final MainActivity mContext;
     private final FragmentManager mFragmentManager;
     private long nowInMill;
+    private Calendar calendar = Calendar.getInstance();
+    private Calendar itemCal = Calendar.getInstance();
 
     public SchedulerRecyclerViewAdapter(MainActivity context, ArrayList<ScheduledTransactionCollection.TransactionsHolder> mTransactions) {
         this.mTransactions = mTransactions;
         mContext = context;
         mFragmentManager = context.getFragmentManager();
-        nowInMill = Calendar.getInstance().getTimeInMillis();
+        nowInMill = calendar.getTimeInMillis();
     }
 
     @Override
@@ -94,11 +96,40 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
         if (displayDateTime) {
             return new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(new Date(dateInMill));
         } else {
-            long when = nowInMill - dateInMill;
-            if (when < 0) {
+            itemCal.setTimeInMillis(dateInMill);
+            int difference = itemCal.get(Calendar.DAY_OF_YEAR) - calendar.get(Calendar.DAY_OF_YEAR);
+            if (difference < 0) {
+                return "Просрочено дней" + ": " + (-difference);
+            } else {
+                switch (difference) {
+                    case 0:
+                        return "Сегодня";
+                    case 1:
+                        return "Завтра";
+                    case 2:
+                        return "Послезавтра";
+                    case 3:
+                        return "Через три дня";
+                    default:
+                        difference = itemCal.get(Calendar.WEEK_OF_YEAR) - calendar.get(Calendar.WEEK_OF_YEAR);
+                        switch (difference) {
+                            case 0:
+                                return "На этой неделе";
+                            case 1:
+                                return "На следующей неделе";
+                            default:
+                                difference = itemCal.get(Calendar.MONTH) - calendar.get(Calendar.MONTH);
+                                switch (difference) {
+                                    case 0:
+                                        return "В этом месяце";
+                                    case 1:
+                                        return "В следующем месяце";
+                                    default:
+                                        return "Не скоро";
+                                }
+                        }
+                }
             }
-
-            return "";
         }
     }
 
