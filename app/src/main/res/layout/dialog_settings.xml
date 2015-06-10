@@ -58,7 +58,8 @@
             android:layout_height="wrap_content"
             android:text="@string/display_date_time"
             style="@style/Base.TextAppearance.AppCompat.Small"
-            android:id="@+id/checkbox"/>
+            android:id="@+id/checkbox"
+            android:layout_marginBottom="10dp" />
 
     </LinearLayout>
 
