@@ -36,4 +36,15 @@
     <string name="not_need_confirm">Подтверждение не требуется</string>
     <string name="total">Всего</string>
     <string name="display_date_time">Отображать точную дату в списке транзакций</string>
+    <string name="days_overdue">Просрочено дней</string>
+    <string name="today">Сегодня</string>
+    <string name="tomorrow">Завтра</string>
+    <string name="day_after_tomorrow">Послезавтра</string>
+    <string name="three_days_later">Через три дня</string>
+    <string name="this_week">На этой неделе</string>
+    <string name="next_week">На следующей неделе</string>
+    <string name="this_month">В этом месяце</string>
+    <string name="next_month">В следующем месяце</string>
+    <string name="not_soon">Не скоро</string>
+    <string name="next_year">В следующем году</string>
 </resources>

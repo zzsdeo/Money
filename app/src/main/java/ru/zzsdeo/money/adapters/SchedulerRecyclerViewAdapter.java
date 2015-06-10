@@ -8,8 +8,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.util.TimeUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import ru.zzsdeo.money.Constants;
 import ru.zzsdeo.money.R;
@@ -41,9 +38,9 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
     public ArrayList<ScheduledTransactionCollection.TransactionsHolder> mTransactions;
     private final MainActivity mContext;
     private final FragmentManager mFragmentManager;
-    private long nowInMill;
-    private Calendar calendar = Calendar.getInstance();
-    private Calendar itemCal = Calendar.getInstance();
+    private final long nowInMill;
+    private final Calendar calendar = Calendar.getInstance();
+    private final Calendar itemCal = Calendar.getInstance();
 
     public SchedulerRecyclerViewAdapter(MainActivity context, ArrayList<ScheduledTransactionCollection.TransactionsHolder> mTransactions) {
         this.mTransactions = mTransactions;
@@ -97,38 +94,44 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
             return new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(new Date(dateInMill));
         } else {
             itemCal.setTimeInMillis(dateInMill);
-            int difference = itemCal.get(Calendar.DAY_OF_YEAR) - calendar.get(Calendar.DAY_OF_YEAR);
-            if (difference < 0) {
-                return "Просрочено дней" + ": " + (-difference);
-            } else {
-                switch (difference) {
-                    case 0:
-                        return "Сегодня";
-                    case 1:
-                        return "Завтра";
-                    case 2:
-                        return "Послезавтра";
-                    case 3:
-                        return "Через три дня";
-                    default:
-                        difference = itemCal.get(Calendar.WEEK_OF_YEAR) - calendar.get(Calendar.WEEK_OF_YEAR);
+            int difference = itemCal.get(Calendar.YEAR) - calendar.get(Calendar.YEAR);
+            switch (difference) {
+                case 1:
+                    return mContext.getString(R.string.next_year);
+                default:
+                    difference = itemCal.get(Calendar.DAY_OF_YEAR) - calendar.get(Calendar.DAY_OF_YEAR);
+                    if (difference < 0) {
+                        return mContext.getString(R.string.days_overdue) + ": " + (-difference);
+                    } else {
                         switch (difference) {
                             case 0:
-                                return "На этой неделе";
+                                return mContext.getString(R.string.today);
                             case 1:
-                                return "На следующей неделе";
+                                return mContext.getString(R.string.tomorrow);
+                            case 2:
+                                return mContext.getString(R.string.day_after_tomorrow);
+                            case 3:
+                                return mContext.getString(R.string.three_days_later);
                             default:
-                                difference = itemCal.get(Calendar.MONTH) - calendar.get(Calendar.MONTH);
+                                difference = itemCal.get(Calendar.WEEK_OF_YEAR) - calendar.get(Calendar.WEEK_OF_YEAR);
                                 switch (difference) {
                                     case 0:
-                                        return "В этом месяце";
+                                        return mContext.getString(R.string.this_week);
                                     case 1:
-                                        return "В следующем месяце";
+                                        return mContext.getString(R.string.next_week);
                                     default:
-                                        return "Не скоро";
+                                        difference = itemCal.get(Calendar.MONTH) - calendar.get(Calendar.MONTH);
+                                        switch (difference) {
+                                            case 0:
+                                                return mContext.getString(R.string.this_month);
+                                            case 1:
+                                                return mContext.getString(R.string.next_month);
+                                            default:
+                                                return mContext.getString(R.string.not_soon);
+                                        }
                                 }
                         }
-                }
+                    }
             }
         }
     }
