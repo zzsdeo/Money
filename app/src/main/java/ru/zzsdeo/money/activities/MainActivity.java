@@ -193,7 +193,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
                 int ids[] = appWidgetManager.getAppWidgetIds(thisAppWidget);
 
-                Intent update = new Intent();
+                Intent update = new Intent(this, WidgetReceiver.class);
                 update.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
                 update.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
                 sendBroadcast(update);

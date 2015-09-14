@@ -22,6 +22,7 @@ public class SmsParserIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
 
         String sms = intent.getExtras().getString(SmsReceiver.SMS_BODY);
+        assert sms != null;
         if (sms.startsWith("Telecard")) {
             String dostupno = "";
             String cardNumber = "";
@@ -54,7 +55,7 @@ public class SmsParserIntentService extends IntentService {
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
                 int ids[] = appWidgetManager.getAppWidgetIds(thisAppWidget);
 
-                Intent update = new Intent();
+                Intent update = new Intent(this, WidgetReceiver.class);
                 update.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
                 update.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
                 getApplicationContext().sendBroadcast(update);
