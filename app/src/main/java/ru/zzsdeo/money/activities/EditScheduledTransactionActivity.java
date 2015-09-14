@@ -2,7 +2,7 @@ package ru.zzsdeo.money.activities;
 
 import android.app.DialogFragment;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -24,7 +24,7 @@ import ru.zzsdeo.money.dialogs.Dialogs;
 import ru.zzsdeo.money.model.RepeatingTypes;
 import ru.zzsdeo.money.model.ScheduledTransaction;
 
-public class EditScheduledTransactionActivity extends ActionBarActivity
+public class EditScheduledTransactionActivity extends AppCompatActivity
         implements
         View.OnClickListener,
         Dialogs.DialogListener,

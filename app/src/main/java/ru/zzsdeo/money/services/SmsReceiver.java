@@ -18,10 +18,12 @@ public class SmsReceiver extends BroadcastReceiver {
         Bundle bundle = intent.getExtras();
 
         Object[] messages = (Object[]) bundle.get("pdus");
+        assert messages != null;
         SmsMessage[] sms = new SmsMessage[messages.length];
 
         StringBuilder sb = new StringBuilder();
         for (int n = 0; n < messages.length; n++) {
+            //noinspection deprecation
             sms[n] = SmsMessage.createFromPdu((byte[]) messages[n]);
             sb.append(sms[n].getMessageBody());
         }

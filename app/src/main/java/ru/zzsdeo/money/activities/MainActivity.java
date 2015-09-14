@@ -13,7 +13,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.Menu;
@@ -39,7 +39,7 @@ import ru.zzsdeo.money.services.ServiceReceiver;
 import ru.zzsdeo.money.services.UpdateTransactionsIntentService;
 import ru.zzsdeo.money.widgets.WidgetReceiver;
 
-public class MainActivity extends ActionBarActivity implements View.OnClickListener, Dialogs.DialogListener, ObservableScrollViewCallbacks {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, Dialogs.DialogListener, ObservableScrollViewCallbacks {
 
     public SchedulerRecyclerViewAdapter schedulerRecyclerViewAdapter;
     private SharedPreferences sharedPreferences;
@@ -241,6 +241,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     @Override
     public void onUpOrCancelMotionEvent(ScrollState scrollState) {
         ActionBar ab = getSupportActionBar();
+        assert ab != null;
         if (scrollState == ScrollState.UP) {
             if (ab.isShowing()) {
                 ab.hide();
@@ -254,9 +255,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     public void setTitleAsBalance () {
         String title = sharedPreferences.getString(Constants.BALANCE, getString(R.string.app_name));
-        if (title != null) {
-            if (title.isEmpty()) title = getString(R.string.app_name);
-        }
+        if (title.isEmpty()) title = getString(R.string.app_name);
+        //noinspection ConstantConditions
         getSupportActionBar().setTitle(title);
     }
 }

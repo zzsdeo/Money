@@ -177,9 +177,7 @@ public class ScheduledTransactionCollection extends ArrayList<ScheduledTransacti
 
         String stringBalance = mSharedPreferences.getString(Constants.BALANCE, "");
         float balance = 0;
-        if (stringBalance != null) {
-            if (!stringBalance.isEmpty()) balance = Float.parseFloat(stringBalance);
-        }
+        if (!stringBalance.isEmpty()) balance = Float.parseFloat(stringBalance);
         for (TransactionsHolder transactionsHolder : mTransactions) {
             balance = balance + transactionsHolder.scheduledTransaction.getAmount();
             transactionsHolder.setBalance(balance);

@@ -193,14 +193,14 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
                     Dialogs dialog = new Dialogs();
                     Bundle bundle = new Bundle();
                     bundle.putInt(Dialogs.DIALOG_TYPE, Dialogs.DELETE_SCHEDULED_TRANSACTION);
-                    bundle.putLong(Dialogs.ID, mAdapter.mTransactions.get(getPosition()).scheduledTransaction.getScheduledTransactionId());
+                    bundle.putLong(Dialogs.ID, mAdapter.mTransactions.get(getAdapterPosition()).scheduledTransaction.getScheduledTransactionId());
                     dialog.setArguments(bundle);
                     dialog.show(mAdapter.mFragmentManager, Dialogs.DIALOGS_TAG);
                     return true;
                 case R.id.edit_item:
                     Intent i = new Intent(mAdapter.mContext, EditScheduledTransactionActivity.class);
                     Bundle b = new Bundle();
-                    b.putLong(SCHEDULED_TRANSACTION_ID, mAdapter.mTransactions.get(getPosition()).scheduledTransaction.getScheduledTransactionId());
+                    b.putLong(SCHEDULED_TRANSACTION_ID, mAdapter.mTransactions.get(getAdapterPosition()).scheduledTransaction.getScheduledTransactionId());
                     i.putExtras(b);
                     mAdapter.mContext.startActivityForResult(i, Constants.EDIT_SCHEDULED_TRANSACTION_REQUEST_CODE);
                     return true;
@@ -214,7 +214,7 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
             Dialogs dialog = new Dialogs();
             Bundle bundle = new Bundle();
             bundle.putInt(Dialogs.DIALOG_TYPE, Dialogs.DETAILS);
-            bundle.putInt(Dialogs.ID, getPosition());
+            bundle.putInt(Dialogs.ID, getAdapterPosition());
             dialog.setArguments(bundle);
             dialog.show(mAdapter.mFragmentManager, Dialogs.DIALOGS_TAG);
         }
