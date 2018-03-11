@@ -23,42 +23,38 @@ public class SmsParserIntentService extends IntentService {
 
         String sms = intent.getExtras().getString(SmsReceiver.SMS_BODY);
         assert sms != null;
-        if (sms.startsWith("Telecard")) {
-            String dostupno = "";
-            String cardNumber = "";
 
-            String[] parsedSms = sms.split(";");
-            for (String str : parsedSms) {
-                str = str.trim();
-                if (str.matches("Card\\d\\d\\d\\d")) {
-                    cardNumber = str.substring(4);
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+        String cardNumber = sharedPreferences.getString(Constants.CARD_NUMBER, "");
+
+        if (sms.matches("\\*" + cardNumber + ".+")) {
+            String[] parsedSms = sms.split("\\s");
+            if (parsedSms.length > 0) {
+                String dostupno = parsedSms[parsedSms.length - 2];
+                if (dostupno.equals("Доступно")) {
+                    String balance = parsedSms[parsedSms.length - 1];
+                    balance = balance.substring(0, balance.length() - 1);
+
+                    sharedPreferences.edit().putString(Constants.BALANCE, balance).apply();
+
+                    // посылаем сообщение на обновление списка транзакций
+
+                    Intent i = new Intent(ServiceReceiver.BROADCAST_ACTION);
+                    i.putExtra(ServiceReceiver.ACTION, ServiceReceiver.REFRESH_ALL);
+                    sendBroadcast(i);
+
+                    // обновляем виджет
+
+                    ComponentName thisAppWidget = new ComponentName(getApplicationContext(), WidgetReceiver.class);
+                    AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
+                    int ids[] = appWidgetManager.getAppWidgetIds(thisAppWidget);
+
+                    Intent update = new Intent(this, WidgetReceiver.class);
+                    update.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+                    update.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+                    getApplicationContext().sendBroadcast(update);
                 }
-                if (str.matches("dostupno:\\s[0-9\\.]+(\\sRUR)")) {
-                    dostupno = str.replaceAll("dostupno:\\s|\\sRUR", "").trim();
-                }
-            }
 
-            SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
-
-            if (!cardNumber.isEmpty() && cardNumber.equals(sharedPreferences.getString(Constants.CARD_NUMBER, ""))) {
-                sharedPreferences.edit().putString(Constants.BALANCE, dostupno).apply();
-
-                // посылаем сообщение на обновление списка транзакций
-
-                Intent i = new Intent(ServiceReceiver.BROADCAST_ACTION);
-                i.putExtra(ServiceReceiver.ACTION, ServiceReceiver.REFRESH_ALL);
-                sendBroadcast(i);
-
-                // обновляем виджет
-
-                ComponentName thisAppWidget = new ComponentName(getApplicationContext(), WidgetReceiver.class);
-                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
-                int ids[] = appWidgetManager.getAppWidgetIds(thisAppWidget);
-
-                Intent update = new Intent(this, WidgetReceiver.class);
-                update.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-                update.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
-                getApplicationContext().sendBroadcast(update);
             }
         }
     }
