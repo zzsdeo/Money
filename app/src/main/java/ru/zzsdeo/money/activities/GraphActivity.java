@@ -49,7 +49,7 @@ public class GraphActivity extends Activity {
         graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this));
         graph.getGridLabelRenderer().setNumHorizontalLabels(3);
         graph.getViewport().setMinX(dataHolder.get(0).dateTime);
-        graph.getViewport().setMaxX(dataHolder.get(0).dateTime + 5184000000l);
+        graph.getViewport().setMaxX(dataHolder.get(0).dateTime + 5184000000L);
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setScalable(true);
         graph.getViewport().setScrollable(true);

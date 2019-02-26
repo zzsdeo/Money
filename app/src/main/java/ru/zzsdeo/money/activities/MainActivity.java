@@ -255,6 +255,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void setTitleAsBalance () {
         String title = sharedPreferences.getString(Constants.BALANCE, getString(R.string.app_name));
+        assert title != null;
         if (title.isEmpty()) title = getString(R.string.app_name);
         //noinspection ConstantConditions
         getSupportActionBar().setTitle(title);

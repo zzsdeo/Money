@@ -30,8 +30,8 @@ public class SmsParserIntentService extends IntentService {
         if (sms.matches("\\*" + cardNumber + ".+")) {
             String[] parsedSms = sms.split("\\s");
             if (parsedSms.length > 0) {
-                String dostupno = parsedSms[parsedSms.length - 2];
-                if (dostupno.equals("Доступно")) {
+                String available = parsedSms[parsedSms.length - 2];
+                if (available.equals("Доступно")) {
                     String balance = parsedSms[parsedSms.length - 1];
                     balance = balance.substring(0, balance.length() - 1);
 
