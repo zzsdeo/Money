@@ -52,8 +52,9 @@ public class NotificationIntentService extends IntentService {
         }
 
         Intent i = new Intent(getApplicationContext(), MainActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, i, 0);
-
         StringBuilder text = new StringBuilder();
         String comment;
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
@@ -77,7 +78,7 @@ public class NotificationIntentService extends IntentService {
         }
         inboxStyle.setSummaryText(getString(R.string.total) + ": " + scheduledTransactionCollection.size());
 
-        createNotificationChannels();
+        createNotificationChannel();
         NotificationCompat.Builder builder = new  NotificationCompat.Builder(getApplicationContext(), NOTIFICATION_CHANNEL_ID);
         builder.setSmallIcon(R.mipmap.ic_action_action_account_balance_wallet2)
                 .setContentTitle(getString(R.string.need_confirm))
@@ -90,7 +91,7 @@ public class NotificationIntentService extends IntentService {
         notificationManager.notify(Constants.NOTIFICATION_ID, builder.build());
     }
 
-    private void createNotificationChannels() {
+    private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
             notificationManager
