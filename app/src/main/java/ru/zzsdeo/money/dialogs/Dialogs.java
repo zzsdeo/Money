@@ -1,10 +1,8 @@
 package ru.zzsdeo.money.dialogs;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,6 +16,9 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -68,18 +69,19 @@ public class Dialogs extends DialogFragment implements DatePickerDialog.OnDateSe
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
         try {
             // Instantiate the NoticeDialogListener so we can send events to the host
-            dialogListener = (DialogListener) activity;
+            dialogListener = (DialogListener) context;
         } catch (ClassCastException e) {
             // The activity doesn't implement the interface, throw exception
-            throw new ClassCastException(activity.toString()
+            throw new ClassCastException(context.toString()
                     + " must implement DialogListener");
         }
     }
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -150,13 +152,13 @@ public class Dialogs extends DialogFragment implements DatePickerDialog.OnDateSe
                 etBalance.setText(sharedPreferences.getString(Constants.BALANCE, ""));
                 etCardNumber.setText(sharedPreferences.getString(Constants.CARD_NUMBER, ""));
                 int progress = sharedPreferences.getInt(Constants.NUMBER_OF_MONTHS, Constants.DEFAULT_NUM_OF_MONTHS);
-                tvSeekBar.append(" " + String.valueOf(progress));
+                tvSeekBar.append(" " + progress);
                 seekBar.setMax(Constants.MAX_NUM_OF_MONTHS - 1);
                 seekBar.setProgress(progress - 1);
                 seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        tvSeekBar.setText(getActivity().getString(R.string.num_of_months_to_planning) + " " + (progress + 1));
+                        tvSeekBar.setText(String.format(Locale.getDefault(),"%s %d", getActivity().getString(R.string.num_of_months_to_planning), progress + 1));
                     }
 
                     @Override

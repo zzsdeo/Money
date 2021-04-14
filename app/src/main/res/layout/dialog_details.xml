@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -13,11 +14,11 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:layout_gravity="center_vertical"
-            android:drawableLeft="@mipmap/ic_action_editor_format_quote"
-            android:drawableStart="@mipmap/ic_action_editor_format_quote"
             android:drawablePadding="10dp"
             android:gravity="center_vertical"
-            android:id="@+id/comment"/>
+            android:id="@+id/comment"
+            app:drawableLeftCompat="@mipmap/ic_action_editor_format_quote"
+            app:drawableStartCompat="@mipmap/ic_action_editor_format_quote" />
 
 
         <TextView
@@ -25,55 +26,55 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:layout_gravity="center_vertical"
-            android:drawableLeft="@mipmap/ic_action_editor_attach_money"
-            android:drawableStart="@mipmap/ic_action_editor_attach_money"
             android:drawablePadding="10dp"
             android:gravity="center_vertical"
-            android:id="@+id/amount"/>
+            android:id="@+id/amount"
+            app:drawableLeftCompat="@mipmap/ic_action_editor_attach_money"
+            app:drawableStartCompat="@mipmap/ic_action_editor_attach_money" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:layout_gravity="center_vertical"
-            android:drawableLeft="@mipmap/ic_action_action_account_balance_wallet"
-            android:drawableStart="@mipmap/ic_action_action_account_balance_wallet"
             android:drawablePadding="10dp"
             android:gravity="center_vertical"
-            android:id="@+id/bal"/>
+            android:id="@+id/bal"
+            app:drawableLeftCompat="@mipmap/ic_action_action_account_balance_wallet"
+            app:drawableStartCompat="@mipmap/ic_action_action_account_balance_wallet" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:layout_gravity="center_vertical"
-            android:drawableLeft="@mipmap/ic_action_av_repeat"
-            android:drawableStart="@mipmap/ic_action_av_repeat"
             android:drawablePadding="10dp"
             android:gravity="center_vertical"
-            android:id="@+id/repeating_type"/>
+            android:id="@+id/repeating_type"
+            app:drawableLeftCompat="@mipmap/ic_action_av_repeat"
+            app:drawableStartCompat="@mipmap/ic_action_av_repeat" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:layout_gravity="center_vertical"
-            android:drawableLeft="@mipmap/ic_action_action_alarm_on"
-            android:drawableStart="@mipmap/ic_action_action_alarm_on"
             android:drawablePadding="10dp"
             android:gravity="center_vertical"
-            android:id="@+id/need_confirm"/>
+            android:id="@+id/need_confirm"
+            app:drawableLeftCompat="@mipmap/ic_action_action_alarm_on"
+            app:drawableStartCompat="@mipmap/ic_action_action_alarm_on" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:layout_gravity="center_vertical"
-            android:drawableLeft="@mipmap/ic_action_action_event"
-            android:drawableStart="@mipmap/ic_action_action_event"
             android:drawablePadding="10dp"
             android:gravity="center_vertical"
-            android:id="@+id/date_time"/>
+            android:id="@+id/date_time"
+            app:drawableStartCompat="@mipmap/ic_action_action_event"
+            app:drawableLeftCompat="@mipmap/ic_action_action_event" />
 
     </LinearLayout>
 

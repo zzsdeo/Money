@@ -47,7 +47,7 @@ public class SmsParserIntentService extends IntentService {
 
                     ComponentName thisAppWidget = new ComponentName(getApplicationContext(), WidgetReceiver.class);
                     AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
-                    int ids[] = appWidgetManager.getAppWidgetIds(thisAppWidget);
+                    int[] ids = appWidgetManager.getAppWidgetIds(thisAppWidget);
 
                     Intent update = new Intent(this, WidgetReceiver.class);
                     update.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);

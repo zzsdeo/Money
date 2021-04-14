@@ -1,19 +1,21 @@
 package ru.zzsdeo.money.adapters;
 
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -45,10 +47,11 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
     public SchedulerRecyclerViewAdapter(MainActivity context, ArrayList<ScheduledTransactionCollection.TransactionsHolder> mTransactions) {
         this.mTransactions = mTransactions;
         mContext = context;
-        mFragmentManager = context.getFragmentManager();
+        mFragmentManager = context.getSupportFragmentManager();
         nowInMill = calendar.getTimeInMillis();
     }
 
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_card_transaction_scheduler, parent, false);
@@ -56,7 +59,7 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ScheduledTransaction transaction = mTransactions.get(position).scheduledTransaction;
         float balance = mTransactions.get(position).getBalance();
         long dateTime = mTransactions.get(position).dateTime;
@@ -95,43 +98,41 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
         } else {
             itemCal.setTimeInMillis(dateInMill);
             int difference = itemCal.get(Calendar.YEAR) - calendar.get(Calendar.YEAR);
-            switch (difference) {
-                case 1:
-                    return mContext.getString(R.string.next_year);
-                default:
-                    difference = itemCal.get(Calendar.DAY_OF_YEAR) - calendar.get(Calendar.DAY_OF_YEAR);
-                    if (difference < 0) {
-                        return mContext.getString(R.string.days_overdue) + ": " + (-difference);
-                    } else {
+            if (difference == 1) {
+                return mContext.getString(R.string.next_year);
+            }
+            difference = itemCal.get(Calendar.DAY_OF_YEAR) - calendar.get(Calendar.DAY_OF_YEAR);
+            if (difference < 0) {
+                return mContext.getString(R.string.days_overdue) + ": " + (-difference);
+            } else {
+                switch (difference) {
+                    case 0:
+                        return mContext.getString(R.string.today);
+                    case 1:
+                        return mContext.getString(R.string.tomorrow);
+                    case 2:
+                        return mContext.getString(R.string.day_after_tomorrow);
+                    case 3:
+                        return mContext.getString(R.string.three_days_later);
+                    default:
+                        difference = itemCal.get(Calendar.WEEK_OF_YEAR) - calendar.get(Calendar.WEEK_OF_YEAR);
                         switch (difference) {
                             case 0:
-                                return mContext.getString(R.string.today);
+                                return mContext.getString(R.string.this_week);
                             case 1:
-                                return mContext.getString(R.string.tomorrow);
-                            case 2:
-                                return mContext.getString(R.string.day_after_tomorrow);
-                            case 3:
-                                return mContext.getString(R.string.three_days_later);
+                                return mContext.getString(R.string.next_week);
                             default:
-                                difference = itemCal.get(Calendar.WEEK_OF_YEAR) - calendar.get(Calendar.WEEK_OF_YEAR);
+                                difference = itemCal.get(Calendar.MONTH) - calendar.get(Calendar.MONTH);
                                 switch (difference) {
                                     case 0:
-                                        return mContext.getString(R.string.this_week);
+                                        return mContext.getString(R.string.this_month);
                                     case 1:
-                                        return mContext.getString(R.string.next_week);
+                                        return mContext.getString(R.string.next_month);
                                     default:
-                                        difference = itemCal.get(Calendar.MONTH) - calendar.get(Calendar.MONTH);
-                                        switch (difference) {
-                                            case 0:
-                                                return mContext.getString(R.string.this_month);
-                                            case 1:
-                                                return mContext.getString(R.string.next_month);
-                                            default:
-                                                return mContext.getString(R.string.not_soon);
-                                        }
+                                        return mContext.getString(R.string.not_soon);
                                 }
                         }
-                    }
+                }
             }
         }
     }
@@ -193,14 +194,14 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
                     Dialogs dialog = new Dialogs();
                     Bundle bundle = new Bundle();
                     bundle.putInt(Dialogs.DIALOG_TYPE, Dialogs.DELETE_SCHEDULED_TRANSACTION);
-                    bundle.putLong(Dialogs.ID, mAdapter.mTransactions.get(getAdapterPosition()).scheduledTransaction.getScheduledTransactionId());
+                    bundle.putLong(Dialogs.ID, mAdapter.mTransactions.get(getBindingAdapterPosition()).scheduledTransaction.getScheduledTransactionId());
                     dialog.setArguments(bundle);
                     dialog.show(mAdapter.mFragmentManager, Dialogs.DIALOGS_TAG);
                     return true;
                 case R.id.edit_item:
                     Intent i = new Intent(mAdapter.mContext, EditScheduledTransactionActivity.class);
                     Bundle b = new Bundle();
-                    b.putLong(SCHEDULED_TRANSACTION_ID, mAdapter.mTransactions.get(getAdapterPosition()).scheduledTransaction.getScheduledTransactionId());
+                    b.putLong(SCHEDULED_TRANSACTION_ID, mAdapter.mTransactions.get(getBindingAdapterPosition()).scheduledTransaction.getScheduledTransactionId());
                     i.putExtras(b);
                     mAdapter.mContext.startActivityForResult(i, Constants.EDIT_SCHEDULED_TRANSACTION_REQUEST_CODE);
                     return true;
@@ -214,7 +215,7 @@ public class SchedulerRecyclerViewAdapter extends RecyclerView.Adapter<Scheduler
             Dialogs dialog = new Dialogs();
             Bundle bundle = new Bundle();
             bundle.putInt(Dialogs.DIALOG_TYPE, Dialogs.DETAILS);
-            bundle.putInt(Dialogs.ID, getAdapterPosition());
+            bundle.putInt(Dialogs.ID, getBindingAdapterPosition());
             dialog.setArguments(bundle);
             dialog.show(mAdapter.mFragmentManager, Dialogs.DIALOGS_TAG);
         }

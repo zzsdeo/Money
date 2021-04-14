@@ -60,9 +60,8 @@ public class GraphActivity extends Activity {
                 Toast.makeText(GraphActivity.this,
                         getString(R.string.date) + "  " + new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(dataPoint.getX()) + "\n" +
                                 getString(R.string.balance2) + "  " +
-                                String.valueOf(
-                                        BigDecimal.valueOf(
-                                                dataPoint.getY()).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue()),
+                                BigDecimal.valueOf(
+                                        dataPoint.getY()).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue(),
                         Toast.LENGTH_SHORT).show();
             }
         });

@@ -92,13 +92,11 @@ public class DatabaseContentProvider extends ContentProvider {
         SQLiteDatabase sqlDB = database.getWritableDatabase();
         long id;
         String path;
-        switch (uriType) {
-            case SCHEDULED_TRANSACTIONS_ITEMS:
-                id = sqlDB.insert(TableScheduledTransactions.TABLE_NAME, null, values);
-                path = SCHEDULED_TRANSACTIONS_PATH;
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown URI: " + uri);
+        if (uriType == SCHEDULED_TRANSACTIONS_ITEMS) {
+            id = sqlDB.insert(TableScheduledTransactions.TABLE_NAME, null, values);
+            path = SCHEDULED_TRANSACTIONS_PATH;
+        } else {
+            throw new IllegalArgumentException("Unknown URI: " + uri);
         }
         getContext().getContentResolver().notifyChange(uri, null);
         return Uri.parse(path + "/" + id);

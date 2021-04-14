@@ -1,8 +1,6 @@
 package ru.zzsdeo.money.activities;
 
-import android.app.DialogFragment;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -12,6 +10,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -52,9 +52,9 @@ public class AddScheduledTransactionActivity extends AppCompatActivity
         needApprove.setChecked(true);
 
         Date dateTime = calendar.getTime();
-        date.setText(new SimpleDateFormat("dd.MM.yy", Locale.getDefault()).format(dateTime) + "   ");
+        date.setText(String.format("%s   ", new SimpleDateFormat("dd.MM.yy", Locale.getDefault()).format(dateTime)));
         date.setOnClickListener(this);
-        time.setText(new SimpleDateFormat("HH:mm", Locale.getDefault()).format(dateTime) + "   ");
+        time.setText(String.format("%s   ", new SimpleDateFormat("HH:mm", Locale.getDefault()).format(dateTime)));
         time.setOnClickListener(this);
 
         ArrayAdapter<String> repeatingAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, R.id.textView, new RepeatingTypes(this));
@@ -73,14 +73,14 @@ public class AddScheduledTransactionActivity extends AppCompatActivity
                 bundle.putInt(Dialogs.DIALOG_TYPE, Dialogs.DATE_PICKER);
                 bundle.putLong(Dialogs.DATE_IN_MILL, calendar.getTimeInMillis());
                 date.setArguments(bundle);
-                date.show(getFragmentManager(), Dialogs.DIALOGS_TAG);
+                date.show(getSupportFragmentManager(), Dialogs.DIALOGS_TAG);
                 break;
             case R.id.textView2:
                 Dialogs time = new Dialogs();
                 bundle.putInt(Dialogs.DIALOG_TYPE, Dialogs.TIME_PICKER);
                 bundle.putLong(Dialogs.DATE_IN_MILL, calendar.getTimeInMillis());
                 time.setArguments(bundle);
-                time.show(getFragmentManager(), Dialogs.DIALOGS_TAG);
+                time.show(getSupportFragmentManager(), Dialogs.DIALOGS_TAG);
                 break;
             case R.id.addBtn:
                 String amountString = amount.getText().toString();
@@ -110,12 +110,12 @@ public class AddScheduledTransactionActivity extends AppCompatActivity
     }
 
     @Override
-    public void onDialogPositiveClick(DialogFragment dialog, int dialogType, long id) {
+    public void onDialogPositiveClick(androidx.fragment.app.DialogFragment dialog, int dialogType, long id) {
 
     }
 
     @Override
-    public void onDialogNegativeClick(DialogFragment dialog, int dialogType) {
+    public void onDialogNegativeClick(androidx.fragment.app.DialogFragment dialog, int dialogType) {
 
     }
 
@@ -123,7 +123,7 @@ public class AddScheduledTransactionActivity extends AppCompatActivity
     public void onDateSet(int year, int monthOfYear, int dayOfMonth) {
         calendar.set(year, monthOfYear, dayOfMonth);
         Date dateTime = calendar.getTime();
-        date.setText(new SimpleDateFormat("dd.MM.yy", Locale.getDefault()).format(dateTime) + "   ");
+        date.setText(String.format("%s   ", new SimpleDateFormat("dd.MM.yy", Locale.getDefault()).format(dateTime)));
         switch (repeatingTypeId.getSelectedItemPosition()) {
             case 3:
                 repeatingTextView.setText(new SimpleDateFormat("dd", Locale.getDefault()).format(calendar.getTime()));
@@ -142,25 +142,23 @@ public class AddScheduledTransactionActivity extends AppCompatActivity
         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
         calendar.set(Calendar.MINUTE, minute);
         Date dateTime = calendar.getTime();
-        time.setText(new SimpleDateFormat("HH:mm", Locale.getDefault()).format(dateTime) + "   ");
+        time.setText(String.format("%s   ", new SimpleDateFormat("HH:mm", Locale.getDefault()).format(dateTime)));
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        switch (parent.getId()) {
-            case R.id.spinner4:
-                switch (position) {
-                    case 3:
-                        repeatingTextView.setText(new SimpleDateFormat("dd", Locale.getDefault()).format(calendar.getTime()));
-                        break;
-                    case 4:
-                        repeatingTextView.setText(new SimpleDateFormat("E", Locale.getDefault()).format(calendar.getTime()));
-                        break;
-                    default:
-                        repeatingTextView.setText("");
-                        break;
-                }
-                break;
+        if (parent.getId() == R.id.spinner4) {
+            switch (position) {
+                case 3:
+                    repeatingTextView.setText(new SimpleDateFormat("dd", Locale.getDefault()).format(calendar.getTime()));
+                    break;
+                case 4:
+                    repeatingTextView.setText(new SimpleDateFormat("E", Locale.getDefault()).format(calendar.getTime()));
+                    break;
+                default:
+                    repeatingTextView.setText("");
+                    break;
+            }
         }
     }
 

@@ -1,7 +1,6 @@
 package ru.zzsdeo.money.activities;
 
 import android.app.AlarmManager;
-import android.app.DialogFragment;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
@@ -12,16 +11,17 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.SeekBar;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Bundle bundle = new Bundle();
                 bundle.putInt(Dialogs.DIALOG_TYPE, Dialogs.SETTINGS);
                 dialog.setArguments(bundle);
-                dialog.show(getFragmentManager(), Dialogs.DIALOGS_TAG);
+                dialog.show(getSupportFragmentManager(), Dialogs.DIALOGS_TAG);
                 return true;
 
             case R.id.graph:
@@ -148,21 +148,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         switch (requestCode) {
             case Constants.ADD_SCHEDULED_TRANSACTION_REQUEST_CODE:
-                if (resultCode == RESULT_OK) {
-                    schedulerRecyclerViewAdapter.refreshDataSet(
-                            new ScheduledTransactionCollection(this).getTransactionsHolderCollection());
-                }
-                break;
             case Constants.EDIT_SCHEDULED_TRANSACTION_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
                     schedulerRecyclerViewAdapter.refreshDataSet(
                             new ScheduledTransactionCollection(this).getTransactionsHolderCollection());
                 }
+                break;
         }
     }
 
     @Override
-    public void onDialogPositiveClick(DialogFragment dialog, int dialogType, long id) {
+    public void onDialogPositiveClick(androidx.fragment.app.DialogFragment dialog, int dialogType, long id) {
         switch (dialogType) {
             case Dialogs.DELETE_SCHEDULED_TRANSACTION:
                 new ScheduledTransactionCollection(this).removeScheduledTransaction(id);
@@ -191,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 ComponentName thisAppWidget = new ComponentName(this, WidgetReceiver.class);
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-                int ids[] = appWidgetManager.getAppWidgetIds(thisAppWidget);
+                int[] ids = appWidgetManager.getAppWidgetIds(thisAppWidget);
 
                 Intent update = new Intent(this, WidgetReceiver.class);
                 update.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
@@ -204,15 +200,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onDialogNegativeClick(DialogFragment dialog, int dialogType) {
+    public void onDialogNegativeClick(androidx.fragment.app.DialogFragment dialog, int dialogType) {
         switch (dialogType) {
             case Dialogs.DELETE_SCHEDULED_TRANSACTION:
-                dialog.dismiss();
-                break;
-            case Dialogs.SETTINGS:
-                dialog.dismiss();
-                break;
             case Dialogs.DETAILS:
+            case Dialogs.SETTINGS:
                 dialog.dismiss();
                 break;
         }
@@ -257,7 +249,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String title = sharedPreferences.getString(Constants.BALANCE, getString(R.string.app_name));
         assert title != null;
         if (title.isEmpty()) title = getString(R.string.app_name);
-        //noinspection ConstantConditions
         getSupportActionBar().setTitle(title);
     }
 }

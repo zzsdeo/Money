@@ -25,7 +25,7 @@ public class ScheduledTransactionCollection extends ArrayList<ScheduledTransacti
 
     public ScheduledTransactionCollection(Context context) {
         mSharedPreferences = context.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
-        endOfTimeSetting = mSharedPreferences.getInt(Constants.NUMBER_OF_MONTHS, Constants.DEFAULT_NUM_OF_MONTHS) * 2592000000l;
+        endOfTimeSetting = mSharedPreferences.getInt(Constants.NUMBER_OF_MONTHS, Constants.DEFAULT_NUM_OF_MONTHS) * 2592000000L;
         contentResolver = context.getContentResolver();
         Cursor c = contentResolver.query(
                 DatabaseContentProvider.CONTENT_URI_SCHEDULED_TRANSACTIONS,
@@ -48,11 +48,10 @@ public class ScheduledTransactionCollection extends ArrayList<ScheduledTransacti
 
     public ScheduledTransactionCollection(Context context, String[] params) {
         mSharedPreferences = context.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
-        endOfTimeSetting = mSharedPreferences.getInt(Constants.NUMBER_OF_MONTHS, Constants.DEFAULT_NUM_OF_MONTHS) * 2592000000l;
+        endOfTimeSetting = mSharedPreferences.getInt(Constants.NUMBER_OF_MONTHS, Constants.DEFAULT_NUM_OF_MONTHS) * 2592000000L;
         String[] args;
         if (params.length > 2) {
-            ArrayList<String> argsList = new ArrayList<>();
-            argsList.addAll(Arrays.asList(params).subList(2, params.length));
+            ArrayList<String> argsList = new ArrayList<>(Arrays.asList(params).subList(2, params.length));
             args = (String[]) argsList.toArray();
         } else {
             args = null;
@@ -162,13 +161,7 @@ public class ScheduledTransactionCollection extends ArrayList<ScheduledTransacti
                 } else if (lhs.dateTime < rhs.dateTime) {
                     return -1;
                 } else {
-                    if (lhs.scheduledTransaction.getScheduledTransactionId() > rhs.scheduledTransaction.getScheduledTransactionId()) {
-                        return 1;
-                    } else if (lhs.scheduledTransaction.getScheduledTransactionId() < rhs.scheduledTransaction.getScheduledTransactionId()) {
-                        return -1;
-                    } else {
-                        return 0;
-                    }
+                    return Long.compare(lhs.scheduledTransaction.getScheduledTransactionId(), rhs.scheduledTransaction.getScheduledTransactionId());
                 }
             }
         });
