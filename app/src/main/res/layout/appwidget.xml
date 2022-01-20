@@ -15,6 +15,7 @@
         android:drawableTop="@mipmap/ic_action_action_account_balance_wallet2"
         style="@style/TextAppearance.AppCompat"
         android:textColor="@color/cardview_light_background"
-        tools:ignore="UseCompatTextViewDrawableXml" />
+        tools:ignore="UseCompatTextViewDrawableXml"
+        android:padding="8dp"/>
 
 </LinearLayout>
