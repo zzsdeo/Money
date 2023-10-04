@@ -27,7 +27,7 @@ public class SmsParserIntentService extends IntentService {
         SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
         String cardNumber = sharedPreferences.getString(Constants.CARD_NUMBER, "");
 
-        if (sms.matches("\\*" + cardNumber + ".+")) {
+        if (sms.contains("*" + cardNumber)) {
             String[] parsedSms = sms.split("\\s");
             if (parsedSms.length > 0) {
                 String available = parsedSms[parsedSms.length - 2];
